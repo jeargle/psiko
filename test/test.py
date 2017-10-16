@@ -2,10 +2,10 @@
 # 2017
 
 
-import psiko as pk
-
 import numpy as np
 import matplotlib.pyplot as plt
+
+import psiko.psiko as pk
 
 
 x = np.linspace(0,1,500)
@@ -19,9 +19,9 @@ plt.show()
 omega=2
 x = np.linspace(0,1,500)
 ns = [1, 2, 8, 32, 128, 512]
-y = np.array([square(x, omega, i) for i in ns])
+y = np.array([pk.square(x, omega, i) for i in ns])
 print('np.shape(y):', np.shape(y))
-y2 = np.array([square2(x, omega, i) for i in ns])
+y2 = np.array([pk.square2(x, omega, i) for i in ns])
 print('np.shape(y2):', np.shape(y2))
 print('np.abs(y-y2).max():', np.abs(y-y2).max())
 print('np.abs(y-y2).sum():', np.abs(y-y2).sum())

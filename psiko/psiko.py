@@ -4,6 +4,7 @@
 
 import numpy as np
 
+__all__ = ["square_comp", "square", "square2"]
 
 def square_comp(x, omega, k):
     """
