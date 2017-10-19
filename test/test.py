@@ -159,6 +159,21 @@ def forces_test3():
     plt.show()
 
 
+def pib_test1():
+    l = 10
+    x = np.linspace(0, l, 1000)
+    y = np.zeros(3*len(x)).reshape(3, len(x))
+
+    # calculate 4 harmonics
+    for n in range(1,4):
+        y[n-1] = pk.pib_1D(x, n, l)
+
+    for i in y:
+        plt.plot(x, i)
+    plt.legend()
+    plt.show()
+
+
 
 if __name__=='__main__':
 
@@ -181,4 +196,10 @@ if __name__=='__main__':
     # boundary_cond_test1()
     # forces_test1()
     # forces_test2()
-    forces_test3()
+    # forces_test3()
+
+    # ====================
+    # 1D Quantum Particle tests
+    # ====================
+
+    pib_test1()
