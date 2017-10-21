@@ -5,7 +5,7 @@
 import numpy as np
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
-           "boundary_1d", "pib_1D"]
+           "boundary_1d", "pib_ti_1D", "pib_td_1D"]
 
 def square_comp(x, omega, k):
     """
@@ -54,8 +54,15 @@ def boundary_1d(xi, v, l):
     return v
 
 
-def pib_1D(x,n,l):
+def pib_ti_1D(x,n,l):
     """
     Harmonic solutions to time-independent Particle In a Box.
     """
     return np.sin(n*np.pi*x/l)
+
+
+def pib_td_1D(t,c,n,l):
+    """
+    Harmonic solutions to time-dependent Particle In a Box.
+    """
+    return np.cos(n*np.pi*c*t/l)

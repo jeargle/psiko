@@ -166,10 +166,26 @@ def pib_test1():
 
     # calculate 4 harmonics
     for n in range(1,4):
-        y[n-1] = pk.pib_1D(x, n, l)
+        y[n-1] = pk.pib_ti_1D(x, n, l)
 
     for i in y:
         plt.plot(x, i)
+    plt.legend()
+    plt.show()
+
+
+def pib_test2():
+    l = 10.0
+    c = 0.1
+    t = np.linspace(0, 100, 1000)
+    y = np.zeros(4*len(t)).reshape(4, len(t))
+
+    # use a for loop for the multiple harmonics
+    for n in range(1,5):
+        y[n-1] = pk.pib_td_1D(t, c, n, l)
+
+    for i in y:
+        plt.plot(t,i)
     plt.legend()
     plt.show()
 
@@ -203,3 +219,4 @@ if __name__=='__main__':
     # ====================
 
     pib_test1()
+    pib_test2()
