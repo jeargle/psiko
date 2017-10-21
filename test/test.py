@@ -200,9 +200,26 @@ def pib_test3():
 
     for step, time in enumerate(t):
         # time-dependent and time-independent terms
-        y[:,step] = pk.pib_td_1D(time, c, n, l) * pk.pib_ti_1D(x, n, l)
+        # y[:, step] = pk.pib_td_1D(time, c, n, l) * pk.pib_ti_1D(x, n, l)
+        y[:, step] = pk.wave_solution(x, time, c, n, l)
 
     pk.time_plot(x, y, t)
+    plt.show()
+
+
+def pib_interference_test1():
+    t = np.arange(0, 100, 0.1)
+    c = 0.5
+    l = 10
+    x = l/3.0
+    wave = np.zeros(len(t))
+
+    # sum 2 eigenstates
+    for step, time in enumerate(t):
+        wave[step] = (pk.wave_solution(x, time, c, 1, l) +
+                      pk.wave_solution(x, time, c, 2, l))
+
+    plt.plot(t, wave)
     plt.show()
 
 
@@ -237,3 +254,4 @@ if __name__=='__main__':
     # pib_test1()
     # pib_test2()
     pib_test3()
+    pib_interference_test1()
