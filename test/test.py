@@ -185,8 +185,24 @@ def pib_test2():
         y[n-1] = pk.pib_td_1D(t, c, n, l)
 
     for i in y:
-        plt.plot(t,i)
+        plt.plot(t, i)
     plt.legend()
+    plt.show()
+
+
+def pib_test3():
+    c = 0.1
+    l = 10
+    x = np.arange(0, l, 0.01)
+    t = np.arange(0, 30, 0.1)
+    y = np.zeros((len(x), len(t)))
+    n = 3
+
+    for step, time in enumerate(t):
+        # time-dependent and time-independent terms
+        y[:,step] = pk.pib_td_1D(time, c, n, l) * pk.pib_ti_1D(x, n, l)
+
+    pk.time_plot(x, y, t)
     plt.show()
 
 
@@ -218,5 +234,6 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    pib_test1()
-    pib_test2()
+    # pib_test1()
+    # pib_test2()
+    pib_test3()

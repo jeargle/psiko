@@ -3,9 +3,10 @@
 
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
-           "boundary_1d", "pib_ti_1D", "pib_td_1D"]
+           "boundary_1d", "pib_ti_1D", "pib_td_1D", "time_plot"]
 
 def square_comp(x, omega, k):
     """
@@ -66,3 +67,9 @@ def pib_td_1D(t,c,n,l):
     Harmonic solutions to time-dependent Particle In a Box.
     """
     return np.cos(n*np.pi*c*t/l)
+
+
+def time_plot(x, y, t):
+    for i, time in enumerate(t):
+        plt.plot(x, y[:,i])
+    return
