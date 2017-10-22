@@ -278,6 +278,30 @@ def pib_interference_test2():
 #     plt.show()
 
 
+def normalize_test1():
+    L = 10.0
+    x = np.arange(0, L, 0.01)
+    psi_x = np.zeros(len(x))
+
+    # Build wavefunction from 4 eigenfunctions
+    for n in range(1,5):
+        psi_x += pk.pib_ti_1D(x, L, n)
+
+    # Bet PDF and normalize for psi_x
+    pdf = pk.prob_density(psi_x)
+    psi_normed = pk.normalize_wfn(x, psi_x)
+
+    norm_pre = pk.psi_norm(x, psi_x)
+    norm_post = pk.psi_norm(x, psi_normed)
+    print('Norm pre:', norm_pre)
+    print('Norm post:', norm_post)
+
+    # plot
+    plt.plot(x, psi_x)
+    plt.plot(x, pdf)
+    plt.show()
+
+
 
 if __name__=='__main__':
 
