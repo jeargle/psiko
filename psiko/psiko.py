@@ -82,7 +82,7 @@ def wave_solution(x, t, c, n, l):
 # Plotting
 # ====================
 
-def time_plot(x, y, t):
-    for i, time in enumerate(t):
+def time_plot(x, y, t, timestep=1):
+    for i in range(0, len(t), timestep):
         plt.plot(x, y[:,i])
     return

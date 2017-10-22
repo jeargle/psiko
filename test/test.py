@@ -208,6 +208,10 @@ def pib_test3():
 
 
 def pib_interference_test1():
+    """
+    Plot time trace for a single position in a wavefunction made from
+    the first two eigenstates.
+    """
     t = np.arange(0, 100, 0.1)
     c = 0.5
     l = 10
@@ -220,6 +224,26 @@ def pib_interference_test1():
                       pk.wave_solution(x, time, c, 2, l))
 
     plt.plot(t, wave)
+    plt.show()
+
+
+def pib_interference_test2():
+    """
+    Plot time evolution of full wavefunction made from the first two
+    eigenstates.
+    """
+    c = 0.5
+    l= 10
+    x = np.linspace(0, l, 100)
+    t = np.arange(0, 30, 0.1)
+    y = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+
+    for step, time in enumerate(t):
+        y[:, step] = (pk.wave_solution(x, time, c, 1, l) +
+                      pk.wave_solution(x, time, c, 2, l))
+
+    # time-plot
+    pk.time_plot(x, y, t, timestep=1)
     plt.show()
 
 
@@ -253,5 +277,6 @@ if __name__=='__main__':
 
     # pib_test1()
     # pib_test2()
-    pib_test3()
-    pib_interference_test1()
+    # pib_test3()
+    # pib_interference_test1()
+    pib_interference_test2()
