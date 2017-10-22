@@ -77,6 +77,15 @@ def wave_solution(x, t, c, n, l):
     return pib_td_1D(t, c, n, l) * pib_ti_1D(x, n, l)
 
 
+# TODO - figure out what square_function() is supposed to return
+# def projection_integrand(x, n, l):
+#     """
+#     """
+#     return (np.sqrt(2.0/l) *
+#             np.sin(n*np.pi*x/l) *
+#             pk.square_function(x,l))
+
+
 
 # ====================
 # Plotting

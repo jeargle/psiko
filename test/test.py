@@ -233,7 +233,7 @@ def pib_interference_test2():
     eigenstates.
     """
     c = 0.5
-    l= 10
+    l = 10
     x = np.linspace(0, l, 100)
     t = np.arange(0, 30, 0.1)
     y = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
@@ -245,6 +245,37 @@ def pib_interference_test2():
     # time-plot
     pk.time_plot(x, y, t, timestep=1)
     plt.show()
+
+
+# import scipy.integrate.quad as quad
+# def quadrature_test1():
+#     l = 10.0
+#     x = np.arange(0, l, 0.01)
+#     c = np.zeros(10)
+
+#     for n in range(0,10):
+#         c[n], _ = quad(pk.projection_integrand, 0.0, l, args=(n, l))
+
+
+
+# import scipy.integrate.quad as quad
+# def quadrature_test2():
+#     """
+#     Wave decomposition
+#     """
+#     l = 10.0
+#     x = np.arange(0, l, 0.01)
+#     y = np.array([pk.square_function(xi, l) for xi in x])
+#     square_approx = np.zeros(len(x))
+
+#     for n in range(10):
+#         # project amplitudes and integrate components
+#         cn, _ = quad(pk.projection_integrand, 0.0, l, args=(n, l))
+#         square_approx += cn*np.sqrt(2.0/l)*np.sin(n*np.pi*x/l)
+
+#     plt.plot(x, square_approx)
+#     plt.plot(x, [pk.square_function(i, l) for i in x])
+#     plt.show()
 
 
 
@@ -278,5 +309,7 @@ if __name__=='__main__':
     # pib_test1()
     # pib_test2()
     # pib_test3()
-    # pib_interference_test1()
+    pib_interference_test1()
     pib_interference_test2()
+    # quadrature_test1()
+    # quadrature_test2()
