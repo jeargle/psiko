@@ -4,6 +4,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.integrate import simps
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
            "boundary_1d", "pib_ti_1D", "pib_td_1D", "wave_solution",
@@ -88,14 +89,12 @@ def normalize_wfn(x, psi):
     return psi / psi_norm(x, psi)
 
 
-# import scipy.integrate.simps as simps
 def psi_norm(x, psi):
     """
     Norm of a wavefunction.
     """
-    # result = simps(prob_density(psi), x)
-    # return np.sqrt(result)
-    pass
+    result = simps(prob_density(psi), x)
+    return np.sqrt(result)
 
 
 # ====================
@@ -132,13 +131,22 @@ def pib_energy(n,l, hbar=1, m=1):
 
 
 
+def square_function(x, l):
+    # result = np.zeros(len(x))
+    # for i in range(len(x)):
+    if x < (1.0/3)*l or x > (2.0/3)*l:
+        return 0.0
+    else:
+        return 1.0
+
+
 # TODO - figure out what square_function() is supposed to return
-# def projection_integrand(x, n, l):
-#     """
-#     """
-#     return (np.sqrt(2.0/l) *
-#             np.sin(n*np.pi*x/l) *
-#             pk.square_function(x,l))
+def projection_integrand(x, n, l):
+    """
+    """
+    return (np.sqrt(2.0/l) *
+            np.sin(n*np.pi*x/l) *
+            square_function(x,l))
 
 
 

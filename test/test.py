@@ -4,6 +4,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.integrate import simps, quad
 
 import psiko.psiko as pk
 
@@ -18,7 +19,7 @@ def square_comp_test1():
 
 
 def square_test1():
-    omega=2
+    omega = 2
     x = np.linspace(0,1,500)
     ns = [1, 2, 8, 32, 128, 512]
     y = np.array([pk.square(x, omega, i) for i in ns])
@@ -247,35 +248,35 @@ def pib_interference_test2():
     plt.show()
 
 
-# import scipy.integrate.quad as quad
-# def quadrature_test1():
-#     l = 10.0
-#     x = np.arange(0, l, 0.01)
-#     c = np.zeros(10)
+def quadrature_test1():
+    l = 10.0
+    x = np.arange(0, l, 0.01)
+    c = np.zeros(10)
 
-#     for n in range(0,10):
-#         c[n], _ = quad(pk.projection_integrand, 0.0, l, args=(n, l))
+    for n in range(0, 10):
+        c[n], _ = quad(pk.projection_integrand, 0.0, l, args=(n, l))
+
+    plt.plot(range(0, 10), c)
+    plt.show()
 
 
+def quadrature_test2():
+    """
+    Wave decomposition
+    """
+    l = 10.0
+    x = np.arange(0, l, 0.01)
+    y = np.array([pk.square_function(xi, l) for xi in x])
+    square_approx = np.zeros(len(x))
 
-# import scipy.integrate.quad as quad
-# def quadrature_test2():
-#     """
-#     Wave decomposition
-#     """
-#     l = 10.0
-#     x = np.arange(0, l, 0.01)
-#     y = np.array([pk.square_function(xi, l) for xi in x])
-#     square_approx = np.zeros(len(x))
+    for n in range(10):
+        # project amplitudes and integrate components
+        cn, _ = quad(pk.projection_integrand, 0.0, l, args=(n, l))
+        square_approx += cn * np.sqrt(2.0/l) * np.sin(n*np.pi*x/l)
 
-#     for n in range(10):
-#         # project amplitudes and integrate components
-#         cn, _ = quad(pk.projection_integrand, 0.0, l, args=(n, l))
-#         square_approx += cn*np.sqrt(2.0/l)*np.sin(n*np.pi*x/l)
-
-#     plt.plot(x, square_approx)
-#     plt.plot(x, [pk.square_function(i, l) for i in x])
-#     plt.show()
+    plt.plot(x, square_approx)
+    plt.plot(x, [pk.square_function(i, l) for i in x])
+    plt.show()
 
 
 def normalize_test1():
@@ -333,7 +334,7 @@ if __name__=='__main__':
     # pib_test1()
     # pib_test2()
     # pib_test3()
-    pib_interference_test1()
-    pib_interference_test2()
+    # pib_interference_test1()
+    # pib_interference_test2()
     # quadrature_test1()
-    # quadrature_test2()
+    quadrature_test2()
