@@ -8,6 +8,7 @@ from scipy.integrate import simps
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
            "boundary_1d", "pib_ti_1D", "pib_td_1D", "wave_solution",
+           "pib_energy", "square_function", "projection_integrand",
            "time_plot"]
 
 def square_comp(x, omega, k):
@@ -130,17 +131,16 @@ def pib_energy(n,l, hbar=1, m=1):
     return (n**2 * hbar**2 * np.pi**2) / (2.0 * m * l**2)
 
 
-
 def square_function(x, l):
-    # result = np.zeros(len(x))
-    # for i in range(len(x)):
+    """
+    Square wave 0->1->0 in the middle third of the length l.
+    """
     if x < (1.0/3)*l or x > (2.0/3)*l:
         return 0.0
     else:
         return 1.0
 
 
-# TODO - figure out what square_function() is supposed to return
 def projection_integrand(x, n, l):
     """
     """
