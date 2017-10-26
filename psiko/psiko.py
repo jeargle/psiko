@@ -58,11 +58,31 @@ def boundary_1d(xi, v, l):
     return v
 
 
+
+# ====================
+# Wavefunction Functions
+# ====================
+
 def prob_density(psi):
     """
     Probability density for a normalized wavefunction.
     """
     return np.conjugate(psi) * psi
+
+
+def normalize_wfn(x, psi):
+    """
+    Normalize a wavefunction.
+    """
+    return psi / psi_norm(x, psi)
+
+
+def psi_norm(x, psi):
+    """
+    Norm of a wavefunction.
+    """
+    result = simps(prob_density(psi), x)
+    return np.sqrt(result)
 
 
 def finite_diff(y, dx):
@@ -81,21 +101,6 @@ def finite_diff(y, dx):
     diff[-1] = (y[-1] - y[-2])/dx
 
     return diff
-
-
-def normalize_wfn(x, psi):
-    """
-    Normalize a wavefunction.
-    """
-    return psi / psi_norm(x, psi)
-
-
-def psi_norm(x, psi):
-    """
-    Norm of a wavefunction.
-    """
-    result = simps(prob_density(psi), x)
-    return np.sqrt(result)
 
 
 # ====================

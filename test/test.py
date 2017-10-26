@@ -280,15 +280,19 @@ def quadrature_test2():
 
 
 def normalize_test1():
+    """
+
+    """
     L = 10.0
+    # L = 1.0
     x = np.arange(0, L, 0.01)
     psi_x = np.zeros(len(x))
 
     # Build wavefunction from 4 eigenfunctions
     for n in range(1,5):
-        psi_x += pk.pib_ti_1D(x, L, n)
+        psi_x += pk.pib_ti_1D(x, n, L)
 
-    # Bet PDF and normalize for psi_x
+    # Get PDF and normalize for psi_x
     pdf = pk.prob_density(psi_x)
     psi_normed = pk.normalize_wfn(x, psi_x)
 
@@ -337,4 +341,5 @@ if __name__=='__main__':
     # pib_interference_test1()
     # pib_interference_test2()
     # quadrature_test1()
-    quadrature_test2()
+    # quadrature_test2()
+    normalize_test1()
