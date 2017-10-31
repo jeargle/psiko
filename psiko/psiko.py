@@ -103,6 +103,12 @@ def finite_diff(y, dx):
     return diff
 
 
+def cnt_evolve(cn_0, t, E_n, hbar=1.0):
+    """
+    """
+    return cn_0 * np.exp(-1j*E_n*t/hbar)
+
+
 # ====================
 # Particle in a Box
 # ====================
@@ -129,7 +135,7 @@ def wave_solution(x, t, c, n, l):
     return pib_td_1D(t, c, n, l) * pib_ti_1D(x, n, l)
 
 
-def pib_energy(n,l, hbar=1, m=1):
+def pib_energy(n, l, hbar=1, m=1):
     """
     Energy eigenvalues
     """

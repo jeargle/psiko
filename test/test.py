@@ -281,16 +281,17 @@ def quadrature_test2():
 
 def normalize_test1():
     """
-
+    Set up a mixed state from the ground and first three excited states
+    for the particle in a box.  Normalize the wavefunction.
     """
-    L = 10.0
-    # L = 1.0
-    x = np.arange(0, L, 0.01)
+    l = 10.0
+    # l = 1.0
+    x = np.arange(0, l, 0.01)
     psi_x = np.zeros(len(x))
 
     # Build wavefunction from 4 eigenfunctions
     for n in range(1,5):
-        psi_x += pk.pib_ti_1D(x, n, L)
+        psi_x += pk.pib_ti_1D(x, n, l)
 
     # Get PDF and normalize for psi_x
     pdf = pk.prob_density(psi_x)
@@ -301,9 +302,35 @@ def normalize_test1():
     print('Norm pre:', norm_pre)
     print('Norm post:', norm_post)
 
-    # plot
     plt.plot(x, psi_x)
     plt.plot(x, pdf)
+    plt.show()
+
+
+def schroedinger_test1():
+    """
+    Set up a mixed state from the ground and first excited states for
+    the particle in a box.  Normalize the wavefunction.
+    """
+    l = 10
+    x = np.arange(0, l, 0.01)
+
+    # First eigenstate
+    psi1_x = pk.pib_ti_1D(x, 1, l)
+    c1 = 1.0/np.sqrt(2)
+    E1 = pk.pib_energy(1, l)
+
+    # Second eigenstate
+    psi2_x = pk.pib_ti_1D(x, 2, l)
+    c2 = 1.0/np.sqrt(2)
+    E2 = pk.pib_energy(2, l)
+
+    # Mixed state
+    psi0 = c1*psi1_x + c2*psi2_x
+    psi0_norm = pk.psi_norm(x, psi0)
+    print('Norm is ', psi0_norm)
+
+    plt.plot(x, psi0)
     plt.show()
 
 
@@ -342,4 +369,5 @@ if __name__=='__main__':
     # pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
-    normalize_test1()
+    # normalize_test1()
+    schroedinger_test1()
