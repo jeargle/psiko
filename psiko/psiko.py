@@ -105,6 +105,7 @@ def finite_diff(y, dx):
 
 def cnt_evolve(cn_0, t, E_n, hbar=1.0):
     """
+    Time-evolve a complex, time-dependent coefficient.
     """
     return cn_0 * np.exp(-1j*E_n*t/hbar)
 

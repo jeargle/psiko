@@ -243,7 +243,6 @@ def pib_interference_test2():
         y[:, step] = (pk.wave_solution(x, time, c, 1, l) +
                       pk.wave_solution(x, time, c, 2, l))
 
-    # time-plot
     pk.time_plot(x, y, t, timestep=1)
     plt.show()
 
@@ -334,6 +333,35 @@ def schroedinger_test1():
     plt.show()
 
 
+def schroedinger_test2():
+    """
+    Time-dependent Schroedinger equation.
+    """
+    l = 10
+    x = np.arange(0, l, 0.01)
+    t = np.linspace(0, 50, 100)
+    psi = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+
+    # First eigenstate
+    c1_0 = 1/np.sqrt(2)
+    psi1_x = pk.pib_ti_1D(x, 1, l)
+    E1 = pk.pib_energy(1, l)
+
+    # Second eigenstate
+    c2_0 = 1/np.sqrt(2)
+    psi2_x = pk.pib_ti_1D(x, 2, l)
+    E2 = pk.pib_energy(2, l)
+
+    for step, time in enumerate(t):
+        # Get time evolved coefficients
+        c1 = pk.cnt_evolve(c1_0, time, E1)
+        c2 = pk.cnt_evolve(c2_0, time, E2)
+        psi[:, step] = c1*psi1_x + c2*psi2_x
+
+    pk.time_plot(x, psi, t)
+    plt.show()
+
+
 
 if __name__=='__main__':
 
@@ -371,3 +399,4 @@ if __name__=='__main__':
     # quadrature_test2()
     # normalize_test1()
     schroedinger_test1()
+    schroedinger_test2()
