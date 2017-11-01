@@ -58,6 +58,16 @@ def boundary_1d(xi, v, l):
     return v
 
 
+def complex_simps(y, x):
+    """
+    Complex Simpson's rule.
+    """
+    if np.all(np.isreal(y)):
+        return simps(y, x) + 0j
+    else:
+        return simps(y.real, x) + 1j * simps(y.imag, x)
+
+
 
 # ====================
 # Wavefunction Functions
@@ -110,6 +120,13 @@ def cnt_evolve(cn_0, t, E_n, hbar=1.0):
     return cn_0 * np.exp(-1j*E_n*t/hbar)
 
 
+def momentum_operator(psi, dx, hbar=1.0):
+    """
+    Momentum operator.
+    """
+    return -1j * hbar * finite_diff(psi, dx)
+
+
 # ====================
 # Particle in a Box
 # ====================
@@ -136,7 +153,7 @@ def wave_solution(x, t, c, n, l):
     return pib_td_1D(t, c, n, l) * pib_ti_1D(x, n, l)
 
 
-def pib_energy(n, l, hbar=1, m=1):
+def pib_energy(n, l, hbar=1.0, m=1):
     """
     Energy eigenvalues
     """

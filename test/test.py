@@ -362,6 +362,31 @@ def schroedinger_test2():
     plt.show()
 
 
+def operator_test1():
+    """
+    Position and momentum operators.
+    """
+    l = 10
+    dx = 0.01
+    x = np.arange(0, l, dx)
+    c1 = 1.0/np.sqrt(2)
+    c2 = 1.0/np.sqrt(2)
+    # psi1_x = qw.pib_eigenfunction(x, l, 1)
+    # psi2_x = qw.pib_eigenfunction(x, l, 2)
+    psi1_x = pk.pib_ti_1D(x, 1, l)
+    psi2_x = pk.pib_ti_1D(x, 2, l)
+
+    psi0 = c1*psi1_x + c2*psi2_x
+
+    x_integrand = psi0 * x * psi0
+    exp_x = pk.complex_simps(x_integrand, x)
+    print('Expectation of position:', exp_x)
+
+    p_integrand = psi0 * pk.momentum_operator(psi0, dx)
+    exp_p = pk.complex_simps(p_integrand, x)
+    print('Expectation of momentum:', exp_p)
+
+
 
 if __name__=='__main__':
 
@@ -398,5 +423,6 @@ if __name__=='__main__':
     # quadrature_test1()
     # quadrature_test2()
     # normalize_test1()
-    schroedinger_test1()
+    # schroedinger_test1()
     schroedinger_test2()
+    operator_test1()
