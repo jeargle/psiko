@@ -113,6 +113,24 @@ def finite_diff(y, dx):
     return diff
 
 
+# def finite_diff(psi):
+#     """
+#     Finite difference method.
+#     """
+#     diff = np.zeros(len(psi.x))
+
+#     # start at step 0
+#     diff[0] = (psi.x[1] - psi.x[0])/psi.dx
+
+#     for i in range(1, len(psi.x)-1):
+#         diff[i] = (psi.x[i+1] - psi.x[i-1]) / (2*psi.dx)
+
+#     # end at step n-1
+#     diff[-1] = (psi.x[-1] - psi.x[-2])/psi.dx
+
+#     return diff
+
+
 def cnt_evolve(cn_0, t, E_n, hbar=1.0):
     """
     Time-evolve a complex, time-dependent coefficient.
@@ -120,11 +138,83 @@ def cnt_evolve(cn_0, t, E_n, hbar=1.0):
     return cn_0 * np.exp(-1j*E_n*t/hbar)
 
 
-def momentum_operator(psi, dx, hbar=1.0):
+def position_operator(psi, x, dx, hbar=1.0):
+    """
+    Position operator.
+    """
+    return x*psi
+
+
+def momentum_operator(psi, x, dx, hbar=1.0):
     """
     Momentum operator.
     """
     return -1j * hbar * finite_diff(psi, dx)
+
+
+# def momentum_operator(psi, hbar=1.0):
+#     """
+#     Momentum operator.
+#     """
+#     return -1j * hbar * finite_diff(psi)
+
+
+def eval_expectation(psi, x, dx, operator):
+    """
+    """
+    integrand = np.conjugate(psi) * operator(psi, x, dx)
+    exp = complex_simps(integrand, x)
+    exp = 0.0 if np.abs(exp) < 1e-7 else exp
+
+    return exp
+
+
+_wf_type = {
+    'position': 1,
+    'momentum': 2,
+    'energy': 3,
+}
+
+_wf_type_name = {val: key for key, val in _wf_type.items()}
+
+class Psi(object):
+
+    def __init__(self, x, dx, psi, wf_type=_wf_type['position']):
+        self.x = x
+        self.dx = dx
+        self.psi = psi
+        self.wf_type = wf_type
+        self._normalize()
+
+    def prob_density(self):
+        """
+        Probability density for the wavefunction.
+        """
+        return np.conjugate(self.psi) * self.psi
+
+    def psi_norm(self):
+        """
+        Norm of the wavefunction.
+        """
+        result = simps(prob_density(self.psi), self.x)
+        return np.sqrt(result)
+
+    def _normalize(self):
+        """
+        Normalize the wavefunction.
+        """
+        self.psi = self.psi / self.psi_norm()
+        return
+
+    def expectation(operator):
+        """
+        Expectation value for an operator on this wavefunction.
+        """
+        integrand = np.conjugate(self.psi) * operator(self.psi)
+        exp = complex_simps(integrand, self.x)
+        exp = 0.0 if np.abs(exp) < 1e-7 else exp
+
+        return exp
 
 
 # ====================
@@ -158,6 +248,28 @@ def pib_energy(n, l, hbar=1.0, m=1):
     Energy eigenvalues
     """
     return (n**2 * hbar**2 * np.pi**2) / (2.0 * m * l**2)
+
+
+def pib_superposition(x, t, l, n1, n2):
+    # First eigenstate
+    psi1 = pib_ti_1D(x, n1, l)
+    c1_0 = 1.0/np.sqrt(2) + 0.0j
+    E1 = pib_energy(n1, l)
+
+    # Second eigenstate
+    psi2 = pib_ti_1D(x, n2, l)
+    c2_0 = 1.0/np.sqrt(2) + 0.0j
+    E2 = pib_energy(n2, l)
+
+    psi = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+
+    for step, time in enumerate(t):
+        # Get time evolved coefficients
+        c1 = cnt_evolve(c1_0, time, E1)
+        c2 = cnt_evolve(c2_0, time, E2)
+        psi[:, step] = c1*psi1 + c2*psi2
+
+    return psi
 
 
 def square_function(x, l):

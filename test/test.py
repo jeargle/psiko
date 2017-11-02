@@ -371,8 +371,6 @@ def operator_test1():
     x = np.arange(0, l, dx)
     c1 = 1.0/np.sqrt(2)
     c2 = 1.0/np.sqrt(2)
-    # psi1_x = qw.pib_eigenfunction(x, l, 1)
-    # psi2_x = qw.pib_eigenfunction(x, l, 2)
     psi1_x = pk.pib_ti_1D(x, 1, l)
     psi2_x = pk.pib_ti_1D(x, 2, l)
 
@@ -382,9 +380,33 @@ def operator_test1():
     exp_x = pk.complex_simps(x_integrand, x)
     print('Expectation of position:', exp_x)
 
-    p_integrand = psi0 * pk.momentum_operator(psi0, dx)
+    p_integrand = psi0 * pk.momentum_operator(psi0, x, dx)
     exp_p = pk.complex_simps(p_integrand, x)
     print('Expectation of momentum:', exp_p)
+
+
+def operator_test2():
+    """
+    Observables and expectation values.
+    """
+    l = 10
+    dx = 0.01
+    x = np.arange(0, l, dx)
+    t = np.arange(0, 100)
+    psi = pk.pib_superposition(x, t, l, 1, 2)
+    p_array = np.zeros(len(t))
+    x_array = np.zeros(len(t))
+
+    for step, time in enumerate(t):
+        p_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.momentum_operator)
+        x_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.position_operator)
+
+    plt.plot(t, p_array)
+    plt.show()
+
+    plt.clf()
+    plt.plot(t, x_array)
+    plt.show()
 
 
 
@@ -424,5 +446,6 @@ if __name__=='__main__':
     # quadrature_test2()
     # normalize_test1()
     # schroedinger_test1()
-    schroedinger_test2()
+    # schroedinger_test2()
     operator_test1()
+    operator_test2()
