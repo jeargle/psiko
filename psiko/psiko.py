@@ -188,6 +188,17 @@ def linear_ramp(x):
     return b*x
 
 
+def build_hamiltonian(x, dx, vx, m=1, h_bar=1):
+    """
+    Get kinetic energy, potential energy, and hamiltonian
+    """
+    T = kinetic_mat_operator(x, dx)
+    V = np.diag(vx)
+    H = T + V
+
+    return H
+
+
 def eval_expectation(psi, x, dx, operator):
     """
     """

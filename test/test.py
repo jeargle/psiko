@@ -444,6 +444,30 @@ def operator_test4():
     plt.show()
 
 
+def operator_test5():
+    """
+    Solving for states of a wavefunction
+    """
+
+    l = 5.0
+    dx =0.02
+    x = np.arange(0, l+dx, dx)
+
+    vx = pk.linear_ramp(x)
+    H = pk.build_hamiltonian(x, dx, vx)
+
+    evals, evecs = np.linalg.eigh(H)
+
+    for i in range(5):
+        psi = evecs[:, i]
+        psi = pk.normalize_wfn(x, psi)
+        pdf = pk.prob_density(psi)
+
+        plt.plot(x, psi)
+        plt.plot(x, pdf)
+        plt.show()
+
+
 
 if __name__=='__main__':
 
@@ -494,5 +518,6 @@ if __name__=='__main__':
     # 1-D Time-Independent Schroedinger Equation (TISE)
     # ====================
 
-    operator_test3()
+    # operator_test3()
     operator_test4()
+    operator_test5()
