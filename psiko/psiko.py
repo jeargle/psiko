@@ -159,6 +159,35 @@ def momentum_operator(psi, x, dx, hbar=1.0):
 #     return -1j * hbar * finite_diff(psi)
 
 
+def kinetic_mat_operator(x, dx, m=1, h_bar=1):
+    """
+    Kinetic energy matrix operator.
+    """
+    t = -(h_bar**2) / (2*m*(dx**2))
+    T = np.zeros(len(x)**2).reshape(len(x),len(x))
+
+    for i, pos in enumerate(x):
+        # consider first diagonal elements
+        T[i][i] = -2*t
+        # then side diagonal elements, consider edge cases (i=0) or (i=n-1)
+        if i==0:
+            T[i][i+1] = t
+        elif i==len(x)-1:
+            T[i][i-1] = t
+        else:
+            T[i][i-1] = t
+            T[i][i+1] = t
+    return T
+
+
+def linear_ramp(x):
+    """
+    Linear potential.
+    """
+    b = 2
+    return b*x
+
+
 def eval_expectation(psi, x, dx, operator):
     """
     """

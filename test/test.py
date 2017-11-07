@@ -409,6 +409,27 @@ def operator_test2():
     plt.show()
 
 
+def operator_test3():
+    """
+    Build a Hamiltonian matrix.
+    """
+
+    # initial variables
+    l = 10
+    dx = 0.01
+    x = np.arange(0, l, dx)
+    vx = pk.linear_ramp(x)
+
+    # get kinetic energy, potential energy, and hamiltonian
+    T = pk.kinetic_mat_operator(x, dx)
+    V = np.diag(vx)
+    H = T + V
+    print('T:')
+    print(T)
+    print('V:')
+    print(V)
+
+
 
 if __name__=='__main__':
 
@@ -444,8 +465,19 @@ if __name__=='__main__':
     # pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
+
+    # ====================
+    # QM postulates
+    # ====================
+
     # normalize_test1()
     # schroedinger_test1()
     # schroedinger_test2()
-    operator_test1()
-    operator_test2()
+    # operator_test1()
+    # operator_test2()
+
+    # ====================
+    # 1-D Time-Independent Schroedinger Equation (TISE)
+    # ====================
+
+    operator_test3()
