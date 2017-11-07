@@ -430,6 +430,20 @@ def operator_test3():
     print(V)
 
 
+def operator_test4():
+    """
+    Build a potential surface.
+    """
+
+    l = 5.0
+    dx = 0.05
+    x = np.arange(0, l+dx, dx)
+
+    vx = pk.linear_ramp(x)
+    plt.plot(x, vx)
+    plt.show()
+
+
 
 if __name__=='__main__':
 
@@ -481,3 +495,4 @@ if __name__=='__main__':
     # ====================
 
     operator_test3()
+    operator_test4()
