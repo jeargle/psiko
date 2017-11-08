@@ -7,6 +7,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from mpl_toolkits import axes_grid1
 from mpl_toolkits.mplot3d import Axes3D
+from scipy import misc
 from scipy.integrate import simps
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
@@ -14,11 +15,14 @@ __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
            "pib_energy", "square_function", "projection_integrand",
            "time_plot"]
 
+
+
 def square_comp(x, omega, k):
     """
     Single component of square function.
     """
     return (4.0/np.pi) * np.sin(2*np.pi*(2*k-1)*omega*x)/(2*k-1)
+
 
 def square(x, omega, n):
     """
@@ -30,6 +34,7 @@ def square(x, omega, n):
         sum += i
     return sum
 
+
 def square2(x, omega, n):
     """
     Approximate a square wave with sin() series.
@@ -37,11 +42,13 @@ def square2(x, omega, n):
     a = np.array([square_comp(x, omega, k) for k in range(1,n+1)])
     return np.array([a[:n,i].sum() for i in range(len(x))])
 
+
 def force1(ti, m):
     """
     Time dependent force calculation.
     """
     return 5.0*np.sin(2*ti)/m
+
 
 def repulsion(r1, r2):
     """
@@ -75,6 +82,7 @@ def complex_simps(y, x):
 # ====================
 # Wavefunction Functions
 # ====================
+
 
 def prob_density(psi):
     """
@@ -288,9 +296,11 @@ class Psi(object):
         return exp
 
 
+
 # ====================
 # Particle in a Box
 # ====================
+
 
 def pib_ti_1D(x, n, l):
     """
@@ -348,14 +358,43 @@ def pib_superposition(x, t, l, n1, n2):
 # Harmonic Oscillator
 # ====================
 
+
 def harmonic_potential_2D(xx, yy, kx, ky, x0=0, y0=0):
     return 0.5*kx*(xx-x0)**2 + 0.5*ky*(yy-y0)**2
+
+
+def harmonic_oscillator_2D(xx, yy, l, m, mass=1.0, omega=1.0, hbar=1.0):
+    """
+    Harmonic Oscillator
+    """
+    # Prefactor for the HO eigenfunctions
+    prefactor = ( ((mass*omega) / (np.pi*hbar))**(1.0/2.0) /
+                  (np.sqrt(2**l * 2**m * misc.factorial(l) * misc.factorial(m))) )
+
+    # Gaussian for the HO eigenfunctions
+    gaussian = np.exp(-(mass * omega * (xx**2 + yy**2)) / (2.0*hbar))
+
+    # Hermite polynomial setup
+    coeff_grid = np.sqrt(mass * omega / hbar)
+    # coeff_l = np.zeros((l+1, ))
+    coeff_l = np.zeros(l+1)
+    coeff_l[l] = 1.0
+    # coeff_m = np.zeros((m+1, ))
+    coeff_m = np.zeros(m+1)
+    coeff_m[m] = 1.0
+    # Hermite polynomials for the HO eigenfunctions
+    hermite_l = np.polynomial.hermite.hermval(coeff_grid * xx, coeff_l)
+    hermite_m = np.polynomial.hermite.hermval(coeff_grid * yy, coeff_m)
+
+    # The eigenfunction is the product of all of the above.
+    return prefactor * gaussian * hermite_l * hermite_m
 
 
 
 # ====================
 # Helper Functions
 # ====================
+
 
 def square_function(x, l):
     """
@@ -393,9 +432,10 @@ def plot_surface(xx, yy, zz):
     """
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(xx, yy, zz, rstride=8, cstride=8, alpha=0.25)
+    ax.plot_surface(xx, yy, zz, rstride=10, cstride=10, alpha=0.25)
     # Set viewing angle
     ax.view_init(30, -60)
+    # ax.view_init(80, -60)
     # Add contour lines
     ax.contour(xx, yy, zz, zdir='z')
     plt.xlabel('x')

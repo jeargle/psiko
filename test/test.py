@@ -496,14 +496,14 @@ def operator_test6():
     plt.show()
 
 
-def harmonic_2d_test():
+def harmonic_2d_test1():
     """
     The 2-D Harmonic potential
     """
     kx = 0.05
     ky = 0.05
-    x = np.linspace(-4, 4, 50)
-    y = np.linspace(-4, 4, 50)
+    x = np.linspace(-4, 4, 200)
+    y = np.linspace(-4, 4, 200)
 
     # meshgrid
     xx, yy = np.meshgrid(x, y)
@@ -515,6 +515,27 @@ def harmonic_2d_test():
     plt.clf()
     pk.plot_contours(xx, yy, vxy)
     plt.show()
+
+
+def harmonic_2d_test2():
+    """
+    The 2-D Harmonic Oscillator eigenstates
+    """
+    l = 1
+    m = 2
+    x = np.linspace(-4, 4, 200)
+    y = np.linspace(-4, 4, 200)
+    xx, yy = np.meshgrid(x, y)
+
+    ho = pk.harmonic_oscillator_2D(xx, yy, l, m)
+
+    pk.plot_surface(xx, yy, ho)
+    plt.show()
+
+    plt.clf()
+    pk.plot_contours(xx, yy, ho)
+    plt.show()
+
 
 
 
@@ -570,10 +591,11 @@ if __name__=='__main__':
     # operator_test3()
     # operator_test4()
     # operator_test5()
-    operator_test6()
+    # operator_test6()
 
     # ====================
     # Quantum Mechanics in 2-D
     # ====================
 
-    harmonic_2d_test()
+    harmonic_2d_test1()
+    harmonic_2d_test2()
