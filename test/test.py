@@ -454,7 +454,7 @@ def operator_test5():
     x = np.arange(0, l+dx, dx)
 
     vx = pk.linear_ramp(x)
-    H = pk.build_hamiltonian(x, dx, vx)
+    H = pk.build_hamiltonian(x, vx, dx=dx)
 
     evals, evecs = np.linalg.eigh(H)
 
@@ -466,6 +466,34 @@ def operator_test5():
         plt.plot(x, psi)
         plt.plot(x, pdf)
         plt.show()
+
+
+def operator_test6():
+    """
+    Time-independent Schroedinger equation in Coulomb-like double well
+    """
+    x = np.linspace(-3, 3, 500)
+    dx = x[1] - x[0]
+    r = 1.21
+
+    vx = pk.coulomb_double_well(x, r)
+    H = pk.build_hamiltonian(x, vx, dx=dx)
+    evals, evecs = np.linalg.eigh(H)
+    plt.plot(x, vx)
+    plt.show()
+    plt.plot(x, evecs[:,0])
+    plt.plot(x, evecs[:,1])
+    plt.show()
+
+    vx2 = pk.coulomb_well(x)
+    H2 = pk.build_hamiltonian(x, vx2, dx=dx)
+    evals2, evecs2 = np.linalg.eigh(H2)
+    print(evals[0], evals2[0])
+    plt.plot(x, vx2)
+    plt.show()
+    plt.plot(x, evecs2[:,0])
+    plt.plot(x, evecs2[:,1])
+    plt.show()
 
 
 
@@ -519,5 +547,6 @@ if __name__=='__main__':
     # ====================
 
     # operator_test3()
-    operator_test4()
-    operator_test5()
+    # operator_test4()
+    # operator_test5()
+    operator_test6()

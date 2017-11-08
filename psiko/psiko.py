@@ -159,17 +159,20 @@ def momentum_operator(psi, x, dx, hbar=1.0):
 #     return -1j * hbar * finite_diff(psi)
 
 
-def kinetic_mat_operator(x, dx, m=1, h_bar=1):
+def kinetic_mat_operator(x, dx=None, m=1, h_bar=1):
     """
     Kinetic energy matrix operator.
     """
+    if dx is None:
+        dx = x[1]-x[0]
+
     t = -(h_bar**2) / (2*m*(dx**2))
     T = np.zeros(len(x)**2).reshape(len(x),len(x))
 
     for i, pos in enumerate(x):
-        # consider first diagonal elements
+        # diagonal elements
         T[i][i] = -2*t
-        # then side diagonal elements, consider edge cases (i=0) or (i=n-1)
+        # side diagonal elements with edge cases i==0 and i==n-1
         if i==0:
             T[i][i+1] = t
         elif i==len(x)-1:
@@ -177,6 +180,7 @@ def kinetic_mat_operator(x, dx, m=1, h_bar=1):
         else:
             T[i][i-1] = t
             T[i][i+1] = t
+
     return T
 
 
@@ -188,15 +192,39 @@ def linear_ramp(x):
     return b*x
 
 
-def build_hamiltonian(x, dx, vx, m=1, h_bar=1):
+def build_hamiltonian(x, vx, dx=None, m=1.0, h_bar=1.0):
     """
     Get kinetic energy, potential energy, and hamiltonian
     """
+    if dx is None:
+        dx = x[1]-x[0]
     T = kinetic_mat_operator(x, dx)
     V = np.diag(vx)
     H = T + V
 
     return H
+
+
+def coulomb_double_well(x, r):
+    """
+    Build Coulomb-like double well potential centered around 0.
+    """
+    x0_1 = -r / 2.0  # first well
+    x0_2 = r / 2.0   # second well
+
+    return np.array([
+        -1.0 / np.abs(xi-x0_1)
+        if xi <= 0
+        else -1.0 / np.abs(xi-x0_2)
+        for xi in x
+    ])
+
+
+def coulomb_well(x, x0=0.0):
+    """
+    Build Coulomb-like well potential at x0.
+    """
+    return -1.0 / np.abs(x-x0)
 
 
 def eval_expectation(psi, x, dx, operator):
