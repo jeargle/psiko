@@ -3,7 +3,10 @@
 
 
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+from mpl_toolkits import axes_grid1
+from mpl_toolkits.mplot3d import Axes3D
 from scipy.integrate import simps
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
@@ -340,6 +343,20 @@ def pib_superposition(x, t, l, n1, n2):
     return psi
 
 
+
+# ====================
+# Harmonic Oscillator
+# ====================
+
+def harmonic_potential_2D(xx, yy, kx, ky, x0=0, y0=0):
+    return 0.5*kx*(xx-x0)**2 + 0.5*ky*(yy-y0)**2
+
+
+
+# ====================
+# Helper Functions
+# ====================
+
 def square_function(x, l):
     """
     Square wave 0->1->0 in the middle third of the length l.
@@ -363,7 +380,58 @@ def projection_integrand(x, n, l):
 # Plotting
 # ====================
 
+
 def time_plot(x, y, t, timestep=1):
     for i in range(0, len(t), timestep):
         plt.plot(x, y[:,i])
     return
+
+
+def plot_surface(xx, yy, zz):
+    """
+    Plot a surface.
+    """
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.plot_surface(xx, yy, zz, rstride=8, cstride=8, alpha=0.25)
+    # Set viewing angle
+    ax.view_init(30, -60)
+    # Add contour lines
+    ax.contour(xx, yy, zz, zdir='z')
+    plt.xlabel('x')
+    plt.ylabel('y')
+
+    return
+
+
+def plot_contours(xx, yy, zz, vmin=None, vmax=None):
+    """
+    Plot a heatmap and contours for a 3d surface.
+    """
+    # Use viridis colormap
+    cmap = mpl.cm.get_cmap('viridis')
+    plt.contour(xx, yy, zz, linewidths=3.0, cmap=cmap)
+    contour = plt.contour(xx, yy, zz, colors='k', linewidths=0.5)
+    im = plt.imshow(zz, interpolation='nearest',
+                    extent=[xx.min(), xx.max(), yy.min(), yy.max()],
+                    vmin=vmin, vmax=vmax, aspect='auto')
+    plt.clabel(contour, fontsize='x-small', inline=1)
+    _add_colorbar(im, label='z')
+    plt.xlabel('x')
+    plt.ylabel('y')
+
+    return
+
+
+def _add_colorbar(im, aspect=20, pad_fraction=0.5, **kwargs):
+    """
+    Add a vertical color bar to an image plot.
+    """
+    divider = axes_grid1.make_axes_locatable(im.axes)
+    width = axes_grid1.axes_size.AxesY(im.axes, aspect=1.0/aspect)
+    pad = axes_grid1.axes_size.Fraction(pad_fraction, width)
+    current_ax = plt.gca()
+    cax = divider.append_axes('right', size=width, pad=pad)
+    plt.sca(current_ax)
+
+    return im.axes.figure.colorbar(im, cax=cax, **kwargs)
