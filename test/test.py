@@ -498,7 +498,7 @@ def operator_test6():
 
 def harmonic_2d_test1():
     """
-    The 2-D Harmonic potential
+    The 2D Harmonic potential
     """
     kx = 0.05
     ky = 0.05
@@ -519,7 +519,7 @@ def harmonic_2d_test1():
 
 def harmonic_2d_test2():
     """
-    The 2-D Harmonic Oscillator eigenstates
+    The 2D Harmonic Oscillator eigenstates
     """
     l = 1
     m = 2
@@ -534,6 +534,32 @@ def harmonic_2d_test2():
 
     plt.clf()
     pk.plot_contours(xx, yy, ho)
+    plt.show()
+
+
+def harmonic_2d_test3():
+    """
+    2D Harmonic Oscillator eigenstate superposition
+    """
+    l1, m1 = 0, 0
+    l2, m2 = 1, 2
+    x = np.linspace(-4, 4, 200)
+    y = np.linspace(-4, 4, 200)
+    xx, yy = np.meshgrid(x, y)
+
+    # Two eigenfunctions
+    psi1 = pk.harmonic_oscillator_2D(xx, yy, l1, m1)
+    E1 = l1 + m1 + 1
+    c1 = 1.0/np.sqrt(2)
+
+    psi2 = pk.harmonic_oscillator_2D(xx, yy, l2, m2)
+    E2 = l2 + m2 + 1
+    c2 = c1
+
+    # superposition
+    psi = c1*psi1 + c2*psi2
+
+    pk.plot_contours(xx, yy, psi)
     plt.show()
 
 
@@ -597,5 +623,6 @@ if __name__=='__main__':
     # Quantum Mechanics in 2-D
     # ====================
 
-    harmonic_2d_test1()
+    # harmonic_2d_test1()
     harmonic_2d_test2()
+    harmonic_2d_test3()
