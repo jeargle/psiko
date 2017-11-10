@@ -563,6 +563,42 @@ def harmonic_2d_test3():
     plt.show()
 
 
+def harmonic_2d_test4():
+    """
+    Time-dependent 2D Harmonic Oscillator
+    """
+    l1, m1 = 0, 0
+    l2, m2 = 1, 2
+    x = np.linspace(-4, 4, 200)
+    y = np.linspace(-4, 4, 200)
+    xx, yy = np.meshgrid(x, y)
+    t = np.linspace(0, 4, 80)
+    psi = np.zeros(len(t)*xx.shape[0]*xx.shape[1]).reshape(len(t), xx.shape[0], xx.shape[1])
+
+    # Two eigenfunctions
+    psi1 = pk.harmonic_oscillator_2D(xx, yy, l1, m1)
+    E1 = l1 + m1 + 1
+    c1 = 1.0/np.sqrt(2)
+
+    psi2 = pk.harmonic_oscillator_2D(xx, yy, l2, m2)
+    E2 = l2 + m2 + 1
+    c2 = c1
+
+    for step, time in enumerate(t):
+        c1_t = pk.cnt_evolve(c1, time, E1)
+        c2_t = pk.cnt_evolve(c2, time, E2)
+        psi[step] = c1_t*psi1 + c2_t*psi2
+
+    vmin = np.min(psi)
+    vmax = np.max(psi)
+
+    for i in range(0, 80, 8):
+        # pk.plot_surface(xx, yy, psi[i])
+        pk.plot_contours(xx, yy, psi[i], vmin=vmin, vmax=vmax)
+        plt.show()
+        plt.clf()
+
+
 
 
 if __name__=='__main__':
@@ -624,5 +660,6 @@ if __name__=='__main__':
     # ====================
 
     # harmonic_2d_test1()
-    harmonic_2d_test2()
+    # harmonic_2d_test2()
     harmonic_2d_test3()
+    harmonic_2d_test4()
