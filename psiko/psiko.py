@@ -359,6 +359,42 @@ def pib_superposition(x, t, l, n1, n2):
 # ====================
 
 
+def harmonic_oscillator_1D(x, n, mass=1.0, omega=1.0, hbar=1.0):
+    """
+    Harmonic Oscillator
+    """
+    prefactor = (1.0 / (np.sqrt(2**n * misc.factorial(n))) *
+                 (mass * omega / (np.pi * hbar))**(1.0/4.0))
+    gaussian = np.exp(-(mass * omega * x * x) / (2.0 * hbar))
+
+    coeff_grid = np.sqrt(mass * omega / hbar)
+    coeff = np.zeros(n + 1)
+    coeff[n] = 1.0
+    hermite = np.polynomial.hermite.hermval(coeff_grid * x, coeff)
+
+    return prefactor * gaussian * hermite
+
+
+def harmonic_oscillator_1D_in_field(x, t, omega_f, omega_0=1, lam=1, E_0=1.0, mass=1.0, hbar=1.0):
+    """
+    Time-dependent solution to ground state Harmonic Oscillator in a sinusoidal
+    potential solved using perturbation theory.  Used for system bathed in EM
+    field (spectroscopy).
+
+    omega_0: frequency of harmonic oscillator
+    omega_f: frequency of incoming field
+    """
+    omega_diff = omega_0 - omega_f
+    omega_sum = omega_0 + omega_f
+    c1 = ( ((1j*E_0*(2.0*np.pi/lam)) / (2.0*np.sqrt(2.0*mass*hbar*omega_0))) *
+           ( ((np.exp(-1j*omega_diff*t) - 1.0) / omega_diff) +
+             ((np.exp(1j*omega_sum*t) - 1.0) / omega_sum) ) )
+    psi0 = harmonic_oscillator_1D(x, 0)
+    psi1 = harmonic_oscillator_1D(x, 1)
+
+    return psi0 + c1*psi1
+
+
 def harmonic_potential_2D(xx, yy, kx, ky, x0=0, y0=0):
     return 0.5*kx*(xx-x0)**2 + 0.5*ky*(yy-y0)**2
 

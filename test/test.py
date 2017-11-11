@@ -599,6 +599,19 @@ def harmonic_2d_test4():
         plt.clf()
 
 
+def field_test1():
+    """
+    Time-dependent wavefunction under a field
+    """
+    dx = 0.01
+    x = np.arange(-3, 3+dx, dx)
+    ti=0.0
+    omega_f =3.0
+
+    test = pk.harmonic_oscillator_1D_in_field(x, ti, omega_f)
+    plt.plot(x, test)
+    plt.show()
+
 
 
 if __name__=='__main__':
@@ -661,5 +674,11 @@ if __name__=='__main__':
 
     # harmonic_2d_test1()
     # harmonic_2d_test2()
-    harmonic_2d_test3()
-    harmonic_2d_test4()
+    # harmonic_2d_test3()
+    # harmonic_2d_test4()
+
+    # ====================
+    # Spectrum via a Time-Dependent field
+    # ====================
+
+    field_test1()
