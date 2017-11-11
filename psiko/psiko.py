@@ -384,15 +384,29 @@ def harmonic_oscillator_1D_in_field(x, t, omega_f, omega_0=1, lam=1, E_0=1.0, ma
     omega_0: frequency of harmonic oscillator
     omega_f: frequency of incoming field
     """
-    omega_diff = omega_0 - omega_f
-    omega_sum = omega_0 + omega_f
-    c1 = ( ((1j*E_0*(2.0*np.pi/lam)) / (2.0*np.sqrt(2.0*mass*hbar*omega_0))) *
-           ( ((np.exp(-1j*omega_diff*t) - 1.0) / omega_diff) +
-             ((np.exp(1j*omega_sum*t) - 1.0) / omega_sum) ) )
+    # omega_diff = omega_0 - omega_f
+    # omega_sum = omega_0 + omega_f
+    # c1 = ( ((1j*E_0*(2.0*np.pi/lam)) / (2.0*np.sqrt(2.0*mass*hbar*omega_0))) *
+    #        ( ((np.exp(-1j*omega_diff*t) - 1.0) / omega_diff) +
+    #          ((np.exp(1j*omega_sum*t) - 1.0) / omega_sum) ) )
+    c1 = excited_overlap(t, omega_f, omega_0, lam, E_0, mass, hbar)
     psi0 = harmonic_oscillator_1D(x, 0)
     psi1 = harmonic_oscillator_1D(x, 1)
 
     return psi0 + c1*psi1
+
+
+def excited_overlap(t, omega_f, omega_0=1, lam=1, E_0=1.0, m=1.0, hbar=1.0):
+    """
+    Overlap of the ground state and first excited states for 1D
+    time-dependent Harmonic Oscillator.
+    """
+    omega_diff = omega_0 - omega_f
+    omega_sum = omega_0 + omega_f
+    c1 = ((1j*E_0*(2.0*np.pi/lam))/(2.0*np.sqrt(2.0*m*hbar*omega_0))) * \
+        ( ((np.exp(-1j*omega_diff*t) - 1.0) / omega_diff) + \
+        ((np.exp(1j*omega_sum*t) - 1.0) / omega_sum))
+    return c1
 
 
 def harmonic_potential_2D(xx, yy, kx, ky, x0=0, y0=0):

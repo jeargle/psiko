@@ -630,6 +630,25 @@ def field_test2():
     plt.show()
 
 
+def field_test3():
+    """
+    Excited states overlap.
+    """
+    t = np.arange(0, 10, 0.01)
+    omegas = [3.0, 5.0, 8.0, 10.0]
+    prob_excited_state = np.zeros(len(omegas)*len(t)).reshape(len(omegas), len(t))
+
+    # iterate over EM field frequencies
+    for omega_idx, omega in enumerate(omegas):
+        for step, time in enumerate(t):
+            c1 = pk.excited_overlap(time, omega)
+            prob_excited_state[omega_idx, step] = abs(c1)**2
+
+    for idx in range(len(omegas)):
+        plt.plot(t, prob_excited_state[idx])
+    plt.show()
+
+
 
 if __name__=='__main__':
 
@@ -698,5 +717,6 @@ if __name__=='__main__':
     # Spectrum via a Time-Dependent field
     # ====================
 
-    field_test1()
+    # field_test1()
     field_test2()
+    field_test3()
