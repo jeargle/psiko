@@ -601,15 +601,32 @@ def harmonic_2d_test4():
 
 def field_test1():
     """
-    Time-dependent wavefunction under a field
+    Time-dependent harmonic oscillator under a field.
     """
     dx = 0.01
     x = np.arange(-3, 3+dx, dx)
-    ti=0.0
-    omega_f =3.0
+    ti = 0.0
+    omega_f = 3.0
 
     test = pk.harmonic_oscillator_1D_in_field(x, ti, omega_f)
     plt.plot(x, test)
+    plt.show()
+
+
+def field_test2():
+    """
+    Wavepacket dynamics for time-dependent harmonic oscillator under
+    a field.
+    """
+    x = np.arange(-3, 3+0.01, 0.01)
+    t = np.linspace(0,4,250)
+    omega_f = 3.0
+    psit = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+
+    for step, time in enumerate(t):
+        psit[:,step] = pk.harmonic_oscillator_1D_in_field(x, time, omega_f)
+
+    pk.time_plot(x, psit, t, timestep=8)
     plt.show()
 
 
@@ -682,3 +699,4 @@ if __name__=='__main__':
     # ====================
 
     field_test1()
+    field_test2()
