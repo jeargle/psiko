@@ -640,14 +640,31 @@ def field_test3():
 
     # iterate over EM field frequencies
     for omega_idx, omega in enumerate(omegas):
-        for step, time in enumerate(t):
-            c1 = pk.excited_overlap(time, omega)
-            prob_excited_state[omega_idx, step] = abs(c1)**2
+        c1 = pk.excited_overlap(t, omega)
+        prob_excited_state[omega_idx] = abs(c1)**2
 
     for idx in range(len(omegas)):
         plt.plot(t, prob_excited_state[idx])
     plt.show()
 
+
+def field_test4():
+    """
+    Calculating Infrared Spectra
+    """
+    omegas = np.linspace(0, 3, 95)
+    t = np.arange(0, 30, 0.1)
+    ir_spectrum = np.zeros_like(omegas)
+
+    # iterate over EM field frequencies
+    for omega_idx, omega in enumerate(omegas):
+        # calculate overlaps and integrate
+        c1t = pk.excited_overlap(t, omega)
+        A_trans = pk.complex_simps(c1t, t)
+        ir_spectrum[omega_idx] = np.absolute(A_trans)**2
+
+    plt.plot(omegas, ir_spectrum)
+    plt.show()
 
 
 if __name__=='__main__':
@@ -718,5 +735,6 @@ if __name__=='__main__':
     # ====================
 
     # field_test1()
-    field_test2()
+    # field_test2()
     field_test3()
+    field_test4()
