@@ -650,7 +650,7 @@ def field_test3():
 
 def field_test4():
     """
-    Calculating Infrared Spectra
+    Calculate infrared spectrum.
     """
     omegas = np.linspace(0, 3, 95)
     t = np.arange(0, 30, 0.1)
@@ -665,6 +665,34 @@ def field_test4():
 
     plt.plot(omegas, ir_spectrum)
     plt.show()
+
+
+def phase_space_test1():
+    """
+    Gaussians and uncertainty.
+    """
+    sigma=0.1
+
+    # calculate position part
+    exp_x, _ = quad(pk.x_int, -np.inf, np.inf, args=(sigma))
+    exp_x2, _ = quad(pk.x2_int, -np.inf, np.inf, args=(sigma))
+
+    # calculate momentum part
+    exp_p, _ = quad(pk.p_int, -np.inf, np.inf, args=(sigma))
+    exp_p2, _ = quad(pk.p2_int, -np.inf, np.inf, args=(sigma))
+
+    # calculate uncertainty
+    delta_x = np.sqrt(exp_x2 - exp_x**2)
+    delta_p = np.sqrt(exp_p2 - exp_p**2)
+    uncertainty = delta_x*delta_p
+    print('uncertainty:', uncertainty)
+
+    #plot
+    grid = np.linspace(-10.0, 10.0,1000)
+    plt.plot(grid, pk.gaussian_x(grid, sigma))
+    plt.plot(grid, pk.gaussian_p(grid, sigma))
+    plt.show()
+
 
 
 if __name__=='__main__':
@@ -736,5 +764,11 @@ if __name__=='__main__':
 
     # field_test1()
     # field_test2()
-    field_test3()
+    # field_test3()
     field_test4()
+
+    # ====================
+    # Phase and Momentum Space Intro
+    # ====================
+
+    phase_space_test1()

@@ -464,6 +464,52 @@ def projection_integrand(x, n, l):
             square_function(x,l))
 
 
+def gaussian_x(x, sigma):
+    """
+    Position gaussian.
+    """
+    return np.exp(-(x**2 / (2*sigma**2))) / (np.sqrt(sigma*np.sqrt(np.pi)))
+
+
+def gaussian_p(p, sigma):
+    """
+    Momentum gaussian.
+    """
+    return (np.sqrt(sigma) * np.exp(-(p**2 * sigma**2)/2)) / (np.sqrt(np.sqrt(np.pi)))
+
+
+def x_int(x, sigma):
+    """
+    Gaussian position integrand.
+    """
+    gx = gaussian_x(x, sigma)
+    return gx * x * gx
+
+
+def x2_int(x, sigma):
+    """
+    Gaussian position-squared integrand.
+    """
+    gx = gaussian_x(x, sigma)
+    return gx * x**2 * gx
+
+
+def p_int(p, sigma):
+    """
+    Gaussian momentum integrand.
+    """
+    gp = gaussian_p(p, sigma)
+    return gp * p * gp
+
+
+def p2_int(p, sigma):
+    """
+    Gaussian momentum-squared integrand.
+    """
+    gp = gaussian_p(p, sigma)
+    return gp * p**2 * gp
+
+
 
 # ====================
 # Plotting
