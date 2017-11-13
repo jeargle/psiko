@@ -671,7 +671,7 @@ def phase_space_test1():
     """
     Gaussians and uncertainty.
     """
-    sigma=0.1
+    sigma = 0.1
 
     # calculate position part
     exp_x, _ = quad(pk.x_int, -np.inf, np.inf, args=(sigma))
@@ -685,12 +685,28 @@ def phase_space_test1():
     delta_x = np.sqrt(exp_x2 - exp_x**2)
     delta_p = np.sqrt(exp_p2 - exp_p**2)
     uncertainty = delta_x*delta_p
+    print('delta_x:', delta_x)
+    print('delta_p:', delta_p)
     print('uncertainty:', uncertainty)
 
-    #plot
-    grid = np.linspace(-10.0, 10.0,1000)
+    grid = np.linspace(-10.0, 10.0, 1000)
     plt.plot(grid, pk.gaussian_x(grid, sigma))
     plt.plot(grid, pk.gaussian_p(grid, sigma))
+    plt.show()
+
+
+def phase_space_test2():
+    """
+    Wigner wavepackets
+    """
+    omega = 1.0
+    x = np.linspace(-3.0, 3.0, 50)
+    p = np.linspace(-3.0, 3.0, 50)
+
+    xx, pp = np.meshgrid(x, p)
+    wxp = pk.harmonic_oscillator_wigner(xx, pp, omega)
+
+    pk.plot_contours(xx, pp, wxp)
     plt.show()
 
 
@@ -765,10 +781,11 @@ if __name__=='__main__':
     # field_test1()
     # field_test2()
     # field_test3()
-    field_test4()
+    # field_test4()
 
     # ====================
     # Phase and Momentum Space Intro
     # ====================
 
     phase_space_test1()
+    phase_space_test2()

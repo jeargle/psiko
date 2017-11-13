@@ -440,6 +440,14 @@ def harmonic_oscillator_2D(xx, yy, l, m, mass=1.0, omega=1.0, hbar=1.0):
     return prefactor * gaussian * hermite_l * hermite_m
 
 
+def harmonic_oscillator_wigner(x, p, omega, mass=1.0, hbar=1.0):
+    """
+    """
+    return ( 1.0 / (np.pi * hbar) *
+             np.exp(-mass * omega * x**2 / hbar) *
+             np.exp(-p**2/(mass * omega * hbar)) )
+
+
 
 # ====================
 # Helper Functions
@@ -468,14 +476,16 @@ def gaussian_x(x, sigma):
     """
     Position gaussian.
     """
-    return np.exp(-(x**2 / (2*sigma**2))) / (np.sqrt(sigma*np.sqrt(np.pi)))
+    return ( np.exp(-(x**2 / (2 * sigma**2))) /
+             (np.sqrt(sigma * np.sqrt(np.pi))) )
 
 
 def gaussian_p(p, sigma):
     """
     Momentum gaussian.
     """
-    return (np.sqrt(sigma) * np.exp(-(p**2 * sigma**2)/2)) / (np.sqrt(np.sqrt(np.pi)))
+    return ( (np.sqrt(sigma) * np.exp(-(p**2 * sigma**2)/2)) /
+             (np.sqrt(np.sqrt(np.pi))) )
 
 
 def x_int(x, sigma):
