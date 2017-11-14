@@ -710,6 +710,37 @@ def phase_space_test2():
     plt.show()
 
 
+def phase_space_test3():
+    """
+    Propagating a Wigner density
+    """
+    x = np.linspace(-3.0, 3.0, 40)
+    p = np.linspace(-3.0, 3.0, 40)
+    xx, pp = np.meshgrid(x, p)
+    omega = 1.5
+    t_0 = 0.0
+    t_f = 2*np.pi
+    t = np.linspace(t_0, t_f, 80)
+    wxpt = np.zeros(len(t)*len(x)*len(p)).reshape(len(t),len(x),len(p))
+
+    for i, time in enumerate(t):
+        wxpt[i] = pk.harmonic_oscillator_wigner(
+            xx - np.cos(omega*time),
+            pp - np.sin(omega*time),
+            omega
+        )
+
+    zmin = np.min(wxpt)
+    zmax = np.max(wxpt)
+    print('zmin:', zmin)
+    print('zmax:', zmax)
+
+    for i in range(0, 80, 8):
+        pk.plot_contours(xx, pp, wxpt[i])
+        plt.show()
+        plt.clf()
+
+
 
 if __name__=='__main__':
 
@@ -787,5 +818,6 @@ if __name__=='__main__':
     # Phase and Momentum Space Intro
     # ====================
 
-    phase_space_test1()
+    # phase_space_test1()
     phase_space_test2()
+    phase_space_test3()
