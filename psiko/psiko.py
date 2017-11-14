@@ -447,6 +447,12 @@ def harmonic_oscillator_wigner(x, p, omega, mass=1.0, hbar=1.0):
              np.exp(-mass * omega * x**2 / hbar) *
              np.exp(-p**2/(mass * omega * hbar)) )
 
+def harmonic_oscillator_wigner_01(x, p, t):
+    """
+    """
+    return ( np.exp(-x**2 - p**2) *
+             (x**2 + p**2 + np.sqrt(2.0)*x*np.cos(t) - np.sqrt(2)*p*np.sin(t)) )
+
 
 
 # ====================

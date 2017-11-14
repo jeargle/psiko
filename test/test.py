@@ -735,6 +735,30 @@ def phase_space_test3():
     print('zmin:', zmin)
     print('zmax:', zmax)
 
+    for i in range(0, 80, 20):
+        pk.plot_contours(xx, pp, wxpt[i])
+        plt.show()
+        plt.clf()
+
+
+def phase_space_test4():
+    """
+    Wigner density superposition of the HO
+    """
+    x = np.linspace(-3.0, 3.0, 40)
+    p = np.linspace(-3.0, 3.0, 40)
+    xx, pp = np.meshgrid(x, p)
+    t = np.linspace(0, 5, 80)
+    wxpt = np.zeros(len(t)*len(x)*len(p)).reshape(len(t),len(x),len(p))
+
+    for i, time in enumerate(t):
+        wxpt[i] = pk.harmonic_oscillator_wigner_01(xx, pp, time)
+
+    z_min = np.min(wxpt)
+    z_max = np.max(wxpt)
+    print('z_min:', z_min)
+    print('z_max:', z_max)
+
     for i in range(0, 80, 8):
         pk.plot_contours(xx, pp, wxpt[i])
         plt.show()
@@ -819,5 +843,6 @@ if __name__=='__main__':
     # ====================
 
     # phase_space_test1()
-    phase_space_test2()
-    phase_space_test3()
+    # phase_space_test2()
+    # phase_space_test3()
+    phase_space_test4()
