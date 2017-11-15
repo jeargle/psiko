@@ -765,6 +765,26 @@ def phase_space_test4():
         plt.clf()
 
 
+def tunnel_test1():
+    """
+    """
+    dx = 0.01
+    x = np.arange(0, 10, dx)
+    energy = 10.0
+    psi_x = pk.complex_plane_wave(x, energy)
+    barrier = pk.square_barrier(x)
+
+    psi_tunnel = pk.tunnel_finite_diff(x, psi_x, barrier, energy)
+    pdf = pk.prob_density(psi_tunnel)
+
+    plt.plot(x, barrier)
+    plt.plot(x, psi_tunnel.real)
+    plt.plot(x, psi_tunnel.imag)
+    plt.plot(x, pdf)
+    plt.legend()
+    plt.show()
+
+
 
 if __name__=='__main__':
 
@@ -846,3 +866,9 @@ if __name__=='__main__':
     # phase_space_test2()
     # phase_space_test3()
     phase_space_test4()
+
+    # ====================
+    # Quantum Tunneling and reactions
+    # ====================
+
+    tunnel_test1()

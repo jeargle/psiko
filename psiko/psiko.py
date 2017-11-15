@@ -238,6 +238,29 @@ def coulomb_well(x, x0=0.0):
     return -1.0 / np.abs(x-x0)
 
 
+def square_barrier(x, length=1.0, height=9.0, x0=4.0):
+    """
+    Build square barrier potential at x0.
+    """
+    result = np.zeros(len(x))
+    for i, xval in enumerate(x):
+        if xval >= x0 and xval <= x0 + length:
+            result[i] = height
+
+    return result
+
+
+def complex_plane_wave(x, energy, mass=1.0, hbar=1.0):
+    """
+    Complex plane wave.
+    """
+    k = np.sqrt(2 * mass * energy / hbar**2)
+    psi = np.zeros(len(x), dtype=np.dtype(complex))
+    psi = np.exp(-1j * k * x)
+
+    return psi
+
+
 def eval_expectation(psi, x, dx, operator):
     """
     """
@@ -294,6 +317,20 @@ class Psi(object):
         exp = 0.0 if np.abs(exp) < 1e-7 else exp
 
         return exp
+
+
+def tunnel_finite_diff(x, psi_x, v_x, E):
+    """
+    tunnel function
+
+    return time-propagated wavefunction
+    """
+    psi_new = np.copy(psi_x)
+    for i in range(1, len(x)-1):
+        dx = x[i+1]-x[i]
+        psi_new[i+1] = (2.0 + (2.0*dx**2)*(v_x[i]-E))*psi_new[i] - psi_new[i-1]
+
+    return psi_new
 
 
 
