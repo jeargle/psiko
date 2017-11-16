@@ -603,7 +603,7 @@ def plot_contours(xx, yy, zz, vmin=None, vmax=None):
     contour = plt.contour(xx, yy, zz, colors='k', linewidths=0.5)
     im = plt.imshow(zz, interpolation='nearest',
                     extent=[xx.min(), xx.max(), yy.min(), yy.max()],
-                    vmin=vmin, vmax=vmax, aspect='auto')
+                    vmin=vmin, vmax=vmax, aspect='auto', origin='lower')
     plt.clabel(contour, fontsize='x-small', inline=1)
     _add_colorbar(im, label='z')
     plt.xlabel('x')
