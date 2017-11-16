@@ -427,11 +427,6 @@ def harmonic_oscillator_1D_in_field(x, t, omega_f, omega_0=1, lam=1, E_0=1.0, ma
     omega_0: frequency of harmonic oscillator
     omega_f: frequency of incoming field
     """
-    # omega_diff = omega_0 - omega_f
-    # omega_sum = omega_0 + omega_f
-    # c1 = ( ((1j*E_0*(2.0*np.pi/lam)) / (2.0*np.sqrt(2.0*mass*hbar*omega_0))) *
-    #        ( ((np.exp(-1j*omega_diff*t) - 1.0) / omega_diff) +
-    #          ((np.exp(1j*omega_sum*t) - 1.0) / omega_sum) ) )
     c1 = excited_overlap(t, omega_f, omega_0, lam, E_0, mass, hbar)
     psi0 = harmonic_oscillator_1D(x, 0)
     psi1 = harmonic_oscillator_1D(x, 1)
@@ -469,10 +464,8 @@ def harmonic_oscillator_2D(xx, yy, l, m, mass=1.0, omega=1.0, hbar=1.0):
 
     # Hermite polynomial setup
     coeff_grid = np.sqrt(mass * omega / hbar)
-    # coeff_l = np.zeros((l+1, ))
     coeff_l = np.zeros(l+1)
     coeff_l[l] = 1.0
-    # coeff_m = np.zeros((m+1, ))
     coeff_m = np.zeros(m+1)
     coeff_m[m] = 1.0
     # Hermite polynomials for the HO eigenfunctions
