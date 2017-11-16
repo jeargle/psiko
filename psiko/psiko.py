@@ -250,6 +250,12 @@ def square_barrier(x, length=1.0, height=9.0, x0=4.0):
     return result
 
 
+def transmission_probability(pdf, n_cutoff=300):
+    """
+    """
+    return 2.0 / (1.0 + np.mean(pdf[-n_cutoff:]))
+
+
 def complex_plane_wave(x, energy, mass=1.0, hbar=1.0):
     """
     Complex plane wave.

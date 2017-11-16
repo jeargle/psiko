@@ -785,6 +785,27 @@ def tunnel_test1():
     plt.show()
 
 
+def tunnel_test2():
+    """
+    Transmission probability
+    """
+    x = np.arange(0, 10, 0.01)
+    barrier = pk.square_barrier(x)
+    # m = 1
+    energies = np.arange(0, 25, 0.1)
+    transmission = np.zeros_like(energies)
+
+    for idx, energy in enumerate(energies):
+        psi_x = pk.complex_plane_wave(x, energy)
+        psi_tunnel = pk.tunnel_finite_diff(x, psi_x, barrier, energy)
+        pdf = pk.prob_density(psi_tunnel)
+        transmission[idx] = pk.transmission_probability(pdf)
+
+    plt.plot(energies, transmission)
+    plt.show()
+
+
+
 
 if __name__=='__main__':
 
@@ -865,10 +886,11 @@ if __name__=='__main__':
     # phase_space_test1()
     # phase_space_test2()
     # phase_space_test3()
-    phase_space_test4()
+    # phase_space_test4()
 
     # ====================
     # Quantum Tunneling and reactions
     # ====================
 
     tunnel_test1()
+    tunnel_test2()
