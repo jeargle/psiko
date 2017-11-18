@@ -805,6 +805,28 @@ def tunnel_test2():
     plt.show()
 
 
+def tunnel_test3():
+    """
+    Transmission vs mass/energy (2-D scan)
+    """
+    dx = 0.01
+    x = np.arange(0, 10, dx)
+    barrier = pk.square_barrier(x)
+    energies = np.linspace(1,25,20)
+    masses = np.linspace(0.5, 5, 20)
+    ee, mm = np.meshgrid(energies, masses)
+    transmission = np.zeros(len(energies)*len(masses)).reshape(len(energies), len(masses))
+
+    for i, e in enumerate(energies):
+        for j, m in enumerate(masses):
+            psi_x = pk.complex_plane_wave(x, e, m)
+            psi_tunnel = pk.tunnel_finite_diff(x, psi_x, barrier, e)
+            pdf = pk.prob_density(psi_tunnel)
+            transmission[i, j] = pk.transmission_probability(pdf)
+
+    pk.plot_contours(ee, mm, transmission)
+    plt.show()
+
 
 
 if __name__=='__main__':
@@ -892,5 +914,6 @@ if __name__=='__main__':
     # Quantum Tunneling and reactions
     # ====================
 
-    tunnel_test1()
+    # tunnel_test1()
     tunnel_test2()
+    tunnel_test3()
