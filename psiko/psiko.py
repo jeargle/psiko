@@ -655,29 +655,22 @@ def plot_sphere(m, l):
     """
     Plot a function onto a sphere.
     """
-    fig = plt.figure(figsize=(6, 6))
     theta = np.arange(0, 2 * np.pi, 0.01)
     phi = np.arange(0, np.pi, 0.01)
-    ax = fig.add_subplot(111, projection='3d')
     theta_mg, phi_mg = np.meshgrid(theta, phi)
-
-    Y_lm_real = sph_harm_real(m, l, theta_mg, phi_mg)
-
-    cmap = mpl.cm.get_cmap(name='seismic', lut=None)
-    cm = mpl.cm.ScalarMappable(norm=None, cmap=cmap)
-    mapped_Y_lm = cm.to_rgba(Y_lm_real)
-    cm.set_array(mapped_Y_lm)
-
     x, y, z = sphere_to_cart(theta_mg, phi_mg, r=1.0)
 
-    dt = np.dtype(object)
-    colors = np.zeros(Y_lm_real.shape, dtype=dt)
+    Y_real = sph_harm_real(m, l, theta_mg, phi_mg)
 
-    for ph in range(len(phi)):
-        for th in range(len(theta)):
-            colors[ph, th] = mapped_Y_lm[ph, th]
+    # Color points on sphere.
+    cmap = mpl.cm.get_cmap(name='seismic', lut=None)
+    cm = mpl.cm.ScalarMappable(norm=None, cmap=cmap)
+    mapped_Y = cm.to_rgba(Y_real)
+    cm.set_array(mapped_Y)
 
-    ax.plot_surface(x, y, z, facecolors=colors)
+    fig = plt.figure(figsize=(6, 6))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.plot_surface(x, y, z, facecolors=mapped_Y)
     fig.colorbar(cm, shrink=0.5)
     ax.view_init(20, 45)
     ax.set_title('l=' + str(l) + ' m=' + str(m))
