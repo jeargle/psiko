@@ -828,6 +828,21 @@ def tunnel_test3():
     plt.show()
 
 
+def rotation_test1():
+    """
+    Rotational states: Spherical Harmonics
+    """
+    # spherical harmonics (m=2, l=2)
+    pk.plot_sphere(2, 2)
+    plt.show()
+    plt.clf()
+
+    # spherical harmonics (m=1,l=2)
+    pk.plot_sphere(1, 2)
+    plt.show()
+    plt.clf()
+
+
 
 if __name__=='__main__':
 
@@ -915,5 +930,10 @@ if __name__=='__main__':
     # ====================
 
     # tunnel_test1()
-    tunnel_test2()
+    # tunnel_test2()
     tunnel_test3()
+
+    # ====================
+    # Rotation theory
+    # ====================
+    rotation_test1()

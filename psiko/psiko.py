@@ -9,6 +9,7 @@ from mpl_toolkits import axes_grid1
 from mpl_toolkits.mplot3d import Axes3D
 from scipy import misc
 from scipy.integrate import simps
+from scipy.special import sph_harm
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
            "boundary_1d", "pib_ti_1D", "pib_td_1D", "wave_solution",
@@ -562,6 +563,31 @@ def p2_int(p, sigma):
     return gp * p**2 * gp
 
 
+def sph_harm_real(m, l, phi, theta):
+    """
+    Spherical harmonics in real space.
+    """
+    Y_lm = sph_harm(m, l, phi, theta)
+    if m < 0:
+        Y_lm_real = np.sqrt(2.0) * (-1.0)**m * Y_lm.imag
+    elif m > 0:
+        Y_lm_real = np.sqrt(2.0) * (-1.0)**m * Y_lm.real
+    else:
+        Y_lm_real = Y_lm
+    return Y_lm_real
+
+
+def sphere_to_cart(theta, phi, r=1.0):
+    """
+    Converts spherical coordinates to 3D cartesian coordinates.
+    """
+    x = r * np.sin(phi) * np.cos(theta)
+    y = r * np.sin(phi) * np.sin(theta)
+    z = r * np.cos(phi)
+
+    return x, y, z
+
+
 
 # ====================
 # Plotting
@@ -623,3 +649,40 @@ def _add_colorbar(im, aspect=20, pad_fraction=0.5, **kwargs):
     plt.sca(current_ax)
 
     return im.axes.figure.colorbar(im, cax=cax, **kwargs)
+
+
+def plot_sphere(m, l):
+    """
+    Plot a function onto a sphere.
+    """
+    fig = plt.figure(figsize=(6, 6))
+    theta = np.arange(0, 2 * np.pi, 0.01)
+    phi = np.arange(0, np.pi, 0.01)
+    ax = fig.add_subplot(111, projection='3d')
+    theta_mg, phi_mg = np.meshgrid(theta, phi)
+
+    Y_lm_real = sph_harm_real(m, l, theta_mg, phi_mg)
+
+    cmap = mpl.cm.get_cmap(name='seismic', lut=None)
+    cm = mpl.cm.ScalarMappable(norm=None, cmap=cmap)
+    mapped_Y_lm = cm.to_rgba(Y_lm_real)
+    cm.set_array(mapped_Y_lm)
+
+    x, y, z = sphere_to_cart(theta_mg, phi_mg, r=1.0)
+
+    dt = np.dtype(object)
+    colors = np.zeros(Y_lm_real.shape, dtype=dt)
+
+    for ph in range(len(phi)):
+        for th in range(len(theta)):
+            colors[ph, th] = mapped_Y_lm[ph, th]
+
+    ax.plot_surface(x, y, z, facecolors=colors)
+    fig.colorbar(cm, shrink=0.5)
+    ax.view_init(20, 45)
+    ax.set_title('l=' + str(l) + ' m=' + str(m))
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+
+    return
