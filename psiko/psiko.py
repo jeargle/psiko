@@ -578,16 +578,33 @@ def p2_int(p, sigma):
     return gp * p**2 * gp
 
 
+def mu_operator(mu, theta, phi):
+    """
+    """
+    return mu * (np.sin(theta)*np.cos(phi) +
+                 np.sin(theta)*np.sin(phi) +
+                 np.cos(theta))
+
+
 def dipole_moment_integrand(phi, theta, mu, l1, m1, l2, m2):
     """
     """
-    mu_operator = mu * (np.sin(theta)*np.cos(phi) +
-                        np.sin(theta)*np.sin(phi) +
-                        np.cos(theta))
+    mu_op = mu_operator(mu, theta, phi)
     Y_l1m1 = sph_harm(m1, l1, phi, theta)
     Y_l2m2 = sph_harm(m2, l2, phi, theta)
 
-    return Y_l1m1 * mu_operator * Y_l2m2 * np.sin(theta)
+    return Y_l1m1 * mu_op * Y_l2m2 * np.sin(theta)
+
+
+def dipole_moment_superposition_integrand(phi, theta, mu, c1, c2, l1, m1, l2, m2):
+    """
+    """
+    mu_op = mu_operator(mu, theta, phi)
+    Y_l1m1 = sph_harm(m1, l1, phi, theta)
+    Y_l2m2 = sph_harm(m2, l2, phi, theta)
+    Y_lm = c1*Y_l1m1 + c2*Y_l2m2
+
+    return np.conjugate(Y_lm) * mu_op * Y_lm * np.sin(theta)
 
 
 def sph_harm_real(m, l, phi, theta):
