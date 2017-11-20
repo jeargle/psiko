@@ -7,8 +7,9 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from mpl_toolkits import axes_grid1
 from mpl_toolkits.mplot3d import Axes3D
+import scipy as sp
 from scipy import misc
-from scipy.integrate import simps
+from scipy.integrate import simps, quad, nquad
 from scipy.special import sph_harm
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
@@ -76,7 +77,21 @@ def complex_simps(y, x):
     if np.all(np.isreal(y)):
         return simps(y, x) + 0j
     else:
-        return simps(y.real, x) + 1j * simps(y.imag, x)
+        return simps(y.real, x) + simps(y.imag, x) * 1j
+
+
+def complex_nquad(func, ranges, **kwargs):
+    """
+    Complex quadrature.
+    """
+    real_integral = nquad(
+        lambda *args: sp.real(func(*args)), ranges, **kwargs
+    )
+    imag_integral = nquad(
+        lambda *args: sp.imag(func(*args)), ranges, **kwargs
+    )
+    return (real_integral[0] + imag_integral[0] * 1j,
+            real_integral[1] + imag_integral[1] * 1j)
 
 
 
@@ -561,6 +576,18 @@ def p2_int(p, sigma):
     """
     gp = gaussian_p(p, sigma)
     return gp * p**2 * gp
+
+
+def dipole_moment_integrand(phi, theta, mu, l1, m1, l2, m2):
+    """
+    """
+    mu_operator = mu * (np.sin(theta)*np.cos(phi) +
+                        np.sin(theta)*np.sin(phi) +
+                        np.cos(theta))
+    Y_l1m1 = sph_harm(m1, l1, phi, theta)
+    Y_l2m2 = sph_harm(m2, l2, phi, theta)
+
+    return Y_l1m1 * mu_operator * Y_l2m2 * np.sin(theta)
 
 
 def sph_harm_real(m, l, phi, theta):

@@ -4,7 +4,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.integrate import simps, quad
+from scipy.integrate import simps, quad, nquad
 
 import psiko.psiko as pk
 
@@ -843,6 +843,45 @@ def rotation_test1():
     plt.clf()
 
 
+def rotation_test2():
+    """
+    Dipole moment of rotational wavefunctions
+    """
+    mu = 0.425
+
+    # Expectation for dipole moment Y_0^0
+    dipole_00, _ = nquad(
+        pk.dipole_moment_integrand,
+        [[0,2.0*np.pi], [0,np.pi]],
+        args=[mu,0,0,0,0]
+    )
+    dipole_00_alt, _ = pk.complex_nquad(
+        pk.dipole_moment_integrand,
+        [[0,2.0*np.pi],[0,np.pi]],
+        args=[mu,0,0,0,0]
+    )
+    print("Dipole moment for $Y^0_0$ is (nquad): ", dipole_00)
+    print("Dipole moment for $Y^0_0$ is (complex_nquad): ", dipole_00_alt)
+    print("Difference between approaches", np.abs(dipole_00-dipole_00_alt))
+
+    # Expectation for dipole moment Y_1^1
+    dipole_11, _ = nquad(
+        pk.dipole_moment_integrand,
+        [[0,2.0*np.pi], [0,np.pi]],
+        args=[mu,1,1,1,1]
+    )
+    dipole_11_alt, _ = pk.complex_nquad(
+        pk.dipole_moment_integrand,
+        [[0,2.0*np.pi],[0,np.pi]],
+        args=[mu,1,1,1,1]
+    )
+
+    print("The dipole moment for $Y^1_1$ is (nquad): ", dipole_11)
+    print("The dipole moment for $Y^1_1$ is (complex_nquad): ", dipole_11_alt)
+    print("Difference between approaches", np.abs(dipole_11-dipole_11_alt))
+
+
+
 
 if __name__=='__main__':
 
@@ -931,9 +970,11 @@ if __name__=='__main__':
 
     # tunnel_test1()
     # tunnel_test2()
-    tunnel_test3()
+    # tunnel_test3()
 
     # ====================
     # Rotation theory
     # ====================
-    rotation_test1()
+
+    # rotation_test1()
+    rotation_test2()
