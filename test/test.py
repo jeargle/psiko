@@ -913,6 +913,50 @@ def rotation_test3():
     print("The dipole moment for $Y^0_0$+$Y^1_-1$ is (nquad): ", dipole_3)
 
 
+def rotation_test4():
+    """
+    Time-propagate a rotational superposition
+    """
+    B = 4.82671733e-5
+    mu = 0.425
+    l1, l2 = 0, 1
+    t = np.linspace(0, 70000, 50)
+    dipoles_1 = np.zeros(len(t))
+    dipoles_2 = np.zeros(len(t))
+    dipoles_3 = np.zeros(len(t))
+
+    c1_0 = c2_0 = 1.0/np.sqrt(2)
+
+    E1 = 0.0
+    E2 = 2.0*B
+
+    for i, ti in enumerate(t):
+        c1 = pk.cnt_evolve(c1_0, ti, E1, hbar=1.0)
+        c2 = pk.cnt_evolve(c2_0, ti, E2, hbar=1.0)
+
+        # compute dipole moments, get values, and store absolute values
+        dipoles_1[i], _ = nquad(
+            pk.dipole_moment_superposition_integrand,
+            [[0, 2.0*np.pi], [0, np.pi]],
+            args=[mu, c1, c2, 0, 0, 1, 0]
+        )
+        dipoles_2[i], _ = nquad(
+            pk.dipole_moment_superposition_integrand,
+            [[0, 2.0*np.pi], [0, np.pi]],
+            args=[mu, c1, c2, 0, 0, 1, 1]
+        )
+        dipoles_3[i], _ = nquad(
+            pk.dipole_moment_superposition_integrand,
+            [[0, 2.0*np.pi], [0, np.pi]],
+            args=[mu, c1, c2, 0, 0, 1, -1]
+        )
+
+    plt.plot(t, dipoles_1)
+    plt.plot(t, dipoles_2)
+    plt.plot(t, dipoles_3)
+    plt.show()
+
+
 
 
 if __name__=='__main__':
@@ -1009,5 +1053,6 @@ if __name__=='__main__':
     # ====================
 
     # rotation_test1()
-    rotation_test2()
+    # rotation_test2()
     rotation_test3()
+    rotation_test4()
