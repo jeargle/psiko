@@ -925,6 +925,8 @@ def rotation_test4():
     dipoles_2 = np.zeros(len(t))
     dipoles_3 = np.zeros(len(t))
 
+    l1 = m1 = 0
+    l2 = 1
     c1_0 = c2_0 = 1.0/np.sqrt(2)
 
     E1 = 0.0
@@ -935,20 +937,23 @@ def rotation_test4():
         c2 = pk.cnt_evolve(c2_0, ti, E2, hbar=1.0)
 
         # compute dipole moments, get values, and store absolute values
+        m2 = 0
         dipoles_1[i], _ = nquad(
             pk.dipole_moment_superposition_integrand,
             [[0, 2.0*np.pi], [0, np.pi]],
-            args=[mu, c1, c2, 0, 0, 1, 0]
+            args=[mu, c1, c2, l1, m1, l2, m2]
         )
+        m2 = 1
         dipoles_2[i], _ = nquad(
             pk.dipole_moment_superposition_integrand,
             [[0, 2.0*np.pi], [0, np.pi]],
-            args=[mu, c1, c2, 0, 0, 1, 1]
+            args=[mu, c1, c2, l1, m1, l2, m2]
         )
+        m2 = -1
         dipoles_3[i], _ = nquad(
             pk.dipole_moment_superposition_integrand,
             [[0, 2.0*np.pi], [0, np.pi]],
-            args=[mu, c1, c2, 0, 0, 1, -1]
+            args=[mu, c1, c2, l1, m1, l2, m2]
         )
 
     plt.plot(t, dipoles_1)
@@ -969,13 +974,36 @@ def rotation_test5():
 
     for l1 in l1_arr:
         for l2 in l2_arr:
-            trans_moment_l[l1,l2], _ = nquad(
+            trans_moment_l[l1, l2], _ = nquad(
                 pk.dipole_moment_integrand,
                 [[0, 2.0*np.pi], [0, np.pi]],
                 args=[mu, l1, m1, l2, m2]
             )
 
     plt.imshow(trans_moment_l, interpolation='nearest')
+    plt.colorbar()
+    plt.show()
+
+
+def rotation_test6():
+    """
+    More selection rules for the rigid rotor.
+    """
+    mu = 0.425
+    l1, l2 = 5, 6
+    m1_arr = np.array(range(-5,6))
+    m2_arr = np.array(range(-5,6))
+    trans_moment_m = np.zeros(len(m1_arr)*len(m2_arr)).reshape(len(m1_arr), len(m2_arr))
+
+    for i, m1 in enumerate(m1_arr):
+        for j, m2 in enumerate(m2_arr):
+            trans_moment_m[i, j], _ = nquad(
+                pk.dipole_moment_integrand,
+                [[0, 2.0*np.pi], [0, np.pi]],
+                args=[mu, l1, m1, l2, m2]
+            )
+
+    plt.imshow(trans_moment_m, interpolation='nearest', extent=[-5,5,-5,5])
     plt.colorbar()
     plt.show()
 
@@ -1078,5 +1106,6 @@ if __name__=='__main__':
     # rotation_test1()
     # rotation_test2()
     # rotation_test3()
-    rotation_test4()
+    # rotation_test4()
     rotation_test5()
+    rotation_test6()
