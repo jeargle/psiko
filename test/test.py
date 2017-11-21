@@ -957,6 +957,29 @@ def rotation_test4():
     plt.show()
 
 
+def rotation_test5():
+    """
+    Selection rules for the rigid rotor.
+    """
+    mu = 0.425
+    m1 = m2 = 0
+    l1_arr = np.array(range(0, 6))
+    l2_arr = np.array(range(0, 6))
+    trans_moment_l = np.zeros(len(l1_arr)*len(l2_arr)).reshape(len(l1_arr), len(l2_arr))
+
+    for l1 in l1_arr:
+        for l2 in l2_arr:
+            trans_moment_l[l1,l2], _ = nquad(
+                pk.dipole_moment_integrand,
+                [[0, 2.0*np.pi], [0, np.pi]],
+                args=[mu, l1, m1, l2, m2]
+            )
+
+    plt.imshow(trans_moment_l, interpolation='nearest')
+    plt.colorbar()
+    plt.show()
+
+
 
 
 if __name__=='__main__':
@@ -1054,5 +1077,6 @@ if __name__=='__main__':
 
     # rotation_test1()
     # rotation_test2()
-    rotation_test3()
+    # rotation_test3()
     rotation_test4()
+    rotation_test5()
