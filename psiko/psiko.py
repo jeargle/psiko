@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import scipy as sp
 from scipy import misc
 from scipy.integrate import simps, quad, nquad
-from scipy.special import sph_harm
+from scipy.special import sph_harm, eval_genlaguerre
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
            "boundary_1d", "pib_ti_1D", "pib_td_1D", "wave_solution",
@@ -504,6 +504,36 @@ def harmonic_oscillator_wigner_01(x, p, t):
     """
     return ( np.exp(-x**2 - p**2) *
              (x**2 + p**2 + np.sqrt(2.0)*x*np.cos(t) - np.sqrt(2)*p*np.sin(t)) )
+
+
+
+# ====================
+# Hydrogen
+# ====================
+
+def radial_psi(r, n, l, a0=1.0, z=1.0):
+    """
+    Radial wavefunction for hydrogen electron orbital.
+    """
+    rho = (2.0 * z * r) / (n * a0)
+    sub = n - l - 1.0
+    sup = 2.0 * l + 1.0
+    normFactor = np.sqrt(
+        (2.0 * z / (n * a0))**3 * misc.factorial(sub) /
+        (2.0 * n * misc.factorial(n+l))
+    )
+
+    wf = (rho**l * np.exp(-rho / 2.0) *
+          eval_genlaguerre(sub, sup, rho))
+    return wf * normFactor
+
+
+def radial_integrand(r, n, l, a0=1.0, z=1.0):
+    """
+    Expectation integrand for radial distribution.
+    """
+    psi = radial_psi(r, n, l, a0=1.0, z=1.0)
+    return np.conjugate(psi) * r**3.0 * psi
 
 
 

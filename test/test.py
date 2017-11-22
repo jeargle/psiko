@@ -1008,6 +1008,36 @@ def rotation_test6():
     plt.show()
 
 
+def hydrogen_test1():
+    """
+    Radial wavefunction
+    """
+    r = np.linspace(0.0, 30.0, 500)
+    l_m_list = [(1,0), (2,1), (3,0), (3,1), (5,2)]
+    r_psi = np.zeros(len(l_m_list)*len(r)).reshape(len(l_m_list), len(r))
+
+    for i, (l, m) in enumerate(l_m_list):
+        # radial wavefunction and PDF
+        psi = pk.radial_psi(r, l, m) * r
+        r_psi[i] = pk.prob_density(psi)
+        plt.plot(r, r_psi[i])
+
+    plt.show()
+    plt.clf()
+
+    ns = range(1,10)
+    r_exp = np.zeros(len(ns))
+    l = 0.0
+    for i, n in enumerate(ns):
+        # radial expectation value
+        r_exp[i], _ = quad(
+            pk.radial_integrand,
+            0.0, np.inf, args=(n, l)
+        )
+        plt.axvline(r_exp[i])
+
+    plt.show()
+
 
 
 if __name__=='__main__':
@@ -1107,5 +1137,11 @@ if __name__=='__main__':
     # rotation_test2()
     # rotation_test3()
     # rotation_test4()
-    rotation_test5()
+    # rotation_test5()
     rotation_test6()
+
+    # ====================
+    # The Hydrogen Atom Intro
+    # ====================
+
+    hydrogen_test1()
