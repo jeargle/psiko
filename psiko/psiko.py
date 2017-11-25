@@ -538,8 +538,18 @@ def radial_integrand(r, n, l, a0=1.0, z=1.0):
 
 def hydrogen_energy(n, a0=1.0, Z=1.0, mu=1.0, c=137.0, alpha=1.0/137.0):
     """
+    Hydrogen energy value for a given state.
     """
     return (-mu * c**2 * Z**2 * alpha**2) / (2.0 * n**2)
+
+
+def hydrogen_transition_energy(n1, n2, a0=1.0, Z=1.0, mu=1.0,
+                               c=137.0, alpha=1.0/137.0):
+    """
+    Hydrogen transition energy value between two given states.
+    """
+    return ( (-mu * c**2 * Z**2 * alpha**2) /
+             (2.0)) * ((1.0/n1**2) - (1.0/n2**2) )
 
 
 
@@ -666,6 +676,15 @@ def sphere_to_cart(theta, phi, r=1.0):
     z = r * np.cos(phi)
 
     return x, y, z
+
+
+def hartrees_to_wavelength(energy):
+    """
+    Get wavelength (nm) corresponding to a given energy (Hartrees)
+    """
+
+    return np.abs(45.56 * 1.0 / energy)
+
 
 
 
@@ -825,3 +844,49 @@ def _energy_label(energy_dict):
         vals.append('m={:d}'.format(energy_dict['m']))
 
     return ', '.join(vals)
+
+
+def wavelength_to_colour(wavelength):
+    """
+    Get RGB values for a given wavelength of light.
+    """
+    if wavelength >= 380 and wavelength < 440:
+        R = -(wavelength - 440.0) / (440.0 - 350.0)
+        G = 0.0
+        B = 1.0
+    elif wavelength >= 440 and wavelength < 490:
+        R = 0.0
+        G = (wavelength - 440.0) / (490.0 - 440.0)
+        B = 1.0
+    elif wavelength >= 490 and wavelength < 510:
+        R = 0.0
+        G = 1.0
+        B = -(wavelength - 510.0) / (510.0 - 490.0)
+    elif wavelength >= 510 and wavelength < 580:
+        R = (wavelength - 510.0) / (580.0 - 510.0)
+        G = 1.0
+        B = 0.0
+    elif wavelength >= 580 and wavelength < 645:
+        R = 1.0
+        G = -(wavelength - 645.0) / (645.0 - 580.0)
+        B = 0.0
+    elif wavelength >= 645 and wavelength <= 780:
+        R = 1.0
+        G = 0.0
+        B = 0.0
+    else:
+        R = 0.0
+        G = 0.0
+        B = 0.0
+
+    # intensity correction
+    if wavelength >= 380 and wavelength < 420:
+        intensity = 0.3 + 0.7 * (wavelength - 350) / (420 - 350)
+    elif wavelength >= 420 and wavelength <= 700:
+        intensity = 1.0
+    elif wavelength > 700 and wavelength <= 780:
+        intensity = 0.3 + 0.7 * (780 - wavelength) / (780 - 700)
+    else:
+        intensity = 0.0
+
+    return (intensity * R, intensity * G, intensity * B)

@@ -1065,6 +1065,35 @@ def hydrogen_test2():
     plt.show()
 
 
+def hydrogen_test3():
+    """
+    Transition energies (Hydrogen Spectogram)
+    """
+    spectrum = []
+
+    for n1 in range(1, 11):
+        for n2 in range(1, 11):
+            # check for valid transition
+            if n1 != n2:
+                qdict = {'n1': n1, 'n2': n2, 'l': 0, 'm': 0}
+                qdict['energy'] = pk.hydrogen_transition_energy(
+                    qdict['n1'], qdict['n2']
+                )
+                spectrum.append(qdict)
+
+    # sorted energy values
+    e_vals = np.unique([s['energy'] for s in spectrum])
+
+    for e_val in e_vals:
+        wavelength = pk.hartrees_to_wavelength(e_val)
+        c = pk.wavelength_to_colour(wavelength)
+        plt.axvline(wavelength, color=c)
+
+    plt.xlabel('Wavelength of light')
+    plt.show()
+
+
+
 
 if __name__=='__main__':
 
@@ -1170,5 +1199,6 @@ if __name__=='__main__':
     # The Hydrogen Atom Intro
     # ====================
 
-    hydrogen_test1()
+    # hydrogen_test1()
     hydrogen_test2()
+    hydrogen_test3()
