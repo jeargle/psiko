@@ -1040,6 +1040,32 @@ def hydrogen_test1():
 
 
 
+def hydrogen_test2():
+    """
+    Wavefuntion energy values
+    """
+    qdict = {"n": 1, "l": 0, "m": 0}
+    energy_list = []
+
+    # quantum number n
+    for n in range(1,4):
+        # quantum number l fixed
+        l = n-1
+        # quantum number m
+        for m in range(-l, l+1):
+            # make dictionary, calculate and store the energy, add to a list
+            qdict = {'n': n, 'l': l, 'm': m}
+            qdict['energy'] = pk.hydrogen_energy(qdict['n'])
+            energy_list.append(qdict)
+
+    # sorted energy values
+    e_vals = np.unique(np.array([e['energy'] for e in energy_list]))
+
+    pk.plot_energy_levels(energy_list)
+    plt.show()
+
+
+
 if __name__=='__main__':
 
     print '*******************'
@@ -1138,10 +1164,11 @@ if __name__=='__main__':
     # rotation_test3()
     # rotation_test4()
     # rotation_test5()
-    rotation_test6()
+    # rotation_test6()
 
     # ====================
     # The Hydrogen Atom Intro
     # ====================
 
     hydrogen_test1()
+    hydrogen_test2()

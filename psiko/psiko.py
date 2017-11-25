@@ -536,6 +536,12 @@ def radial_integrand(r, n, l, a0=1.0, z=1.0):
     return np.conjugate(psi) * r**3.0 * psi
 
 
+def hydrogen_energy(n, a0=1.0, Z=1.0, mu=1.0, c=137.0, alpha=1.0/137.0):
+    """
+    """
+    return (-mu * c**2 * Z**2 * alpha**2) / (2.0 * n**2)
+
+
 
 # ====================
 # Helper Functions
@@ -753,3 +759,69 @@ def plot_sphere(m, l):
     ax.set_zlabel('z')
 
     return
+
+
+def plot_energy_levels(energies, figsize=(14, 6), fontsize='xx-small'):
+    """
+    Energy level plot.
+
+    energies: list of dicts
+    """
+    e = [i['energy'] for i in energies]
+    e_max = np.max(e)
+    e_min = np.min(e)
+    e_diff = e_max - e_min
+    linewidth = 200.0
+    offset_to_add = 480
+
+    fig = plt.figure(figsize=figsize)
+    ax = fig.add_subplot(111)
+
+    prev_e_val = 0.0
+    offset = 0.0
+    i = 0.0
+    for energy_dict in energies:
+        e_val = energy_dict['energy']
+        if prev_e_val == e_val:
+            offset += offset_to_add
+            i += 1
+        else:
+            offset = 0.0
+            i = 0.0
+
+        yalign = 'top' if i % 2 else 'bottom'
+        y_offset = -e_diff * 0.01 if i % 2 else e_diff * 0.01
+
+        xmin = -linewidth / 2.0 + offset
+        xmax = linewidth / 2.0 + offset
+        plt.hlines(e_val, xmin, xmax, linewidth=2)
+        ax.annotate(
+            _energy_label(energy_dict), xy=(xmin, e_val + y_offset),
+            fontsize=fontsize, horizontalalignment='left',
+            verticalalignment=yalign
+        )
+        prev_e_val = energy_dict['energy']
+
+    plt.xlim([-linewidth / 2.0 - 5.0, 2000.0])
+    plt.ylim([e_min - 0.05 * e_diff, e_max + 0.05 * e_diff])
+    plt.tick_params(axis='x', which='both', bottom='off',
+                    top='off', labelbottom='off')
+    plt.ylabel('Energy')
+
+    return
+
+
+def _energy_label(energy_dict):
+    """
+    Create string with quantum numbers n, l, and m.
+    """
+    vals = []
+
+    if 'n' in energy_dict:
+        vals.append('n={:d}'.format(energy_dict['n']))
+    if 'l' in energy_dict:
+        vals.append('l={:d}'.format(energy_dict['l']))
+    if 'm' in energy_dict:
+        vals.append('m={:d}'.format(energy_dict['m']))
+
+    return ', '.join(vals)
