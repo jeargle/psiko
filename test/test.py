@@ -338,9 +338,9 @@ def schroedinger_test2():
     Time-dependent Schroedinger equation.
     """
     l = 10
-    x = np.arange(0, l, 0.01)
-    t = np.linspace(0, 50, 100)
-    psi = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+    x = np.arange(0, l, 0.01, dtype=complex)
+    t = np.linspace(0, 50, 100, dtype=complex)
+    psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
 
     # First eigenstate
     c1_0 = 1/np.sqrt(2)
@@ -394,8 +394,8 @@ def operator_test2():
     x = np.arange(0, l, dx)
     t = np.arange(0, 100)
     psi = pk.pib_superposition(x, t, l, 1, 2)
-    p_array = np.zeros(len(t))
-    x_array = np.zeros(len(t))
+    p_array = np.zeros(len(t), dtype=complex)
+    x_array = np.zeros(len(t), dtype=complex)
 
     for step, time in enumerate(t):
         p_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.momentum_operator)
@@ -1136,7 +1136,7 @@ if __name__=='__main__':
 
     # normalize_test1()
     # schroedinger_test1()
-    # schroedinger_test2()
+    schroedinger_test2()
     # operator_test1()
     # operator_test2()
 
@@ -1200,5 +1200,5 @@ if __name__=='__main__':
     # ====================
 
     # hydrogen_test1()
-    hydrogen_test2()
-    hydrogen_test3()
+    # hydrogen_test2()
+    # hydrogen_test3()

@@ -126,7 +126,7 @@ def finite_diff(y, dx):
     """
     Finite difference method.
     """
-    diff = np.zeros(len(y))
+    diff = np.zeros(len(y), dtype=complex)
 
     # start at step 0
     diff[0] = (y[1] - y[0])/dx
@@ -401,7 +401,7 @@ def pib_superposition(x, t, l, n1, n2):
     c2_0 = 1.0/np.sqrt(2) + 0.0j
     E2 = pib_energy(n2, l)
 
-    psi = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+    psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
 
     for step, time in enumerate(t):
         # Get time evolved coefficients
