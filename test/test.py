@@ -608,7 +608,7 @@ def field_test1():
     ti = 0.0
     omega_f = 3.0
 
-    test = pk.harmonic_oscillator_1D_in_field(x, ti, omega_f)
+    test = pk.harmonic_oscillator_1D_in_field(x, ti, omega_f).real
     plt.plot(x, test)
     plt.show()
 
@@ -624,7 +624,7 @@ def field_test2():
     psit = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
 
     for step, time in enumerate(t):
-        psit[:,step] = pk.harmonic_oscillator_1D_in_field(x, time, omega_f)
+        psit[:,step] = pk.harmonic_oscillator_1D_in_field(x, time, omega_f).real
 
     pk.time_plot(x, psit, t, timestep=8)
     plt.show()
@@ -807,7 +807,7 @@ def tunnel_test2():
 
 def tunnel_test3():
     """
-    Transmission vs mass/energy (2-D scan)
+    Transmission vs mass/energy (2D scan)
     """
     dx = 0.01
     x = np.arange(0, 10, dx)
@@ -1141,7 +1141,7 @@ if __name__=='__main__':
     # operator_test2()
 
     # ====================
-    # 1-D Time-Independent Schroedinger Equation (TISE)
+    # 1D Time-Independent Schroedinger Equation (TISE)
     # ====================
 
     # operator_test3()
@@ -1150,7 +1150,7 @@ if __name__=='__main__':
     # operator_test6()
 
     # ====================
-    # Quantum Mechanics in 2-D
+    # Quantum Mechanics in 2D
     # ====================
 
     # harmonic_2d_test1()
@@ -1162,10 +1162,10 @@ if __name__=='__main__':
     # Spectrum via a Time-Dependent field
     # ====================
 
-    # field_test1()
-    # field_test2()
-    # field_test3()
-    # field_test4()
+    field_test1()
+    field_test2()
+    field_test3()
+    field_test4()
 
     # ====================
     # Phase and Momentum Space Intro
