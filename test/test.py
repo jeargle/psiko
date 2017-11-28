@@ -338,8 +338,8 @@ def schroedinger_test2():
     Time-dependent Schroedinger equation.
     """
     l = 10
-    x = np.arange(0, l, 0.01, dtype=complex)
-    t = np.linspace(0, 50, 100, dtype=complex)
+    x = np.arange(0, l, 0.01)
+    t = np.linspace(0, 50, 100)
     psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
 
     # First eigenstate
@@ -587,7 +587,7 @@ def harmonic_2d_test4():
     for step, time in enumerate(t):
         c1_t = pk.cnt_evolve(c1, time, E1)
         c2_t = pk.cnt_evolve(c2, time, E2)
-        psi[step] = c1_t*psi1 + c2_t*psi2
+        psi[step] = (c1_t*psi1 + c2_t*psi2).real
 
     vmin = np.min(psi)
     vmax = np.max(psi)
@@ -1136,7 +1136,7 @@ if __name__=='__main__':
 
     # normalize_test1()
     # schroedinger_test1()
-    schroedinger_test2()
+    # schroedinger_test2()
     # operator_test1()
     # operator_test2()
 
