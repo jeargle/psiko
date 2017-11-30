@@ -791,7 +791,6 @@ def tunnel_test2():
     """
     x = np.arange(0, 10, 0.01)
     barrier = pk.square_barrier(x)
-    # m = 1
     energies = np.arange(0, 25, 0.1)
     transmission = np.zeros_like(energies)
 
@@ -1162,10 +1161,10 @@ if __name__=='__main__':
     # Spectrum via a Time-Dependent field
     # ====================
 
-    field_test1()
-    field_test2()
-    field_test3()
-    field_test4()
+    # field_test1()
+    # field_test2()
+    # field_test3()
+    # field_test4()
 
     # ====================
     # Phase and Momentum Space Intro

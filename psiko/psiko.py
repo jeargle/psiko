@@ -104,7 +104,7 @@ def prob_density(psi):
     """
     Probability density for a normalized wavefunction.
     """
-    return np.conjugate(psi) * psi
+    return (np.conjugate(psi) * psi).real
 
 
 def normalize_wfn(x, psi):
@@ -269,7 +269,7 @@ def square_barrier(x, length=1.0, height=9.0, x0=4.0):
 def transmission_probability(pdf, n_cutoff=300):
     """
     """
-    return 2.0 / (1.0 + np.mean(pdf[-n_cutoff:]))
+    return (2.0 / (1.0 + np.mean(pdf[-n_cutoff:]))).real
 
 
 def complex_plane_wave(x, energy, mass=1.0, hbar=1.0):
@@ -277,7 +277,7 @@ def complex_plane_wave(x, energy, mass=1.0, hbar=1.0):
     Complex plane wave.
     """
     k = np.sqrt(2 * mass * energy / hbar**2)
-    psi = np.zeros(len(x), dtype=np.dtype(complex))
+    psi = np.zeros(len(x), dtype=complex)
     psi = np.exp(-1j * k * x)
 
     return psi
@@ -314,7 +314,7 @@ class Psi(object):
         """
         Probability density for the wavefunction.
         """
-        return np.conjugate(self.psi) * self.psi
+        return (np.conjugate(self.psi) * self.psi).real
 
     def psi_norm(self):
         """
