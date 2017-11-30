@@ -341,6 +341,7 @@ def schroedinger_test2():
     x = np.arange(0, l, 0.01)
     t = np.linspace(0, 50, 100)
     psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
+    pdf = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
 
     # First eigenstate
     c1_0 = 1/np.sqrt(2)
@@ -357,10 +358,18 @@ def schroedinger_test2():
         c1 = pk.cnt_evolve(c1_0, time, E1)
         c2 = pk.cnt_evolve(c2_0, time, E2)
         psi[:, step] = c1*psi1_x + c2*psi2_x
+        pdf[:, step] = pk.prob_density(psi[:, step])
 
-    pk.time_plot(x, psi, t)
+    pk.time_plot(x, psi.real, t)
     plt.show()
+    plt.clf()
 
+    pk.time_plot(x, psi.imag, t)
+    plt.show()
+    plt.clf()
+
+    pk.time_plot(x, pdf, t)
+    plt.show()
 
 def operator_test1():
     """
@@ -1135,7 +1144,7 @@ if __name__=='__main__':
 
     # normalize_test1()
     # schroedinger_test1()
-    # schroedinger_test2()
+    schroedinger_test2()
     # operator_test1()
     # operator_test2()
 
