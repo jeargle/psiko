@@ -861,7 +861,7 @@ def rotation_test2():
     dipole_00, _ = nquad(
         pk.dipole_moment_integrand,
         [[0, 2.0*np.pi], [0, np.pi]],
-        args=[mu, 0, 0, 0, 0]
+        args=[mu, 0, 0, 0, 0, True]
     )
     dipole_00_alt, _ = pk.complex_nquad(
         pk.dipole_moment_integrand,
@@ -877,7 +877,7 @@ def rotation_test2():
     dipole_11, _ = nquad(
         pk.dipole_moment_integrand,
         [[0, 2.0*np.pi], [0, np.pi]],
-        args=[mu, 1, 1, 1, 1]
+        args=[mu, 1, 1, 1, 1, True]
     )
     dipole_11_alt, _ = pk.complex_nquad(
         pk.dipole_moment_integrand,
@@ -902,21 +902,21 @@ def rotation_test3():
     dipole_1, _ = nquad(
         pk.dipole_moment_superposition_integrand,
         [[0, 2.0*np.pi], [0, np.pi]],
-        args=[mu, c1_0, c2_0, 0, 0, 1, 0]
+        args=[mu, c1_0, c2_0, 0, 0, 1, 0, True]
     )
     print("The dipole moment for $Y^0_0$+$Y^1_0$ is (nquad): ", dipole_1)
 
     dipole_2, _ = nquad(
         pk.dipole_moment_superposition_integrand,
         [[0, 2.0*np.pi], [0, np.pi]],
-        args=[mu, c1_0, c2_0, 0, 0, 1, 1]
+        args=[mu, c1_0, c2_0, 0, 0, 1, 1, True]
     )
     print("The dipole moment for $Y^0_0$+$Y^1_1$ is (nquad): ", dipole_2)
 
     dipole_3, _ = nquad(
         pk.dipole_moment_superposition_integrand,
         [[0, 2.0*np.pi], [0, np.pi]],
-        args=[mu, c1_0, c2_0, 0, 0, 1, -1]
+        args=[mu, c1_0, c2_0, 0, 0, 1, -1, True]
     )
     print("The dipole moment for $Y^0_0$+$Y^1_-1$ is (nquad): ", dipole_3)
 
@@ -949,19 +949,19 @@ def rotation_test4():
         dipoles_1[i], _ = nquad(
             pk.dipole_moment_superposition_integrand,
             [[0, 2.0*np.pi], [0, np.pi]],
-            args=[mu, c1, c2, l1, m1, l2, m2]
+            args=[mu, c1, c2, l1, m1, l2, m2, True]
         )
         m2 = 1
         dipoles_2[i], _ = nquad(
             pk.dipole_moment_superposition_integrand,
             [[0, 2.0*np.pi], [0, np.pi]],
-            args=[mu, c1, c2, l1, m1, l2, m2]
+            args=[mu, c1, c2, l1, m1, l2, m2, True]
         )
         m2 = -1
         dipoles_3[i], _ = nquad(
             pk.dipole_moment_superposition_integrand,
             [[0, 2.0*np.pi], [0, np.pi]],
-            args=[mu, c1, c2, l1, m1, l2, m2]
+            args=[mu, c1, c2, l1, m1, l2, m2, True]
         )
 
     plt.plot(t, dipoles_1)
@@ -985,10 +985,10 @@ def rotation_test5():
             trans_moment_l[l1, l2], _ = nquad(
                 pk.dipole_moment_integrand,
                 [[0, 2.0*np.pi], [0, np.pi]],
-                args=[mu, l1, m1, l2, m2]
+                args=[mu, l1, m1, l2, m2, True]
             )
 
-    plt.imshow(trans_moment_l, interpolation='nearest')
+    plt.imshow(trans_moment_l, interpolation='nearest', extent=[0,5,0,5], origin='lower')
     plt.colorbar()
     plt.show()
 
@@ -1008,7 +1008,7 @@ def rotation_test6():
             trans_moment_m[i, j], _ = nquad(
                 pk.dipole_moment_integrand,
                 [[0, 2.0*np.pi], [0, np.pi]],
-                args=[mu, l1, m1, l2, m2]
+                args=[mu, l1, m1, l2, m2, True]
             )
 
     plt.imshow(trans_moment_m, interpolation='nearest', extent=[-5,5,-5,5])
@@ -1144,7 +1144,7 @@ if __name__=='__main__':
 
     # normalize_test1()
     # schroedinger_test1()
-    schroedinger_test2()
+    # schroedinger_test2()
     # operator_test1()
     # operator_test2()
 
@@ -1196,12 +1196,12 @@ if __name__=='__main__':
     # Rotation theory
     # ====================
 
-    # rotation_test1()
-    # rotation_test2()
-    # rotation_test3()
-    # rotation_test4()
-    # rotation_test5()
-    # rotation_test6()
+    rotation_test1()
+    rotation_test2()
+    rotation_test3()
+    rotation_test4()
+    rotation_test5()
+    rotation_test6()
 
     # ====================
     # The Hydrogen Atom Intro

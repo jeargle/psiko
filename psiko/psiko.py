@@ -632,23 +632,29 @@ def mu_operator(mu, theta, phi):
                  np.cos(theta))
 
 
-def dipole_moment_integrand(phi, theta, mu, l1, m1, l2, m2):
+def dipole_moment_integrand(phi, theta, mu, l1, m1, l2, m2, real=False):
     """
     """
     mu_op = mu_operator(mu, theta, phi)
     Y_l1m1 = sph_harm(m1, l1, phi, theta)
     Y_l2m2 = sph_harm(m2, l2, phi, theta)
 
+    if real:
+        return (Y_l1m1 * mu_op * Y_l2m2 * np.sin(theta)).real
+
     return Y_l1m1 * mu_op * Y_l2m2 * np.sin(theta)
 
 
-def dipole_moment_superposition_integrand(phi, theta, mu, c1, c2, l1, m1, l2, m2):
+def dipole_moment_superposition_integrand(phi, theta, mu, c1, c2, l1, m1, l2, m2, real=False):
     """
     """
     mu_op = mu_operator(mu, theta, phi)
     Y_l1m1 = sph_harm(m1, l1, phi, theta)
     Y_l2m2 = sph_harm(m2, l2, phi, theta)
     Y_lm = c1*Y_l1m1 + c2*Y_l2m2
+
+    if real:
+        return (np.conjugate(Y_lm) * mu_op * Y_lm * np.sin(theta)).real
 
     return np.conjugate(Y_lm) * mu_op * Y_lm * np.sin(theta)
 
