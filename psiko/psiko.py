@@ -554,6 +554,22 @@ def hydrogen_transition_energy(n1, n2, a0=1.0, Z=1.0, mu=1.0,
 
 
 # ====================
+# Helium
+# ====================
+
+
+def H11(Z):
+    """
+    Ground state for CI matrix
+    From components:
+        H11a = -0.5 * Z**2
+        H11b = -0.5 * Z**2
+        H11c = 5.0/4.0
+    """
+    return 2 * (-0.5 * Z**2) + 5.0/4.0
+
+
+# ====================
 # Helper Functions
 # ====================
 

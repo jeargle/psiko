@@ -1101,6 +1101,14 @@ def hydrogen_test3():
     plt.show()
 
 
+def helium_test1():
+    """
+    Building the Helium Hamiltonian: H11
+    """
+    Z = 2
+    h11 = pk.H11(Z)
+    print('h11:', h11)
+
 
 
 if __name__=='__main__':
@@ -1196,12 +1204,12 @@ if __name__=='__main__':
     # Rotation theory
     # ====================
 
-    rotation_test1()
-    rotation_test2()
-    rotation_test3()
-    rotation_test4()
-    rotation_test5()
-    rotation_test6()
+    # rotation_test1()
+    # rotation_test2()
+    # rotation_test3()
+    # rotation_test4()
+    # rotation_test5()
+    # rotation_test6()
 
     # ====================
     # The Hydrogen Atom Intro
@@ -1210,3 +1218,9 @@ if __name__=='__main__':
     # hydrogen_test1()
     # hydrogen_test2()
     # hydrogen_test3()
+
+    # ====================
+    # Helium Atom through Configuration Interaction (CI)
+    # ====================
+
+    helium_test1()
