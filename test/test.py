@@ -2,6 +2,8 @@
 # 2017
 
 
+from __future__ import print_function
+
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import simps, quad, nquad
@@ -1110,12 +1112,49 @@ def helium_test1():
     print('h11:', h11)
 
 
+def helium_test2():
+    """
+    Hamiltonian of a CI basis set
+    """
+    H11 = pk.H11_pm
+    H12 = pk.H12_pm
+    H22 = pk.H22_pm
+    H = np.array([[H11, H12], [H12, H22]])
+
+    return
+
+
+def helium_test3():
+    """
+    Compare the CI energies
+    """
+
+    hartree_to_ev = 27.211399  # conversion factor
+    exact_g = -79.0
+    verypoor_g = -108.8
+    H11, H12, H22 = pk.H11_pm, pk.H12_pm, pk.H22_pm
+    H = np.array([[H11, H12], [H12, H22]])
+    evals, evecs = np.linalg.eigh(H)
+    ci_g = evals[0] * hartree_to_ev
+    c0_g = evecs[0][0]
+    c1_g = evecs[1][0]
+    rel_error = (abs(exact_g - ci_g)/abs(exact_g)) * 100
+
+    print('evals:', evals)
+    print('H[0][0]:', H[0][0])
+    print('11/4:', 11.0/4)
+
+    print('Exact Energy -->', exact_g, 'eV')
+    print('Very Poor Mans approx. --> ', verypoor_g, 'eV')
+    print('Our Configuration interaction estimate --> ', ci_g, 'eV')
+    print('With a relative error of ', rel_error, '%')
+
 
 if __name__=='__main__':
 
-    print '*******************'
-    print '*** PSIKO TESTS ***'
-    print '*******************'
+    print('*******************')
+    print('*** PSIKO TESTS ***')
+    print('*******************')
 
     # ====================
     # Square Wave tests
@@ -1224,3 +1263,5 @@ if __name__=='__main__':
     # ====================
 
     helium_test1()
+    helium_test2()
+    helium_test3()
