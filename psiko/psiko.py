@@ -552,6 +552,27 @@ def hydrogen_transition_energy(n1, n2, a0=1.0, Z=1.0, mu=1.0,
              (2.0)) * ((1.0/n1**2) - (1.0/n2**2) )
 
 
+# Integrals and PES (Potential Energy Surface) functions
+# H2- one-electron 2-proton Hamiltonian
+
+def J(R):
+    return np.exp(-2.0*R) * (1.0 + 1.0/R)
+
+def S(R):
+    return np.exp(-R) * (1.0 + R + (R**2)/3)
+
+def K(R):
+    return S(R)/R - np.exp(-R) * (1.0 + R)
+
+def E_plus(R):
+    return (-0.5 + ((J(R) + 1.0/R) / (1 - S(R))) +
+            ((K(R) + S(R)/R) / (1 - S(R))))
+
+def E_minus(R):
+    return (-0.5 + ((J(R) + 1.0/R) / (1 - S(R))) -
+            ((K(R) + S(R)/R) / (1 - S(R))))
+
+
 
 # ====================
 # Helium

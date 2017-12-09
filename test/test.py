@@ -1150,6 +1150,25 @@ def helium_test3():
     print('With a relative error of ', rel_error, '%')
 
 
+def hydrogen2_test1():
+    """
+    Energies and operators
+    """
+
+    r = np.linspace(0.2, 6, 100)
+
+    plt.plot(r, pk.J(r))
+    plt.plot(r, pk.S(r))
+    plt.plot(r, pk.K(r))
+    plt.show()
+    plt.clf()
+
+    plt.plot(r, pk.E_plus(r))
+    plt.plot(r, pk.E_minus(r))
+    plt.show()
+
+
+
 if __name__=='__main__':
 
     print('*******************')
@@ -1262,6 +1281,12 @@ if __name__=='__main__':
     # Helium Atom through Configuration Interaction (CI)
     # ====================
 
-    helium_test1()
+    # helium_test1()
     helium_test2()
     helium_test3()
+
+    # ====================
+    # The Hydrogen Molecule
+    # ====================
+
+    hydrogen2_test1()
