@@ -1190,6 +1190,30 @@ def hydrogen2_test2():
     plt.show()
 
 
+def hydrogen2_test3():
+    """
+    Molecular Hydrogen energies
+    """
+    r = np.linspace(0.2, 6.0, 100)
+
+    e_ground = pk.H2_E_ground(r)
+    e_excited = pk.H2_E_excited(r)
+    e_min = np.min(e_ground)
+    i_min = np.argmin(e_ground)
+    r_min = r[i_min]
+    print(e_min)
+    print(i_min)
+    print(r_min)
+
+    print('Ground minima at %2.2f Bohr with E=%f Hartrees'%(r_min,e_min))
+
+    plt.plot(r, e_ground)
+    plt.plot(r, e_excited)
+    plt.show()
+    plt.clf()
+
+
+
 
 if __name__=='__main__':
 
@@ -1311,5 +1335,6 @@ if __name__=='__main__':
     # The Hydrogen Molecule
     # ====================
 
-    hydrogen2_test1()
+    # hydrogen2_test1()
     hydrogen2_test2()
+    hydrogen2_test3()

@@ -632,6 +632,12 @@ def J22(R):
 def K12(R):
     return 1.0/(2.0*(1.0-S12(R)**2))*(int_1111(R) - int_1122(R))
 
+def H2_E_ground(R):
+    return (2.0*((H2_H11(R)+H2_H12(R)) / (1.0+S12(R)))) + J11(R) + V(R)
+
+def H2_E_excited(R):
+    return (2.0*((H2_H11(R)-H2_H12(R)) / (1.0-S12(R)))) + J22(R) + V(R)
+
 
 
 # ====================
