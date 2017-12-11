@@ -1108,7 +1108,7 @@ def helium_test1():
     Building the Helium Hamiltonian: H11
     """
     Z = 2
-    h11 = pk.H11(Z)
+    h11 = pk.He_H11(Z)
     print('h11:', h11)
 
 
@@ -1165,6 +1165,28 @@ def hydrogen2_test1():
 
     plt.plot(r, pk.E_plus(r))
     plt.plot(r, pk.E_minus(r))
+    plt.show()
+
+
+def hydrogen2_test2():
+    """
+    Molecular Hydrogen derived
+    """
+    r = np.linspace(0.2, 6, 100)
+
+    plt.plot(r, pk.J11(r))
+    plt.show()
+    plt.clf()
+
+    plt.plot(r, pk.H2_H11(r))
+    plt.plot(r, pk.H2_H12(r))
+    plt.show()
+    plt.clf()
+
+    plt.plot(r, pk.int_1111(r))
+    plt.plot(r, pk.int_1212(r))
+    plt.plot(r, pk.int_1122(r))
+    plt.plot(r, pk.int_1112(r))
     plt.show()
 
 
@@ -1282,11 +1304,12 @@ if __name__=='__main__':
     # ====================
 
     # helium_test1()
-    helium_test2()
-    helium_test3()
+    # helium_test2()
+    # helium_test3()
 
     # ====================
     # The Hydrogen Molecule
     # ====================
 
     hydrogen2_test1()
+    hydrogen2_test2()
