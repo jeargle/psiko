@@ -1213,6 +1213,28 @@ def hydrogen2_test3():
     plt.clf()
 
 
+def ci_test1():
+    """
+    Build CI matrix
+    """
+    r = np.linspace(0.2, 10.0, 100)
+    ci_ground = np.zeros_like(r)
+    ci_excited = np.zeros_like(r)
+
+    for i, rad in enumerate(r):
+        ci_g, ci_e = pk.H2_energy_CI(rad)
+        ci_ground[i] = ci_g + pk.V(rad)
+        ci_excited[i] = ci_e + pk.V(rad)
+
+    e_ground = pk.H2_E_ground(r)
+    e_excited = pk.H2_E_excited(r)
+
+    plt.plot(r, ci_ground)
+    plt.plot(r, ci_excited)
+    plt.plot(r, e_ground)
+    plt.plot(r, e_excited)
+    plt.show()
+
 
 
 if __name__=='__main__':
@@ -1336,5 +1358,11 @@ if __name__=='__main__':
     # ====================
 
     # hydrogen2_test1()
-    hydrogen2_test2()
+    # hydrogen2_test2()
     hydrogen2_test3()
+
+    # ====================
+    # Configuration Interaction
+    # ====================
+
+    ci_test1()

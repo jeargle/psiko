@@ -638,6 +638,18 @@ def H2_E_ground(R):
 def H2_E_excited(R):
     return (2.0*((H2_H11(R)-H2_H12(R)) / (1.0-S12(R)))) + J22(R) + V(R)
 
+def H2_energy_CI(R):
+    """
+    Get CI Hamiltonian for a single atom-atom distance R.
+    """
+    k12 = K12(R)
+    H_ci = np.array(
+        [[H2_E_ground(R) - V(R), k12],
+         [k12, H2_E_excited(R) - V(R)]]
+    )
+    evals, evecs = np.linalg.eigh(H_ci)
+    return evals
+
 
 
 # ====================
