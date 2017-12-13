@@ -1266,6 +1266,22 @@ def vpm_test1():
     return
 
 
+def pert_test1():
+    """
+    Make H(lambda) for He
+    """
+
+    test1 = pk.H0()
+    test2 = pk.H1(0.5)
+    test3 = pk.H_lambda(0.75)
+
+    print('H0:\n', test1)
+    print('H1:\n', test2)
+    print('H_lambda:\n', test3)
+
+    return
+
+
 
 if __name__=='__main__':
 
@@ -1401,4 +1417,10 @@ if __name__=='__main__':
     # The variational principle
     # ====================
 
-    vpm_test1()
+    # vpm_test1()
+
+    # ====================
+    # First Order Perturbation theory
+    # ====================
+
+    pert_test1()
