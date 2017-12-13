@@ -7,6 +7,7 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import simps, quad, nquad
+from scipy.optimize import minimize
 
 import psiko.psiko as pk
 
@@ -1236,6 +1237,35 @@ def ci_test1():
     plt.show()
 
 
+def vpm_test1():
+    """
+    Optimizing Very Poor Man's Wave-Function
+    """
+
+    # zeta = 2
+    zeta = 1.6875
+    ev_per_hartree = 27.2114
+    exact_e = -2.903
+    e = pk.He_expected_phi1(zeta)
+    print('expectation value for phi:', e)
+
+    x_init = np.linspace(0.5, 2.0, 6)
+    # x_init = np.linspace(1.68745, 1.6755, 3)
+    e_exact = -2.903
+
+    for x in x_init:
+        res = minimize(pk.He_expected_phi1, x)
+        print('starting x:', x)
+        print('res.x:', res.x)
+        print('res.success:', res.success)
+        print('res.message:', res.message)
+        e_opt = pk.He_expected_phi1(res.x)
+        e_diff = np.abs(e_exact - e_opt)
+        print('e_diff:', e_diff)
+
+    return
+
+
 
 if __name__=='__main__':
 
@@ -1359,10 +1389,16 @@ if __name__=='__main__':
 
     # hydrogen2_test1()
     # hydrogen2_test2()
-    hydrogen2_test3()
+    # hydrogen2_test3()
 
     # ====================
     # Configuration Interaction
     # ====================
 
-    ci_test1()
+    # ci_test1()
+
+    # ====================
+    # The variational principle
+    # ====================
+
+    vpm_test1()

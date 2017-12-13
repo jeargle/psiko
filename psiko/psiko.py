@@ -9,7 +9,7 @@ from mpl_toolkits import axes_grid1
 from mpl_toolkits.mplot3d import Axes3D
 import scipy as sp
 from scipy import misc
-from scipy.integrate import simps, quad, nquad
+from scipy.integrate import simps, quad, nquad, tplquad
 from scipy.special import sph_harm, eval_genlaguerre, expi
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
@@ -666,6 +666,38 @@ def He_H11(Z):
         H11c = 5.0/4.0
     """
     return 2 * (-0.5 * Z**2) + 5.0/4.0
+
+
+def He_phi1(s, t, u, zeta, Z=2):
+    return np.exp(-zeta * s)
+
+def He_H11_vpm(t, u, s, zeta=1.6875, Z=2):
+    return (He_phi1(s, t, u, zeta, Z)**2 *
+            (s**2 - t**2 - 4*s*u*Z + (s-t)*(s+t)*u*zeta**2))
+
+def He_S11_vpm(t, u, s, zeta=1.6875, Z=2):
+    return (He_phi1(s, t, u, zeta, Z)**2 *
+            u*(s**2 - t**2))
+
+def He_expected_phi1(zeta):
+    # 3D integrate with tplquad
+    H11_int, error = tplquad(
+        He_H11_vpm,
+        0.0, 50.0,
+        lambda x: 0.0, lambda x: x,
+        lambda x, y: 0.0, lambda x, y: y,
+        args=(zeta, 2.0)
+    )
+
+    S11_int, error = tplquad(
+        He_S11_vpm,
+        0.0, np.inf,
+        lambda x: 0.0, lambda x: x,
+        lambda x, y: 0.0, lambda x, y: y,
+        args=(zeta, 2.0)
+    )
+
+    return H11_int/S11_int
 
 
 J22_pm = -337.0 / 162.0
