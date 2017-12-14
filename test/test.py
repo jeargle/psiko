@@ -1282,6 +1282,29 @@ def pert_test1():
     return
 
 
+def pert_test2():
+    """
+    Exploring lambda
+    """
+
+    lambdas = np.linspace(0,1,100)
+    c_g = np.zeros(len(lambdas))
+    c_e = np.zeros(len(lambdas))
+    e_ground = np.zeros(len(lambdas))
+
+    for i, lam in enumerate(lambdas):
+        H = pk.H_lambda(lam)
+        evals, evecs = np.linalg.eigh(H)
+        e_ground[i] = evals[0]
+        c_g[i] = evecs[0][0]
+        c_e[i] = evecs[0][1]
+
+    plt.plot(lambdas, c_g**2)
+    plt.plot(lambdas, c_e**2)
+    plt.plot(lambdas, e_ground)
+    plt.show()
+
+
 
 if __name__=='__main__':
 
@@ -1424,3 +1447,4 @@ if __name__=='__main__':
     # ====================
 
     pert_test1()
+    pert_test2()
