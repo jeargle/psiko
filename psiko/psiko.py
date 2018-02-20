@@ -1,6 +1,5 @@
 # John Eargle
-# 2017
-
+# 2017-2018
 
 import numpy as np
 import matplotlib as mpl
@@ -293,6 +292,20 @@ def eval_expectation(psi, x, dx, operator):
     return exp
 
 
+def tunnel_finite_diff(x, psi_x, v_x, E):
+    """
+    tunnel function
+
+    return time-propagated wavefunction
+    """
+    psi_new = np.copy(psi_x)
+    for i in range(1, len(x)-1):
+        dx = x[i+1]-x[i]
+        psi_new[i+1] = (2.0 + (2.0*dx**2)*(v_x[i]-E))*psi_new[i] - psi_new[i-1]
+
+    return psi_new
+
+
 _wf_type = {
     'position': 1,
     'momentum': 2,
@@ -302,6 +315,9 @@ _wf_type = {
 _wf_type_name = {val: key for key, val in _wf_type.items()}
 
 class Psi(object):
+    """
+    Wavefunction evaluated at discrete points x.
+    """
 
     def __init__(self, x, dx, psi, wf_type=_wf_type['position']):
         self.x = x
@@ -339,21 +355,6 @@ class Psi(object):
         exp = 0.0 if np.abs(exp) < 1e-7 else exp
 
         return exp
-
-
-def tunnel_finite_diff(x, psi_x, v_x, E):
-    """
-    tunnel function
-
-    return time-propagated wavefunction
-    """
-    psi_new = np.copy(psi_x)
-    for i in range(1, len(x)-1):
-        dx = x[i+1]-x[i]
-        psi_new[i+1] = (2.0 + (2.0*dx**2)*(v_x[i]-E))*psi_new[i] - psi_new[i-1]
-
-    return psi_new
-
 
 
 # ====================

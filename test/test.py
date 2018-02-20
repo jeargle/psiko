@@ -1,5 +1,5 @@
 # John Eargle
-# 2017
+# 2017-2018
 
 
 from __future__ import print_function
@@ -168,7 +168,7 @@ def pib_test1():
     x = np.linspace(0, l, 1000)
     y = np.zeros(3*len(x)).reshape(3, len(x))
 
-    # calculate 4 harmonics
+    # calculate 3 harmonics
     for n in range(1,4):
         y[n-1] = pk.pib_ti_1D(x, n, l)
 
@@ -1333,13 +1333,13 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    # pib_test1()
-    # pib_test2()
-    # pib_test3()
-    # pib_interference_test1()
-    # pib_interference_test2()
-    # quadrature_test1()
-    # quadrature_test2()
+    pib_test1()
+    pib_test2()
+    pib_test3()
+    pib_interference_test1()
+    pib_interference_test2()
+    quadrature_test1()
+    quadrature_test2()
 
     # ====================
     # QM postulates
@@ -1446,5 +1446,5 @@ if __name__=='__main__':
     # First Order Perturbation theory
     # ====================
 
-    pert_test1()
-    pert_test2()
+    # pert_test1()
+    # pert_test2()
