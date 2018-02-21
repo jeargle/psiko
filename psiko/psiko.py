@@ -24,7 +24,6 @@ def square_comp(x, omega, k):
     """
     return (4.0/np.pi) * np.sin(2*np.pi*(2*k-1)*omega*x)/(2*k-1)
 
-
 def square(x, omega, n):
     """
     Approximate a square wave with sin() series.
@@ -35,7 +34,6 @@ def square(x, omega, n):
         sum += i
     return sum
 
-
 def square2(x, omega, n):
     """
     Approximate a square wave with sin() series.
@@ -43,20 +41,17 @@ def square2(x, omega, n):
     a = np.array([square_comp(x, omega, k) for k in range(1,n+1)])
     return np.array([a[:n,i].sum() for i in range(len(x))])
 
-
 def force1(ti, m):
     """
     Time dependent force calculation.
     """
     return 5.0*np.sin(2*ti)/m
 
-
 def repulsion(r1, r2):
     """
     """
     #return 5.0*np.sin(2*ti)/m
     return 5/(abs(r1-r2))
-
 
 def boundary_1d(xi, v, l):
     """
@@ -68,7 +63,6 @@ def boundary_1d(xi, v, l):
         v=-v
     return v
 
-
 def complex_simps(y, x):
     """
     Complex Simpson's rule.
@@ -77,7 +71,6 @@ def complex_simps(y, x):
         return simps(y, x) + 0j
     else:
         return simps(y.real, x) + simps(y.imag, x) * 1j
-
 
 def complex_nquad(func, ranges, **kwargs):
     """
@@ -93,11 +86,9 @@ def complex_nquad(func, ranges, **kwargs):
             real_integral[1] + imag_integral[1] * 1j)
 
 
-
 # ====================
 # Wavefunction Functions
 # ====================
-
 
 def prob_density(psi):
     """
@@ -105,13 +96,11 @@ def prob_density(psi):
     """
     return (np.conjugate(psi) * psi).real
 
-
 def normalize_wfn(x, psi):
     """
     Normalize a wavefunction.
     """
     return psi / psi_norm(x, psi)
-
 
 def psi_norm(x, psi):
     """
@@ -119,7 +108,6 @@ def psi_norm(x, psi):
     """
     result = simps(prob_density(psi), x)
     return np.sqrt(result)
-
 
 def finite_diff(y, dx):
     """
@@ -138,7 +126,6 @@ def finite_diff(y, dx):
 
     return diff
 
-
 # def finite_diff(psi):
 #     """
 #     Finite difference method.
@@ -156,13 +143,11 @@ def finite_diff(y, dx):
 
 #     return diff
 
-
 def cnt_evolve(cn_0, t, E_n, hbar=1.0):
     """
     Time-evolve a complex, time-dependent coefficient.
     """
     return cn_0 * np.exp(-1j*E_n*t/hbar)
-
 
 def position_operator(psi, x, dx, hbar=1.0):
     """
@@ -170,20 +155,17 @@ def position_operator(psi, x, dx, hbar=1.0):
     """
     return x*psi
 
-
 def momentum_operator(psi, x, dx, hbar=1.0):
     """
     Momentum operator.
     """
     return -1j * hbar * finite_diff(psi, dx)
 
-
 # def momentum_operator(psi, hbar=1.0):
 #     """
 #     Momentum operator.
 #     """
 #     return -1j * hbar * finite_diff(psi)
-
 
 def kinetic_mat_operator(x, dx=None, m=1, h_bar=1):
     """
@@ -209,14 +191,12 @@ def kinetic_mat_operator(x, dx=None, m=1, h_bar=1):
 
     return T
 
-
 def linear_ramp(x):
     """
     Linear potential.
     """
     b = 2
     return b*x
-
 
 def build_hamiltonian(x, vx, dx=None, m=1.0, h_bar=1.0):
     """
@@ -229,7 +209,6 @@ def build_hamiltonian(x, vx, dx=None, m=1.0, h_bar=1.0):
     H = T + V
 
     return H
-
 
 def coulomb_double_well(x, r):
     """
@@ -245,13 +224,11 @@ def coulomb_double_well(x, r):
         for xi in x
     ])
 
-
 def coulomb_well(x, x0=0.0):
     """
     Build Coulomb-like well potential at x0.
     """
     return -1.0 / np.abs(x-x0)
-
 
 def square_barrier(x, length=1.0, height=9.0, x0=4.0):
     """
@@ -264,12 +241,10 @@ def square_barrier(x, length=1.0, height=9.0, x0=4.0):
 
     return result
 
-
 def transmission_probability(pdf, n_cutoff=300):
     """
     """
     return (2.0 / (1.0 + np.mean(pdf[-n_cutoff:]))).real
-
 
 def complex_plane_wave(x, energy, mass=1.0, hbar=1.0):
     """
@@ -281,7 +256,6 @@ def complex_plane_wave(x, energy, mass=1.0, hbar=1.0):
 
     return psi
 
-
 def eval_expectation(psi, x, dx, operator):
     """
     """
@@ -290,7 +264,6 @@ def eval_expectation(psi, x, dx, operator):
     exp = 0.0 if np.abs(exp) < 1e-7 else exp
 
     return exp
-
 
 def tunnel_finite_diff(x, psi_x, v_x, E):
     """
@@ -304,7 +277,6 @@ def tunnel_finite_diff(x, psi_x, v_x, E):
         psi_new[i+1] = (2.0 + (2.0*dx**2)*(v_x[i]-E))*psi_new[i] - psi_new[i-1]
 
     return psi_new
-
 
 _wf_type = {
     'position': 1,
@@ -361,7 +333,6 @@ class Psi(object):
 # Particle in a Box
 # ====================
 
-
 def pib_ti_1D(x, n, l):
     """
     Normalized energy eigenfunctions to time-independent Particle In a
@@ -369,13 +340,13 @@ def pib_ti_1D(x, n, l):
     """
     return np.sqrt(2.0/l) * np.sin(n*np.pi*x/l)
 
-
 def pib_td_1D(t, c, n, l):
     """
     Time varying prefactor to time-independent Particle In a Box.
+
+    Note: could be replaced by cnt_evolve()
     """
     return np.cos(n*np.pi*c*t/l)
-
 
 def wave_solution(x, t, c, n, l):
     """
@@ -383,13 +354,11 @@ def wave_solution(x, t, c, n, l):
     """
     return pib_td_1D(t, c, n, l) * pib_ti_1D(x, n, l)
 
-
 def pib_energy(n, l, hbar=1.0, m=1):
     """
     Energy eigenvalues
     """
     return (n**2 * hbar**2 * np.pi**2) / (2.0 * m * l**2)
-
 
 def pib_superposition(x, t, l, n1, n2):
     # First eigenstate
@@ -413,11 +382,9 @@ def pib_superposition(x, t, l, n1, n2):
     return psi
 
 
-
 # ====================
 # Harmonic Oscillator
 # ====================
-
 
 def harmonic_oscillator_1D(x, n, mass=1.0, omega=1.0, hbar=1.0):
     """
@@ -434,7 +401,6 @@ def harmonic_oscillator_1D(x, n, mass=1.0, omega=1.0, hbar=1.0):
 
     return prefactor * gaussian * hermite
 
-
 def harmonic_oscillator_1D_in_field(x, t, omega_f, omega_0=1, lam=1, E_0=1.0, mass=1.0, hbar=1.0):
     """
     Time-dependent solution to ground state Harmonic Oscillator in a sinusoidal
@@ -450,7 +416,6 @@ def harmonic_oscillator_1D_in_field(x, t, omega_f, omega_0=1, lam=1, E_0=1.0, ma
 
     return psi0 + c1*psi1
 
-
 def excited_overlap(t, omega_f, omega_0=1, lam=1, E_0=1.0, m=1.0, hbar=1.0):
     """
     Overlap of the ground state and first excited states for 1D
@@ -463,10 +428,8 @@ def excited_overlap(t, omega_f, omega_0=1, lam=1, E_0=1.0, m=1.0, hbar=1.0):
         ((np.exp(1j*omega_sum*t) - 1.0) / omega_sum))
     return c1
 
-
 def harmonic_potential_2D(xx, yy, kx, ky, x0=0, y0=0):
     return 0.5*kx*(xx-x0)**2 + 0.5*ky*(yy-y0)**2
-
 
 def harmonic_oscillator_2D(xx, yy, l, m, mass=1.0, omega=1.0, hbar=1.0):
     """
@@ -492,7 +455,6 @@ def harmonic_oscillator_2D(xx, yy, l, m, mass=1.0, omega=1.0, hbar=1.0):
     # The eigenfunction is the product of all of the above.
     return prefactor * gaussian * hermite_l * hermite_m
 
-
 def harmonic_oscillator_wigner(x, p, omega, mass=1.0, hbar=1.0):
     """
     """
@@ -505,7 +467,6 @@ def harmonic_oscillator_wigner_01(x, p, t):
     """
     return ( np.exp(-x**2 - p**2) *
              (x**2 + p**2 + np.sqrt(2.0)*x*np.cos(t) - np.sqrt(2)*p*np.sin(t)) )
-
 
 
 # ====================
@@ -528,7 +489,6 @@ def radial_psi(r, n, l, a0=1.0, z=1.0):
           eval_genlaguerre(sub, sup, rho))
     return wf * normFactor
 
-
 def radial_integrand(r, n, l, a0=1.0, z=1.0):
     """
     Expectation integrand for radial distribution.
@@ -536,13 +496,11 @@ def radial_integrand(r, n, l, a0=1.0, z=1.0):
     psi = radial_psi(r, n, l, a0=1.0, z=1.0)
     return np.conjugate(psi) * r**3.0 * psi
 
-
 def hydrogen_energy(n, a0=1.0, Z=1.0, mu=1.0, c=137.0, alpha=1.0/137.0):
     """
     Hydrogen energy value for a given state.
     """
     return (-mu * c**2 * Z**2 * alpha**2) / (2.0 * n**2)
-
 
 def hydrogen_transition_energy(n1, n2, a0=1.0, Z=1.0, mu=1.0,
                                c=137.0, alpha=1.0/137.0):
@@ -551,7 +509,6 @@ def hydrogen_transition_energy(n1, n2, a0=1.0, Z=1.0, mu=1.0,
     """
     return ( (-mu * c**2 * Z**2 * alpha**2) /
              (2.0)) * ((1.0/n1**2) - (1.0/n2**2) )
-
 
 # Integrals and PES (Potential Energy Surface) functions
 # H2- one-electron 2-proton Hamiltonian
@@ -652,11 +609,9 @@ def H2_energy_CI(R):
     return evals
 
 
-
 # ====================
 # Helium
 # ====================
-
 
 def He_H11(Z):
     """
@@ -717,11 +672,9 @@ def H_lambda(lam):
     return H0() + H1(lam)
 
 
-
 # ====================
 # Helper Functions
 # ====================
-
 
 def square_function(x, l):
     """
@@ -732,14 +685,12 @@ def square_function(x, l):
     else:
         return 1.0
 
-
 def projection_integrand(x, n, l):
     """
     """
     return (np.sqrt(2.0/l) *
             np.sin(n*np.pi*x/l) *
             square_function(x,l))
-
 
 def gaussian_x(x, sigma):
     """
@@ -748,14 +699,12 @@ def gaussian_x(x, sigma):
     return ( np.exp(-(x**2 / (2 * sigma**2))) /
              (np.sqrt(sigma * np.sqrt(np.pi))) )
 
-
 def gaussian_p(p, sigma):
     """
     Momentum gaussian.
     """
     return ( (np.sqrt(sigma) * np.exp(-(p**2 * sigma**2)/2)) /
              (np.sqrt(np.sqrt(np.pi))) )
-
 
 def x_int(x, sigma):
     """
@@ -764,14 +713,12 @@ def x_int(x, sigma):
     gx = gaussian_x(x, sigma)
     return gx * x * gx
 
-
 def x2_int(x, sigma):
     """
     Gaussian position-squared integrand.
     """
     gx = gaussian_x(x, sigma)
     return gx * x**2 * gx
-
 
 def p_int(p, sigma):
     """
@@ -780,7 +727,6 @@ def p_int(p, sigma):
     gp = gaussian_p(p, sigma)
     return gp * p * gp
 
-
 def p2_int(p, sigma):
     """
     Gaussian momentum-squared integrand.
@@ -788,14 +734,12 @@ def p2_int(p, sigma):
     gp = gaussian_p(p, sigma)
     return gp * p**2 * gp
 
-
 def mu_operator(mu, theta, phi):
     """
     """
     return mu * (np.sin(theta)*np.cos(phi) +
                  np.sin(theta)*np.sin(phi) +
                  np.cos(theta))
-
 
 def dipole_moment_integrand(phi, theta, mu, l1, m1, l2, m2, real=False):
     """
@@ -808,7 +752,6 @@ def dipole_moment_integrand(phi, theta, mu, l1, m1, l2, m2, real=False):
         return (Y_l1m1 * mu_op * Y_l2m2 * np.sin(theta)).real
 
     return Y_l1m1 * mu_op * Y_l2m2 * np.sin(theta)
-
 
 def dipole_moment_superposition_integrand(phi, theta, mu, c1, c2, l1, m1, l2, m2, real=False):
     """
@@ -823,7 +766,6 @@ def dipole_moment_superposition_integrand(phi, theta, mu, c1, c2, l1, m1, l2, m2
 
     return np.conjugate(Y_lm) * mu_op * Y_lm * np.sin(theta)
 
-
 def sph_harm_real(m, l, phi, theta):
     """
     Spherical harmonics in real space.
@@ -837,7 +779,6 @@ def sph_harm_real(m, l, phi, theta):
         Y_lm_real = Y_lm
     return Y_lm_real
 
-
 def sphere_to_cart(theta, phi, r=1.0):
     """
     Converts spherical coordinates to 3D cartesian coordinates.
@@ -848,7 +789,6 @@ def sphere_to_cart(theta, phi, r=1.0):
 
     return x, y, z
 
-
 def hartrees_to_wavelength(energy):
     """
     Get wavelength (nm) corresponding to a given energy (Hartrees)
@@ -857,18 +797,14 @@ def hartrees_to_wavelength(energy):
     return np.abs(45.56 * 1.0 / energy)
 
 
-
-
 # ====================
 # Plotting
 # ====================
-
 
 def time_plot(x, y, t, timestep=1):
     for i in range(0, len(t), timestep):
         plt.plot(x, y[:,i])
     return
-
 
 def plot_surface(xx, yy, zz):
     """
@@ -886,7 +822,6 @@ def plot_surface(xx, yy, zz):
     plt.ylabel('y')
 
     return
-
 
 def plot_contours(xx, yy, zz, vmin=None, vmax=None):
     """
@@ -906,7 +841,6 @@ def plot_contours(xx, yy, zz, vmin=None, vmax=None):
 
     return
 
-
 def _add_colorbar(im, aspect=20, pad_fraction=0.5, **kwargs):
     """
     Add a vertical color bar to an image plot.
@@ -919,7 +853,6 @@ def _add_colorbar(im, aspect=20, pad_fraction=0.5, **kwargs):
     plt.sca(current_ax)
 
     return im.axes.figure.colorbar(im, cax=cax, **kwargs)
-
 
 def plot_sphere(m, l):
     """
@@ -949,7 +882,6 @@ def plot_sphere(m, l):
     ax.set_zlabel('z')
 
     return
-
 
 def plot_energy_levels(energies, figsize=(14, 6), fontsize='xx-small'):
     """
@@ -1000,7 +932,6 @@ def plot_energy_levels(energies, figsize=(14, 6), fontsize='xx-small'):
 
     return
 
-
 def _energy_label(energy_dict):
     """
     Create string with quantum numbers n, l, and m.
@@ -1015,7 +946,6 @@ def _energy_label(energy_dict):
         vals.append('m={:d}'.format(energy_dict['m']))
 
     return ', '.join(vals)
-
 
 def wavelength_to_colour(wavelength):
     """
