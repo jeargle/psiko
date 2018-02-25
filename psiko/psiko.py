@@ -296,15 +296,15 @@ class Psi(object):
         self.x = x
         self.y = y
 
-        if dx is None:
-            self.dx = x[1] - x[0]
-        else:
-            self.dx = dx
+        self.dx = dx
+        if len(x) > 1:
+            if self.dx is None:
+                self.dx = x[1] - x[0]
+            if normalize:  # Do not normalize if there is only one point.
+                self._normalize()
 
         self.wf_type = wf_type
 
-        if normalize:
-            self._normalize()
 
     def prob_density(self):
         """
@@ -336,6 +336,15 @@ class Psi(object):
 
         return exp
 
+class PsiTraj(object):
+    """
+    Trajectory of a wavefunction evaluated at discrete points x and times t.
+    """
+
+    def __init__(self, psi, t):
+        self.psi = psi
+        self.t = t
+
 
 # ====================
 # Particle in a Box
@@ -346,7 +355,7 @@ def pib_ti_1D(x, n, l):
     Normalized energy eigenfunctions to time-independent Particle In a
     Box.
 
-    x: domain array starting at 0
+    x: domain numpy array starting at 0
     n: eigenfunction index
     l: length of box spanned by x
     """
@@ -357,7 +366,7 @@ def pib_ti_1D_psi(x, n, l):
     Normalized energy eigenfunctions to time-independent Particle In a
     Box.
 
-    x: domain array starting at 0
+    x: domain numpy array starting at 0
     n: eigenfunction index
     l: length of box spanned by x
     """
@@ -381,7 +390,21 @@ def pib_wave_solution(x, t, c, n, l):
     """
     Harmonic solutions to time-dependent Particle In a Box.
     """
+    # time-dependent and time-independent terms
     return pib_td_1D(t, c, n, l) * pib_ti_1D(x, n, l)
+
+def pib_wave_solution_psi(psi, t, c, n, l):
+    """
+    Harmonic solutions to time-dependent Particle In a Box.
+
+    psi: Psi for particle in a box
+    t: time array
+    c: scaling factor???
+    n: eigenfunction index
+    l: length of box spanned by psi.x
+    """
+    # time-dependent and time-independent terms
+    return pib_td_1D(t, c, n, l) * psi.y
 
 def pib_energy(n, l, hbar=1.0, m=1):
     """

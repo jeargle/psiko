@@ -215,10 +215,8 @@ def pib_test3():
     psi = pk.pib_ti_1D_psi(x, n, l)
 
     for step, time in enumerate(t):
-        # time-dependent and time-independent terms
-        # traj[:, step] = pk.pib_td_1D(time, c, n, l) * pk.pib_ti_1D(x, n, l)
-        traj[:, step] = pk.pib_td_1D(time, c, n, l) * psi.y
         # traj[:, step] = pk.pib_wave_solution(x, time, c, n, l)
+        traj[:, step] = pk.pib_wave_solution_psi(psi, time, c, n, l)
 
     pk.time_plot(x, traj, t)
     plt.show()
@@ -232,13 +230,18 @@ def pib_interference_test1():
     t = np.arange(0, 100, 0.1)
     c = 0.5
     l = 10
-    x = l/3.0
+    x = np.array([l/3.0])
+    # Single point wavefunctions.
+    psi1 = pk.pib_ti_1D_psi(x, 1, l)
+    psi2 = pk.pib_ti_1D_psi(x, 2, l)
     wave = np.zeros(len(t))
 
     # sum 2 eigenstates
     for step, time in enumerate(t):
-        wave[step] = (pk.pib_wave_solution(x, time, c, 1, l) +
-                      pk.pib_wave_solution(x, time, c, 2, l))
+        # wave[step] = (pk.pib_wave_solution(x, time, c, 1, l) +
+        #               pk.pib_wave_solution(x, time, c, 2, l))
+        wave[step] = (pk.pib_wave_solution_psi(psi1, time, c, 1, l)[0] +
+                      pk.pib_wave_solution_psi(psi2, time, c, 2, l)[0])
 
     plt.plot(t, wave)
     plt.show()
@@ -1348,8 +1351,8 @@ if __name__=='__main__':
 
     # pib_test1()
     # pib_test2()
-    pib_test3()
-    # pib_interference_test1()
+    # pib_test3()
+    pib_interference_test1()
     # pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
