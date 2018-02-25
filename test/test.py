@@ -166,14 +166,16 @@ def forces_test3():
 def pib_test1():
     l = 10
     x = np.linspace(0, l, 1000)
-    y = np.zeros(3*len(x)).reshape(3, len(x))
+    # y = np.zeros(3*len(x)).reshape(3, len(x))
+    y = []
 
     # calculate 3 harmonics
     for n in range(1,4):
-        y[n-1] = pk.pib_ti_1D(x, n, l)
+        # y[n-1] = pk.pib_ti_1D(x, n, l)
+        y.append(pk.pib_ti_1D_psi(x, n, l))
 
-    for i in y:
-        plt.plot(x, i)
+    for psi in y:
+        plt.plot(psi.x, psi.y)
     plt.legend()
     plt.show()
 
@@ -1334,12 +1336,12 @@ if __name__=='__main__':
     # ====================
 
     pib_test1()
-    pib_test2()
-    pib_test3()
-    pib_interference_test1()
-    pib_interference_test2()
-    quadrature_test1()
-    quadrature_test2()
+    # pib_test2()
+    # pib_test3()
+    # pib_interference_test1()
+    # pib_interference_test2()
+    # quadrature_test1()
+    # quadrature_test2()
 
     # ====================
     # QM postulates

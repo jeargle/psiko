@@ -291,38 +291,46 @@ class Psi(object):
     Wavefunction evaluated at discrete points x.
     """
 
-    def __init__(self, x, dx, psi, wf_type=_wf_type['position']):
+    def __init__(self, x, y, dx=None,
+                 wf_type=_wf_type['position'], normalize=True):
         self.x = x
-        self.dx = dx
-        self.psi = psi
+        self.y = y
+
+        if dx is None:
+            self.dx = x[1] - x[0]
+        else:
+            self.dx = dx
+
         self.wf_type = wf_type
-        self._normalize()
+
+        if normalize:
+            self._normalize()
 
     def prob_density(self):
         """
         Probability density for the wavefunction.
         """
-        return (np.conjugate(self.psi) * self.psi).real
+        return (np.conjugate(self.y) * self.y).real
 
     def psi_norm(self):
         """
         Norm of the wavefunction.
         """
-        result = simps(prob_density(self.psi), self.x)
+        result = simps(prob_density(self.y), self.x)
         return np.sqrt(result)
 
     def _normalize(self):
         """
         Normalize the wavefunction.
         """
-        self.psi = self.psi / self.psi_norm()
+        self.y = self.y / self.psi_norm()
         return
 
     def expectation(operator):
         """
         Expectation value for an operator on this wavefunction.
         """
-        integrand = np.conjugate(self.psi) * operator(self.psi)
+        integrand = np.conjugate(self.y) * operator(self.y)
         exp = complex_simps(integrand, self.x)
         exp = 0.0 if np.abs(exp) < 1e-7 else exp
 
@@ -337,14 +345,35 @@ def pib_ti_1D(x, n, l):
     """
     Normalized energy eigenfunctions to time-independent Particle In a
     Box.
+
+    x: domain array starting at 0
+    n: eigenfunction index
+    l: length of box spanned by x
     """
     return np.sqrt(2.0/l) * np.sin(n*np.pi*x/l)
+
+def pib_ti_1D_psi(x, n, l):
+    """
+    Normalized energy eigenfunctions to time-independent Particle In a
+    Box.
+
+    x: domain array starting at 0
+    n: eigenfunction index
+    l: length of box spanned by x
+    """
+    y = np.sqrt(2.0/l) * np.sin(n*np.pi*x/l)
+    return Psi(x, y)
 
 def pib_td_1D(t, c, n, l):
     """
     Time varying prefactor to time-independent Particle In a Box.
 
     Note: could be replaced by cnt_evolve()
+
+    t: time
+    c: scaling factor???
+    n: eigenfunction index
+    l: length of box spanned by x
     """
     return np.cos(n*np.pi*c*t/l)
 
