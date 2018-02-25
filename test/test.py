@@ -164,6 +164,9 @@ def forces_test3():
 
 
 def pib_test1():
+    """
+    Plot first three eigenfunctions for a particle in a box.
+    """
     l = 10
     x = np.linspace(0, l, 1000)
     # y = np.zeros(3*len(x)).reshape(3, len(x))
@@ -181,6 +184,10 @@ def pib_test1():
 
 
 def pib_test2():
+    """
+    Plot time evolution of time-dependent prefactor for first four
+    eigenfunctions of a particle in a box.
+    """
     l = 10.0
     c = 0.1
     t = np.linspace(0, 100, 1000)
@@ -197,19 +204,23 @@ def pib_test2():
 
 
 def pib_test3():
+    """
+    """
     c = 0.1
     l = 10
     x = np.arange(0, l, 0.01)
     t = np.arange(0, 30, 0.1)
-    y = np.zeros((len(x), len(t)))
+    traj = np.zeros((len(x), len(t)))
     n = 3
+    psi = pk.pib_ti_1D_psi(x, n, l)
 
     for step, time in enumerate(t):
         # time-dependent and time-independent terms
-        # y[:, step] = pk.pib_td_1D(time, c, n, l) * pk.pib_ti_1D(x, n, l)
-        y[:, step] = pk.wave_solution(x, time, c, n, l)
+        # traj[:, step] = pk.pib_td_1D(time, c, n, l) * pk.pib_ti_1D(x, n, l)
+        traj[:, step] = pk.pib_td_1D(time, c, n, l) * psi.y
+        # traj[:, step] = pk.pib_wave_solution(x, time, c, n, l)
 
-    pk.time_plot(x, y, t)
+    pk.time_plot(x, traj, t)
     plt.show()
 
 
@@ -226,8 +237,8 @@ def pib_interference_test1():
 
     # sum 2 eigenstates
     for step, time in enumerate(t):
-        wave[step] = (pk.wave_solution(x, time, c, 1, l) +
-                      pk.wave_solution(x, time, c, 2, l))
+        wave[step] = (pk.pib_wave_solution(x, time, c, 1, l) +
+                      pk.pib_wave_solution(x, time, c, 2, l))
 
     plt.plot(t, wave)
     plt.show()
@@ -242,13 +253,13 @@ def pib_interference_test2():
     l = 10
     x = np.linspace(0, l, 100)
     t = np.arange(0, 30, 0.1)
-    y = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+    traj = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
 
     for step, time in enumerate(t):
-        y[:, step] = (pk.wave_solution(x, time, c, 1, l) +
-                      pk.wave_solution(x, time, c, 2, l))
+        traj[:, step] = (pk.pib_wave_solution(x, time, c, 1, l) +
+                         pk.pib_wave_solution(x, time, c, 2, l))
 
-    pk.time_plot(x, y, t, timestep=1)
+    pk.time_plot(x, traj, t, timestep=1)
     plt.show()
 
 
@@ -1335,9 +1346,9 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    pib_test1()
+    # pib_test1()
     # pib_test2()
-    # pib_test3()
+    pib_test3()
     # pib_interference_test1()
     # pib_interference_test2()
     # quadrature_test1()

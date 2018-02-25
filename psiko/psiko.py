@@ -12,7 +12,7 @@ from scipy.integrate import simps, quad, nquad, tplquad
 from scipy.special import sph_harm, eval_genlaguerre, expi
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
-           "boundary_1d", "pib_ti_1D", "pib_td_1D", "wave_solution",
+           "boundary_1d", "pib_ti_1D", "pib_td_1D", "pib_wave_solution",
            "pib_energy", "square_function", "projection_integrand",
            "time_plot"]
 
@@ -377,7 +377,7 @@ def pib_td_1D(t, c, n, l):
     """
     return np.cos(n*np.pi*c*t/l)
 
-def wave_solution(x, t, c, n, l):
+def pib_wave_solution(x, t, c, n, l):
     """
     Harmonic solutions to time-dependent Particle In a Box.
     """
