@@ -215,7 +215,6 @@ def pib_test3():
     psi = pk.pib_ti_1D_psi(x, n, l)
 
     for step, time in enumerate(t):
-        # traj[:, step] = pk.pib_wave_solution(x, time, c, n, l)
         traj[:, step] = pk.pib_wave_solution_psi(psi, time, c, n, l)
 
     pk.time_plot(x, traj, t)
@@ -238,8 +237,6 @@ def pib_interference_test1():
 
     # sum 2 eigenstates
     for step, time in enumerate(t):
-        # wave[step] = (pk.pib_wave_solution(x, time, c, 1, l) +
-        #               pk.pib_wave_solution(x, time, c, 2, l))
         wave[step] = (pk.pib_wave_solution_psi(psi1, time, c, 1, l)[0] +
                       pk.pib_wave_solution_psi(psi2, time, c, 2, l)[0])
 
@@ -255,12 +252,14 @@ def pib_interference_test2():
     c = 0.5
     l = 10
     x = np.linspace(0, l, 100)
+    psi1 = pk.pib_ti_1D_psi(x, 1, l)
+    psi2 = pk.pib_ti_1D_psi(x, 2, l)
     t = np.arange(0, 30, 0.1)
     traj = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
 
     for step, time in enumerate(t):
-        traj[:, step] = (pk.pib_wave_solution(x, time, c, 1, l) +
-                         pk.pib_wave_solution(x, time, c, 2, l))
+        traj[:, step] = (pk.pib_wave_solution_psi(psi1, time, c, 1, l) +
+                         pk.pib_wave_solution_psi(psi2, time, c, 2, l))
 
     pk.time_plot(x, traj, t, timestep=1)
     plt.show()
@@ -1349,11 +1348,11 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    # pib_test1()
-    # pib_test2()
-    # pib_test3()
+    pib_test1()
+    pib_test2()
+    pib_test3()
     pib_interference_test1()
-    # pib_interference_test2()
+    pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
 
