@@ -3,6 +3,7 @@
 
 import numpy as np
 import matplotlib as mpl
+import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 from mpl_toolkits import axes_grid1
 from mpl_toolkits.mplot3d import Axes3D
@@ -14,7 +15,7 @@ from scipy.special import sph_harm, eval_genlaguerre, expi
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
            "boundary_1d", "pib_ti_1D", "pib_td_1D", "pib_wave_solution",
            "pib_energy", "square_function", "projection_integrand",
-           "time_plot"]
+           "time_plot", "traj_plot"]
 
 
 
@@ -1043,3 +1044,57 @@ def wavelength_to_colour(wavelength):
         intensity = 0.0
 
     return (intensity * R, intensity * G, intensity * B)
+
+def traj_plot(x, traj, t, dt=1, xlim=None, ylim=None, skip=1, gif=None, mp4=None, show=False):
+    """
+    Create an animated plot for a wavefunction trajectory.
+
+    x: x-axis array
+    traj: 2D array of function sampling at different timepoints
+    t: time point array
+    dt: timestep
+    xlim: tuple with x-axis bounds
+    ylim: tuple with y-axis bounds
+    skip: number of timepoints to skip between each frame
+    gif: gif filename
+    """
+
+    if xlim is None:
+        xlim = (x[0], x[-1])
+
+    if ylim is None:
+        ylim = (-1.0, 1.0)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, autoscale_on=False, xlim=xlim, ylim=ylim)
+    ax.grid()
+
+    # line, = ax.plot([], [], 'o-', lw=2)
+    line, = ax.plot([], [])
+    time_template = 'time = %.1fs'
+    time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+
+    def init():
+        line.set_data([], [])
+        time_text.set_text('')
+        return line, time_text
+
+    def animate(i):
+        thisx = x
+        thisy = traj[:,i]
+
+        line.set_data(thisx, thisy)
+        time_text.set_text(time_template % (i*dt))
+        return line, time_text
+
+    ani = animation.FuncAnimation(fig, animate, np.arange(0, len(t), skip),
+                                  interval=50, blit=True, init_func=init)
+
+    if gif is not None:
+        ani.save(gif, dpi=80, fps=15, writer='imagemagick')
+    if mp4 is not None:
+        ani.save(mp4, fps=15)
+    if show:
+        plt.show()
+
+    return

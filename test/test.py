@@ -206,6 +206,7 @@ def pib_test2():
 
 def pib_test3():
     """
+    Plot time series for third eigenfunction of particle in a box.
     """
     c = 0.1
     l = 10
@@ -221,6 +222,13 @@ def pib_test3():
 
     pk.time_plot(x, traj, t)
     plt.show()
+    plt.clf()
+
+    pk.traj_plot(
+        x, traj, t, dt,
+        xlim=(0, l), ylim=(-0.5, 0.5),
+        skip=10, show=True
+    )
 
 
 def pib_test3_1():
@@ -237,35 +245,11 @@ def pib_test3_1():
     for step, time in enumerate(t):
         traj[:, step] = pk.pib_wave_solution_psi(psi, time, c, n, l)
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111, autoscale_on=False, xlim=(0, l), ylim=(-0.5, 0.5))
-    ax.grid()
-
-    # line, = ax.plot([], [], 'o-', lw=2)
-    line, = ax.plot([], [])
-    time_template = 'time = %.1fs'
-    time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
-
-    def init():
-        line.set_data([], [])
-        time_text.set_text('')
-        return line, time_text
-
-    def animate(i):
-        thisx = x
-        thisy = traj[:,i]
-
-        line.set_data(thisx, thisy)
-        time_text.set_text(time_template % (i*dt))
-        return line, time_text
-
-    ani = animation.FuncAnimation(fig, animate, np.arange(0, len(t), 10),
-                                  interval=50, blit=True, init_func=init)
-
-    # ani.save('pib3_1.mp4', fps=15)
-    ani.save('pib3_1.gif', dpi=80, fps=15, writer='imagemagick')
-
-    # plt.show()
+    pk.traj_plot(
+        x, traj, t, dt,
+        xlim=(0, l), ylim=(-0.5, 0.5),
+        skip=10, show=True
+    )
 
 
 def pib_interference_test1():
@@ -301,7 +285,8 @@ def pib_interference_test2():
     x = np.linspace(0, l, 100)
     psi1 = pk.pib_ti_1D_psi(x, 1, l)
     psi2 = pk.pib_ti_1D_psi(x, 2, l)
-    t = np.arange(0, 30, 0.1)
+    dt = 0.1
+    t = np.arange(0, 30, dt)
     traj = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
 
     for step, time in enumerate(t):
@@ -310,6 +295,13 @@ def pib_interference_test2():
 
     pk.time_plot(x, traj, t, timestep=1)
     plt.show()
+    plt.clf()
+
+    pk.traj_plot(
+        x, traj, t, dt,
+        xlim=(0, l), ylim=(-1.0, 1.0),
+        skip=5, show=True
+    )
 
 
 def quadrature_test1():
@@ -1397,10 +1389,10 @@ if __name__=='__main__':
 
     # pib_test1()
     # pib_test2()
-    pib_test3()
-    pib_test3_1()
+    # pib_test3()
+    # pib_test3_1()
     # pib_interference_test1()
-    # pib_interference_test2()
+    pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
 
