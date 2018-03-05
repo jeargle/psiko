@@ -216,6 +216,8 @@ def pib_test3():
     traj = np.zeros((len(x), len(t)))
     n = 3
     psi = pk.pib_ti_1D_psi(x, n, l)
+    options = {'c': c, 'n': n, 'l': l}
+    psi_traj = pk.PsiTraj(psi, t, dt, pk.pib_wave_solution_psi, **options)
 
     for step, time in enumerate(t):
         traj[:, step] = pk.pib_wave_solution_psi(psi, time, c, n, l)
@@ -226,29 +228,18 @@ def pib_test3():
 
     pk.traj_plot(
         x, traj, t, dt,
-        xlim=(0, l), ylim=(-0.5, 0.5),
-        skip=10, show=True
+        xlim=(0, l),
+        ylim=(-0.5, 0.5),
+        skip=10,
+        show=True
     )
 
-
-def pib_test3_1():
-
-    c = 0.1
-    l = 10
-    x = np.arange(0, l, 0.01)
-    dt = 0.1
-    t = np.arange(0, 30, dt)
-    traj = np.zeros((len(x), len(t)))
-    n = 3
-    psi = pk.pib_ti_1D_psi(x, n, l)
-
-    for step, time in enumerate(t):
-        traj[:, step] = pk.pib_wave_solution_psi(psi, time, c, n, l)
-
-    pk.traj_plot(
-        x, traj, t, dt,
-        xlim=(0, l), ylim=(-0.5, 0.5),
-        skip=10, show=True
+    pk.traj_plot_psi(
+        psi_traj,
+        # xlim=(0, l),
+        ylim=(-0.5, 0.5),
+        skip=10,
+        show=True
     )
 
 
@@ -1422,8 +1413,7 @@ if __name__=='__main__':
 
     # pib_test1()
     # pib_test2()
-    # pib_test3()
-    # pib_test3_1()
+    pib_test3()
     # pib_interference_test1()
     # pib_interference_test2()
     # quadrature_test1()
@@ -1461,10 +1451,10 @@ if __name__=='__main__':
     # Spectrum via a Time-Dependent field
     # ====================
 
-    field_test1()
-    field_test2()
-    field_test3()
-    field_test4()
+    # field_test1()
+    # field_test2()
+    # field_test3()
+    # field_test4()
 
     # ====================
     # Phase and Momentum Space Intro
@@ -1528,6 +1518,7 @@ if __name__=='__main__':
     # The variational principle
     # ====================
 
+    # Note: long runtime
     # vpm_test1()
 
     # ====================

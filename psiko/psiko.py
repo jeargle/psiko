@@ -342,9 +342,17 @@ class PsiTraj(object):
     Trajectory of a wavefunction evaluated at discrete points x and times t.
     """
 
-    def __init__(self, psi, t):
+    def __init__(self, psi, time, dt=None, wave_soln=None, **values):
         self.psi = psi
-        self.t = t
+        self.time = time
+        self.traj = np.zeros((len(self.psi.x), len(self.time)))
+
+        self.dt = dt
+        if self.dt is None:
+            self.dt = self.time[1] - self.time[0]
+
+        for step, t in enumerate(time):
+            self.traj[:, step] = wave_soln(self.psi, t, **values)
 
 
 # ====================
@@ -394,7 +402,7 @@ def pib_wave_solution(x, t, c, n, l):
     # time-dependent and time-independent terms
     return pib_td_1D(t, c, n, l) * pib_ti_1D(x, n, l)
 
-def pib_wave_solution_psi(psi, t, c, n, l):
+def pib_wave_solution_psi(psi, t, c=None, n=None, l=None):
     """
     Harmonic solutions to time-dependent Particle In a Box.
 
@@ -1082,6 +1090,62 @@ def traj_plot(x, traj, t, dt=1, xlim=None, ylim=None, skip=1, gif=None, mp4=None
     def animate(i):
         thisx = x
         thisy = traj[:,i]
+
+        line.set_data(thisx, thisy)
+        time_text.set_text(time_template % (i*dt))
+        return line, time_text
+
+    ani = animation.FuncAnimation(fig, animate, np.arange(0, len(t), skip),
+                                  interval=50, blit=True, init_func=init)
+
+    if gif is not None:
+        ani.save(gif, dpi=80, fps=15, writer='imagemagick')
+    if mp4 is not None:
+        ani.save(mp4, fps=15)
+    if show:
+        plt.show()
+
+    return
+
+def traj_plot_psi(psi_traj, xlim=None, ylim=None, skip=1, gif=None, mp4=None, show=False):
+    """
+    Create an animated plot for a wavefunction trajectory.
+
+    psi_traj: PsiTraj
+    xlim: tuple with x-axis bounds
+    ylim: tuple with y-axis bounds
+    skip: number of timepoints to skip between each frame
+    gif: gif filename
+    """
+
+    psi = psi_traj.psi
+    x = psi.x
+    t = psi_traj.time
+    dt = psi_traj.dt
+
+    if xlim is None:
+        xlim = (x[0], x[-1])
+
+    if ylim is None:
+        ylim = (-1.0, 1.0)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, autoscale_on=False, xlim=xlim, ylim=ylim)
+    ax.grid()
+
+    # line, = ax.plot([], [], 'o-', lw=2)
+    line, = ax.plot([], [])
+    time_template = 'time = %.1fs'
+    time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+
+    def init():
+        line.set_data([], [])
+        time_text.set_text('')
+        return line, time_text
+
+    def animate(i):
+        thisx = x
+        thisy = psi_traj.traj[:,i]
 
         line.set_data(thisx, thisy)
         time_text.set_text(time_template % (i*dt))
