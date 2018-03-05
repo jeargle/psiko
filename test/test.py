@@ -421,12 +421,37 @@ def schroedinger_test2():
     plt.show()
     plt.clf()
 
+    pk.traj_plot(
+        x, psi.real, t,
+        # xlim=(0, l),
+        ylim=(-0.5, 0.75),
+        # skip=5,
+        show=True
+    )
+
     pk.time_plot(x, psi.imag, t)
     plt.show()
     plt.clf()
 
+    pk.traj_plot(
+        x, psi.imag, t,
+        # xlim=(0, l),
+        ylim=(-0.6, 0.3),
+        # skip=5,
+        show=True
+    )
+
     pk.time_plot(x, pdf, t)
     plt.show()
+
+    pk.traj_plot(
+        x, pdf, t,
+        # xlim=(0, l),
+        ylim=(-0.1, 0.4),
+        # skip=5,
+        show=True
+    )
+
 
 def operator_test1():
     """
@@ -694,6 +719,14 @@ def field_test2():
 
     pk.time_plot(x, psit, t, timestep=8)
     plt.show()
+    plt.clf()
+
+    pk.traj_plot(
+        x, psit, t,
+        ylim=(-0.75, 1.5),
+        skip=2,
+        show=True
+    )
 
 
 def field_test3():
@@ -1392,7 +1425,7 @@ if __name__=='__main__':
     # pib_test3()
     # pib_test3_1()
     # pib_interference_test1()
-    pib_interference_test2()
+    # pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
 
@@ -1428,10 +1461,10 @@ if __name__=='__main__':
     # Spectrum via a Time-Dependent field
     # ====================
 
-    # field_test1()
-    # field_test2()
-    # field_test3()
-    # field_test4()
+    field_test1()
+    field_test2()
+    field_test3()
+    field_test4()
 
     # ====================
     # Phase and Momentum Space Intro
