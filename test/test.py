@@ -1,5 +1,5 @@
 # John Eargle
-# 2017-2018
+# 2017-2022
 
 
 from __future__ import print_function
@@ -1200,8 +1200,6 @@ def helium_test2():
     H22 = pk.H22_pm
     H = np.array([[H11, H12], [H12, H22]])
 
-    return
-
 
 def helium_test3():
     """
@@ -1341,8 +1339,6 @@ def vpm_test1():
         e_diff = np.abs(e_exact - e_opt)
         print('e_diff:', e_diff)
 
-    return
-
 
 def pert_test1():
     """
@@ -1356,8 +1352,6 @@ def pert_test1():
     print('H0:\n', test1)
     print('H1:\n', test2)
     print('H_lambda:\n', test3)
-
-    return
 
 
 def pert_test2():
@@ -1413,7 +1407,7 @@ if __name__=='__main__':
 
     # pib_test1()
     # pib_test2()
-    pib_test3()
+    # pib_test3()
     # pib_interference_test1()
     # pib_interference_test2()
     # quadrature_test1()

@@ -1,5 +1,5 @@
 # John Eargle
-# 2017-2018
+# 2017-2022
 
 import numpy as np
 import matplotlib as mpl
@@ -8,9 +8,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import axes_grid1
 from mpl_toolkits.mplot3d import Axes3D
 import scipy as sp
-from scipy import misc
 from scipy.integrate import simps, quad, nquad, tplquad
-from scipy.special import sph_harm, eval_genlaguerre, expi
+from scipy.special import (
+    factorial, eval_genlaguerre, expi, sph_harm
+)
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
            "boundary_1d", "pib_ti_1D", "pib_td_1D", "pib_wave_solution",
@@ -451,7 +452,7 @@ def harmonic_oscillator_1D(x, n, mass=1.0, omega=1.0, hbar=1.0):
     """
     Harmonic Oscillator
     """
-    prefactor = (1.0 / (np.sqrt(2**n * misc.factorial(n))) *
+    prefactor = (1.0 / (np.sqrt(2**n * factorial(n))) *
                  (mass * omega / (np.pi * hbar))**(1.0/4.0))
     gaussian = np.exp(-(mass * omega * x * x) / (2.0 * hbar))
 
@@ -498,7 +499,7 @@ def harmonic_oscillator_2D(xx, yy, l, m, mass=1.0, omega=1.0, hbar=1.0):
     """
     # Prefactor for the HO eigenfunctions
     prefactor = ( ((mass*omega) / (np.pi*hbar))**(1.0/2.0) /
-                  (np.sqrt(2**l * 2**m * misc.factorial(l) * misc.factorial(m))) )
+                  (np.sqrt(2**l * 2**m * factorial(l) * factorial(m))) )
 
     # Gaussian for the HO eigenfunctions
     gaussian = np.exp(-(mass * omega * (xx**2 + yy**2)) / (2.0*hbar))
@@ -542,8 +543,8 @@ def radial_psi(r, n, l, a0=1.0, z=1.0):
     sub = n - l - 1.0
     sup = 2.0 * l + 1.0
     normFactor = np.sqrt(
-        (2.0 * z / (n * a0))**3 * misc.factorial(sub) /
-        (2.0 * n * misc.factorial(n+l))
+        (2.0 * z / (n * a0))**3 * factorial(sub) /
+        (2.0 * n * factorial(n+l))
     )
 
     wf = (rho**l * np.exp(-rho / 2.0) *
@@ -591,7 +592,7 @@ def E_minus(R):
     return (-0.5 + ((J(R) + 1.0/R) / (1 - S(R))) -
             ((K(R) + S(R)/R) / (1 - S(R))))
 
-import numpy as np
+
 # Basically the formulas above
 def T11(R):
     return 0.5
@@ -865,7 +866,6 @@ def hartrees_to_wavelength(energy):
 def time_plot(x, y, t, timestep=1):
     for i in range(0, len(t), timestep):
         plt.plot(x, y[:,i])
-    return
 
 def plot_surface(xx, yy, zz):
     """
@@ -882,8 +882,6 @@ def plot_surface(xx, yy, zz):
     plt.xlabel('x')
     plt.ylabel('y')
 
-    return
-
 def plot_contours(xx, yy, zz, vmin=None, vmax=None):
     """
     Plot a heatmap and contours for a 3d surface.
@@ -899,8 +897,6 @@ def plot_contours(xx, yy, zz, vmin=None, vmax=None):
     _add_colorbar(im, label='z')
     plt.xlabel('x')
     plt.ylabel('y')
-
-    return
 
 def _add_colorbar(im, aspect=20, pad_fraction=0.5, **kwargs):
     """
@@ -941,8 +937,6 @@ def plot_sphere(m, l):
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
-
-    return
 
 def plot_energy_levels(energies, figsize=(14, 6), fontsize='xx-small'):
     """
@@ -990,8 +984,6 @@ def plot_energy_levels(energies, figsize=(14, 6), fontsize='xx-small'):
     plt.tick_params(axis='x', which='both', bottom='off',
                     top='off', labelbottom='off')
     plt.ylabel('Energy')
-
-    return
 
 def _energy_label(energy_dict):
     """
@@ -1105,8 +1097,6 @@ def traj_plot(x, traj, t, dt=1, xlim=None, ylim=None, skip=1, gif=None, mp4=None
     if show:
         plt.show()
 
-    return
-
 def traj_plot_psi(psi_traj, xlim=None, ylim=None, skip=1, gif=None, mp4=None, show=False):
     """
     Create an animated plot for a wavefunction trajectory.
@@ -1160,5 +1150,3 @@ def traj_plot_psi(psi_traj, xlim=None, ylim=None, skip=1, gif=None, mp4=None, sh
         ani.save(mp4, fps=15)
     if show:
         plt.show()
-
-    return
