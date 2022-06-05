@@ -11,6 +11,7 @@ from scipy.integrate import simps, quad, nquad
 from scipy.optimize import minimize
 
 import psiko.psiko as pk
+import psiko.plot as pk_plot
 
 
 def square_comp_test1():
@@ -222,11 +223,11 @@ def pib_test3():
     for step, time in enumerate(t):
         traj[:, step] = pk.pib_wave_solution_psi(psi, time, c, n, l)
 
-    pk.time_plot(x, traj, t)
+    pk_plot.time_plot(x, traj, t)
     plt.show()
     plt.clf()
 
-    pk.traj_plot(
+    pk_plot.traj_plot(
         x, traj, t, dt,
         xlim=(0, l),
         ylim=(-0.5, 0.5),
@@ -234,7 +235,7 @@ def pib_test3():
         show=True
     )
 
-    pk.traj_plot_psi(
+    pk_plot.traj_plot_psi(
         psi_traj,
         # xlim=(0, l),
         ylim=(-0.5, 0.5),
@@ -284,11 +285,11 @@ def pib_interference_test2():
         traj[:, step] = (pk.pib_wave_solution_psi(psi1, time, c, 1, l) +
                          pk.pib_wave_solution_psi(psi2, time, c, 2, l))
 
-    pk.time_plot(x, traj, t, timestep=1)
+    pk_plot.time_plot(x, traj, t, timestep=1)
     plt.show()
     plt.clf()
 
-    pk.traj_plot(
+    pk_plot.traj_plot(
         x, traj, t, dt,
         xlim=(0, l), ylim=(-1.0, 1.0),
         skip=5, show=True
@@ -408,11 +409,11 @@ def schroedinger_test2():
         psi[:, step] = c1*psi1_x + c2*psi2_x
         pdf[:, step] = pk.prob_density(psi[:, step])
 
-    pk.time_plot(x, psi.real, t)
+    pk_plot.time_plot(x, psi.real, t)
     plt.show()
     plt.clf()
 
-    pk.traj_plot(
+    pk_plot.traj_plot(
         x, psi.real, t,
         # xlim=(0, l),
         ylim=(-0.5, 0.75),
@@ -420,11 +421,11 @@ def schroedinger_test2():
         show=True
     )
 
-    pk.time_plot(x, psi.imag, t)
+    pk_plot.time_plot(x, psi.imag, t)
     plt.show()
     plt.clf()
 
-    pk.traj_plot(
+    pk_plot.traj_plot(
         x, psi.imag, t,
         # xlim=(0, l),
         ylim=(-0.6, 0.3),
@@ -432,10 +433,10 @@ def schroedinger_test2():
         show=True
     )
 
-    pk.time_plot(x, pdf, t)
+    pk_plot.time_plot(x, pdf, t)
     plt.show()
 
-    pk.traj_plot(
+    pk_plot.traj_plot(
         x, pdf, t,
         # xlim=(0, l),
         ylim=(-0.1, 0.4),
@@ -532,7 +533,7 @@ def operator_test5():
     """
 
     l = 5.0
-    dx =0.02
+    dx = 0.02
     x = np.arange(0, l+dx, dx)
 
     vx = pk.linear_ramp(x)
@@ -591,11 +592,11 @@ def harmonic_2d_test1():
     xx, yy = np.meshgrid(x, y)
     vxy = pk.harmonic_potential_2D(xx, yy, kx, ky)
 
-    pk.plot_surface(xx, yy, vxy)
+    pk_plot.plot_surface(xx, yy, vxy)
     plt.show()
 
     plt.clf()
-    pk.plot_contours(xx, yy, vxy)
+    pk_plot.plot_contours(xx, yy, vxy)
     plt.show()
 
 
@@ -611,11 +612,11 @@ def harmonic_2d_test2():
 
     ho = pk.harmonic_oscillator_2D(xx, yy, l, m)
 
-    pk.plot_surface(xx, yy, ho)
+    pk_plot.plot_surface(xx, yy, ho)
     plt.show()
 
     plt.clf()
-    pk.plot_contours(xx, yy, ho)
+    pk_plot.plot_contours(xx, yy, ho)
     plt.show()
 
 
@@ -641,7 +642,7 @@ def harmonic_2d_test3():
     # superposition
     psi = c1*psi1 + c2*psi2
 
-    pk.plot_contours(xx, yy, psi)
+    pk_plot.plot_contours(xx, yy, psi)
     plt.show()
 
 
@@ -675,8 +676,8 @@ def harmonic_2d_test4():
     vmax = np.max(psi)
 
     for i in range(0, 80, 8):
-        # pk.plot_surface(xx, yy, psi[i])
-        pk.plot_contours(xx, yy, psi[i], vmin=vmin, vmax=vmax)
+        # pk_plot.plot_surface(xx, yy, psi[i])
+        pk_plot.plot_contours(xx, yy, psi[i], vmin=vmin, vmax=vmax)
         plt.show()
         plt.clf()
 
@@ -708,11 +709,11 @@ def field_test2():
     for step, time in enumerate(t):
         psit[:,step] = pk.harmonic_oscillator_1D_in_field(x, time, omega_f).real
 
-    pk.time_plot(x, psit, t, timestep=8)
+    pk_plot.time_plot(x, psit, t, timestep=8)
     plt.show()
     plt.clf()
 
-    pk.traj_plot(
+    pk_plot.traj_plot(
         x, psit, t,
         ylim=(-0.75, 1.5),
         skip=2,
@@ -796,7 +797,7 @@ def phase_space_test2():
     xx, pp = np.meshgrid(x, p)
     wxp = pk.harmonic_oscillator_wigner(xx, pp, omega)
 
-    pk.plot_contours(xx, pp, wxp)
+    pk_plot.plot_contours(xx, pp, wxp)
     plt.show()
 
 
@@ -826,7 +827,7 @@ def phase_space_test3():
     print('zmax:', zmax)
 
     for i in range(0, 80, 20):
-        pk.plot_contours(xx, pp, wxpt[i])
+        pk_plot.plot_contours(xx, pp, wxpt[i])
         plt.show()
         plt.clf()
 
@@ -850,7 +851,7 @@ def phase_space_test4():
     print('z_max:', z_max)
 
     for i in range(0, 80, 8):
-        pk.plot_contours(xx, pp, wxpt[i])
+        pk_plot.plot_contours(xx, pp, wxpt[i])
         plt.show()
         plt.clf()
 
@@ -913,7 +914,7 @@ def tunnel_test3():
             pdf = pk.prob_density(psi_tunnel)
             transmission[i, j] = pk.transmission_probability(pdf)
 
-    pk.plot_contours(ee, mm, transmission)
+    pk_plot.plot_contours(ee, mm, transmission)
     plt.show()
 
 
@@ -922,12 +923,12 @@ def rotation_test1():
     Rotational states: Spherical Harmonics
     """
     # spherical harmonics (m=2, l=2)
-    pk.plot_sphere(2, 2)
+    pk_plot.plot_sphere(2, 2)
     plt.show()
     plt.clf()
 
     # spherical harmonics (m=1,l=2)
-    pk.plot_sphere(1, 2)
+    pk_plot.plot_sphere(1, 2)
     plt.show()
     plt.clf()
 
@@ -1150,7 +1151,7 @@ def hydrogen_test2():
     # sorted energy values
     e_vals = np.unique(np.array([e['energy'] for e in energy_list]))
 
-    pk.plot_energy_levels(energy_list)
+    pk_plot.plot_energy_levels(energy_list)
     plt.show()
 
 
@@ -1175,7 +1176,7 @@ def hydrogen_test3():
 
     for e_val in e_vals:
         wavelength = pk.hartrees_to_wavelength(e_val)
-        c = pk.wavelength_to_colour(wavelength)
+        c = pk_plot.wavelength_to_colour(wavelength)
         plt.axvline(wavelength, color=c)
 
     plt.xlabel('Wavelength of light')
@@ -1405,11 +1406,11 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    # pib_test1()
-    # pib_test2()
-    # pib_test3()
-    # pib_interference_test1()
-    # pib_interference_test2()
+    pib_test1()
+    pib_test2()
+    pib_test3()
+    pib_interference_test1()
+    pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
 
@@ -1418,46 +1419,46 @@ if __name__=='__main__':
     # ====================
 
     # normalize_test1()
-    # schroedinger_test1()
-    # schroedinger_test2()
-    # operator_test1()
-    # operator_test2()
+    schroedinger_test1()
+    schroedinger_test2()
+    operator_test1()
+    operator_test2()
 
     # ====================
     # 1D Time-Independent Schroedinger Equation (TISE)
     # ====================
 
-    # operator_test3()
-    # operator_test4()
-    # operator_test5()
-    # operator_test6()
+    operator_test3()
+    operator_test4()
+    operator_test5()
+    operator_test6()
 
     # ====================
     # Quantum Mechanics in 2D
     # ====================
 
-    # harmonic_2d_test1()
-    # harmonic_2d_test2()
-    # harmonic_2d_test3()
-    # harmonic_2d_test4()
+    harmonic_2d_test1()
+    harmonic_2d_test2()
+    harmonic_2d_test3()
+    harmonic_2d_test4()
 
     # ====================
     # Spectrum via a Time-Dependent field
     # ====================
 
-    # field_test1()
-    # field_test2()
-    # field_test3()
-    # field_test4()
+    field_test1()
+    field_test2()
+    field_test3()
+    field_test4()
 
     # ====================
     # Phase and Momentum Space Intro
     # ====================
 
-    # phase_space_test1()
-    # phase_space_test2()
-    # phase_space_test3()
-    # phase_space_test4()
+    phase_space_test1()
+    phase_space_test2()
+    phase_space_test3()
+    phase_space_test4()
 
     # ====================
     # Quantum Tunneling and reactions
@@ -1471,20 +1472,20 @@ if __name__=='__main__':
     # Rotation theory
     # ====================
 
-    # rotation_test1()
-    # rotation_test2()
-    # rotation_test3()
-    # rotation_test4()
-    # rotation_test5()
-    # rotation_test6()
+    rotation_test1()
+    rotation_test2()
+    rotation_test3()
+    rotation_test4()
+    rotation_test5()
+    rotation_test6()
 
     # ====================
     # The Hydrogen Atom Intro
     # ====================
 
-    # hydrogen_test1()
-    # hydrogen_test2()
-    # hydrogen_test3()
+    hydrogen_test1()
+    hydrogen_test2()
+    hydrogen_test3()
 
     # ====================
     # Helium Atom through Configuration Interaction (CI)
