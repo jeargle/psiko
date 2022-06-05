@@ -47,6 +47,17 @@ def time_plot(x, y, t, timestep=1):
     for i in range(0, len(t), timestep):
         plt.plot(x, y[:,i])
 
+def time_plot_psi(psi_traj, timestep=1):
+
+    psi = psi_traj.psi
+    x = psi.x
+    y = psi_traj.traj
+    t = psi_traj.time
+    # dt = psi_traj.dt
+
+    for i in range(0, len(t), timestep):
+        plt.plot(x, y[:,i])
+
 def plot_surface(xx, yy, zz):
     """
     Plot a surface.
@@ -237,6 +248,8 @@ def traj_plot(x, traj, t, dt=1, xlim=None, ylim=None, skip=1, gif=None, mp4=None
     ylim: tuple with y-axis bounds
     skip: number of timepoints to skip between each frame
     gif: gif filename
+    mp4: mp4 filename
+    show: whether or not to show the plot during execution
     """
 
     if xlim is None:
@@ -286,6 +299,8 @@ def traj_plot_psi(psi_traj, xlim=None, ylim=None, skip=1, gif=None, mp4=None, sh
     ylim: tuple with y-axis bounds
     skip: number of timepoints to skip between each frame
     gif: gif filename
+    mp4: mp4 filename
+    show: whether or not to show the plot during execution
     """
 
     psi = psi_traj.psi

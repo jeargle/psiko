@@ -210,36 +210,42 @@ def pib_test3():
     Plot time series for third eigenfunction of particle in a box.
     """
     c = 0.1
+    n = 3
     l = 10
     x = np.arange(0, l, 0.01)
     dt = 0.1
-    t = np.arange(0, 30, dt)
-    traj = np.zeros((len(x), len(t)))
-    n = 3
+    t = np.arange(0, 66, dt)
+
     psi = pk.pib_ti_1D_psi(x, n, l)
     options = {'c': c, 'n': n, 'l': l}
     psi_traj = pk.PsiTraj(psi, t, dt, pk.pib_wave_solution_psi, **options)
 
-    for step, time in enumerate(t):
-        traj[:, step] = pk.pib_wave_solution_psi(psi, time, c, n, l)
+    # traj = np.zeros((len(x), len(t)))
+    # for step, time in enumerate(t):
+    #     traj[:, step] = pk.pib_wave_solution_psi(psi, time, c, n, l)
 
-    pk_plot.time_plot(x, traj, t)
+    # pk_plot.time_plot(x, traj, t)
+    # plt.show()
+    # plt.clf()
+
+
+    # pk_plot.traj_plot(
+    #     x, traj, t, dt,
+    #     xlim=(0, l),
+    #     ylim=(-0.5, 0.5),
+    #     skip=10,
+    #     show=True
+    # )
+
+    pk_plot.time_plot_psi(psi_traj)
     plt.show()
     plt.clf()
 
-    pk_plot.traj_plot(
-        x, traj, t, dt,
-        xlim=(0, l),
-        ylim=(-0.5, 0.5),
-        skip=10,
-        show=True
-    )
-
     pk_plot.traj_plot_psi(
         psi_traj,
-        # xlim=(0, l),
         ylim=(-0.5, 0.5),
-        skip=10,
+        skip=5,
+        # skip=10,
         show=True
     )
 
@@ -253,6 +259,7 @@ def pib_interference_test1():
     c = 0.5
     l = 10
     x = np.array([l/3.0])
+
     # Single point wavefunctions.
     psi1 = pk.pib_ti_1D_psi(x, 1, l)
     psi2 = pk.pib_ti_1D_psi(x, 2, l)
@@ -1406,11 +1413,11 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    pib_test1()
-    pib_test2()
+    # pib_test1()
+    # pib_test2()
     pib_test3()
-    pib_interference_test1()
-    pib_interference_test2()
+    # pib_interference_test1()
+    # pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
 
@@ -1419,46 +1426,46 @@ if __name__=='__main__':
     # ====================
 
     # normalize_test1()
-    schroedinger_test1()
-    schroedinger_test2()
-    operator_test1()
-    operator_test2()
+    # schroedinger_test1()
+    # schroedinger_test2()
+    # operator_test1()
+    # operator_test2()
 
     # ====================
     # 1D Time-Independent Schroedinger Equation (TISE)
     # ====================
 
-    operator_test3()
-    operator_test4()
-    operator_test5()
-    operator_test6()
+    # operator_test3()
+    # operator_test4()
+    # operator_test5()
+    # operator_test6()
 
     # ====================
     # Quantum Mechanics in 2D
     # ====================
 
-    harmonic_2d_test1()
-    harmonic_2d_test2()
-    harmonic_2d_test3()
-    harmonic_2d_test4()
+    # harmonic_2d_test1()
+    # harmonic_2d_test2()
+    # harmonic_2d_test3()
+    # harmonic_2d_test4()
 
     # ====================
     # Spectrum via a Time-Dependent field
     # ====================
 
-    field_test1()
-    field_test2()
-    field_test3()
-    field_test4()
+    # field_test1()
+    # field_test2()
+    # field_test3()
+    # field_test4()
 
     # ====================
     # Phase and Momentum Space Intro
     # ====================
 
-    phase_space_test1()
-    phase_space_test2()
-    phase_space_test3()
-    phase_space_test4()
+    # phase_space_test1()
+    # phase_space_test2()
+    # phase_space_test3()
+    # phase_space_test4()
 
     # ====================
     # Quantum Tunneling and reactions
@@ -1472,20 +1479,20 @@ if __name__=='__main__':
     # Rotation theory
     # ====================
 
-    rotation_test1()
-    rotation_test2()
-    rotation_test3()
-    rotation_test4()
-    rotation_test5()
-    rotation_test6()
+    # rotation_test1()
+    # rotation_test2()
+    # rotation_test3()
+    # rotation_test4()
+    # rotation_test5()
+    # rotation_test6()
 
     # ====================
     # The Hydrogen Atom Intro
     # ====================
 
-    hydrogen_test1()
-    hydrogen_test2()
-    hydrogen_test3()
+    # hydrogen_test1()
+    # hydrogen_test2()
+    # hydrogen_test3()
 
     # ====================
     # Helium Atom through Configuration Interaction (CI)
