@@ -40,6 +40,8 @@ def pib_td_1D(t, c, n, l):
     """
     Time varying prefactor to time-independent Particle In a Box.
 
+    Only the real component???
+
     Note: could be replaced by cnt_evolve()
 
     t: time

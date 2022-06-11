@@ -48,6 +48,14 @@ def time_plot(x, y, t, timestep=1):
         plt.plot(x, y[:,i])
 
 def time_plot_psi(psi_traj, timestep=1):
+    """
+    Plot full wavefunction trajectory on a static graph.  Timesteps
+    are plotted in order so that later states are drawn on top of
+    earlier ones.
+
+    psi: Psi for particle in a box
+    timestep: step to take through the trajectory array
+    """
 
     psi = psi_traj.psi
     x = psi.x

@@ -291,6 +291,13 @@ class Psi(object):
 
     def __init__(self, x, y, dx=None,
                  wf_type=_wf_type['position'], normalize=True):
+        """
+        x: wavefunction domain
+        y: wavefunction values at time 0
+        dx: distance between points of x
+        wf_type: wavefunction type
+        normalize: whether or not to normalize the wavefunction
+        """
         self.x = x
         self.y = y
 
@@ -325,6 +332,8 @@ class Psi(object):
     def expectation(operator):
         """
         Expectation value for an operator on this wavefunction.
+
+        operator: operator function to take the expectation for
         """
         integrand = np.conjugate(self.y) * operator(self.y)
         exp = complex_simps(integrand, self.x)
