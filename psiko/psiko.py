@@ -276,6 +276,34 @@ def tunnel_finite_diff(x, psi_x, v_x, E):
     return psi_new
 
 
+class Eigenstate(object):
+    """
+    Component of a wavefunction Psi.
+    """
+
+    def __init__(self, y, energy, mix_coeff=1.0, hbar=1.0, quantum_numbers=None):
+        """
+        y:
+        energy: energy of this Eigenstate
+        mix_coeff: mixture coefficient for Eigenstate's contribution to Psi
+        hbar: Plank's constant
+        """
+        self.y = y
+        self.energy = energy
+        self.mix_coeff = mix_coeff
+        self.hbar = hbar
+        self.quantum_numbers = quantum_numbers
+
+    def _cnt_evolve(self, t):
+        """
+        Time-evolve a complex, time-dependent coefficient.
+        """
+        return np.exp(-1j * self.energy * t / self.hbar)
+
+    def at_time(self, t):
+        return self.mix_coeff * self._cnt_evolve(t) * self.y
+
+
 _wf_type = {
     'position': 1,
     'momentum': 2,
@@ -341,6 +369,12 @@ class Psi(object):
 
         return exp
 
+    def eigenfunction(self):
+        raise NotImplementedError()
+
+    def energy(self):
+        raise NotImplementedError()
+
 
 class PsiTraj(object):
     """
@@ -367,6 +401,9 @@ class PsiTraj(object):
 def square_function(x, l):
     """
     Square wave 0->1->0 in the middle third of the length l.
+
+    x:
+    l:
     """
     if x < (1.0/3)*l or x > (2.0/3)*l:
         return 0.0
@@ -375,6 +412,9 @@ def square_function(x, l):
 
 def projection_integrand(x, n, l):
     """
+    x:
+    n:
+    l:
     """
     return (np.sqrt(2.0/l) *
             np.sin(n*np.pi*x/l) *
@@ -383,6 +423,9 @@ def projection_integrand(x, n, l):
 def gaussian_x(x, sigma):
     """
     Position gaussian.
+
+    x:
+    sigma:
     """
     return ( np.exp(-(x**2 / (2 * sigma**2))) /
              (np.sqrt(sigma * np.sqrt(np.pi))) )
@@ -390,6 +433,9 @@ def gaussian_x(x, sigma):
 def gaussian_p(p, sigma):
     """
     Momentum gaussian.
+
+    p:
+    sigma:
     """
     return ( (np.sqrt(sigma) * np.exp(-(p**2 * sigma**2)/2)) /
              (np.sqrt(np.sqrt(np.pi))) )
@@ -422,8 +468,11 @@ def p2_int(p, sigma):
     gp = gaussian_p(p, sigma)
     return gp * p**2 * gp
 
-def mu_operator(mu, theta, phi):
+def mu_operator(phi, theta, mu):
     """
+    phi:
+    theta:
+    mu:
     """
     return mu * (np.sin(theta)*np.cos(phi) +
                  np.sin(theta)*np.sin(phi) +
@@ -431,8 +480,16 @@ def mu_operator(mu, theta, phi):
 
 def dipole_moment_integrand(phi, theta, mu, l1, m1, l2, m2, real=False):
     """
+    phi:
+    theta:
+    mu:
+    l1:
+    m1:
+    l2:
+    m2:
+    real:
     """
-    mu_op = mu_operator(mu, theta, phi)
+    mu_op = mu_operator(phi, theta, mu)
     Y_l1m1 = sph_harm(m1, l1, phi, theta)
     Y_l2m2 = sph_harm(m2, l2, phi, theta)
 
@@ -443,8 +500,18 @@ def dipole_moment_integrand(phi, theta, mu, l1, m1, l2, m2, real=False):
 
 def dipole_moment_superposition_integrand(phi, theta, mu, c1, c2, l1, m1, l2, m2, real=False):
     """
+    phi:
+    theta:
+    mu:
+    c1:
+    c2:
+    l1:
+    m1:
+    l2:
+    m2:
+    real:
     """
-    mu_op = mu_operator(mu, theta, phi)
+    mu_op = mu_operator(phi, theta, mu)
     Y_l1m1 = sph_harm(m1, l1, phi, theta)
     Y_l2m2 = sph_harm(m2, l2, phi, theta)
     Y_lm = c1*Y_l1m1 + c2*Y_l2m2
@@ -456,7 +523,9 @@ def dipole_moment_superposition_integrand(phi, theta, mu, c1, c2, l1, m1, l2, m2
 
 def hartrees_to_wavelength(energy):
     """
-    Get wavelength (nm) corresponding to a given energy (Hartrees)
+    Get wavelength (nm) corresponding to a given energy (Hartrees).
+
+    energy: energy in Hartrees
     """
 
     return np.abs(45.56 * 1.0 / energy)
