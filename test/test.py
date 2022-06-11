@@ -13,6 +13,7 @@ from scipy.optimize import minimize
 import psiko.psiko as pk
 import psiko.plot as pk_plot
 import psiko.model.particle_in_a_box as pib
+import psiko.model.harmonic_oscillator as ho
 
 
 def square_comp_test1():
@@ -598,7 +599,7 @@ def harmonic_2d_test1():
 
     # meshgrid
     xx, yy = np.meshgrid(x, y)
-    vxy = pk.harmonic_potential_2D(xx, yy, kx, ky)
+    vxy = ho.harmonic_potential_2D(xx, yy, kx, ky)
 
     pk_plot.plot_surface(xx, yy, vxy)
     plt.show()
@@ -618,13 +619,13 @@ def harmonic_2d_test2():
     y = np.linspace(-4, 4, 200)
     xx, yy = np.meshgrid(x, y)
 
-    ho = pk.harmonic_oscillator_2D(xx, yy, l, m)
+    ho1 = ho.harmonic_oscillator_2D(xx, yy, l, m)
 
-    pk_plot.plot_surface(xx, yy, ho)
+    pk_plot.plot_surface(xx, yy, ho1)
     plt.show()
 
     plt.clf()
-    pk_plot.plot_contours(xx, yy, ho)
+    pk_plot.plot_contours(xx, yy, ho1)
     plt.show()
 
 
@@ -639,11 +640,11 @@ def harmonic_2d_test3():
     xx, yy = np.meshgrid(x, y)
 
     # Two eigenfunctions
-    psi1 = pk.harmonic_oscillator_2D(xx, yy, l1, m1)
+    psi1 = ho.harmonic_oscillator_2D(xx, yy, l1, m1)
     E1 = l1 + m1 + 1
     c1 = 1.0/np.sqrt(2)
 
-    psi2 = pk.harmonic_oscillator_2D(xx, yy, l2, m2)
+    psi2 = ho.harmonic_oscillator_2D(xx, yy, l2, m2)
     E2 = l2 + m2 + 1
     c2 = c1
 
@@ -667,11 +668,11 @@ def harmonic_2d_test4():
     psi = np.zeros(len(t)*xx.shape[0]*xx.shape[1]).reshape(len(t), xx.shape[0], xx.shape[1])
 
     # Two eigenfunctions
-    psi1 = pk.harmonic_oscillator_2D(xx, yy, l1, m1)
+    psi1 = ho.harmonic_oscillator_2D(xx, yy, l1, m1)
     E1 = l1 + m1 + 1
     c1 = 1.0/np.sqrt(2)
 
-    psi2 = pk.harmonic_oscillator_2D(xx, yy, l2, m2)
+    psi2 = ho.harmonic_oscillator_2D(xx, yy, l2, m2)
     E2 = l2 + m2 + 1
     c2 = c1
 
@@ -699,7 +700,7 @@ def field_test1():
     ti = 0.0
     omega_f = 3.0
 
-    test = pk.harmonic_oscillator_1D_in_field(x, ti, omega_f).real
+    test = ho.harmonic_oscillator_1D_in_field(x, ti, omega_f).real
     plt.plot(x, test)
     plt.show()
 
@@ -715,7 +716,7 @@ def field_test2():
     psit = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
 
     for step, time in enumerate(t):
-        psit[:,step] = pk.harmonic_oscillator_1D_in_field(x, time, omega_f).real
+        psit[:,step] = ho.harmonic_oscillator_1D_in_field(x, time, omega_f).real
 
     pk_plot.time_plot(x, psit, t, timestep=8)
     plt.show()
@@ -739,7 +740,7 @@ def field_test3():
 
     # iterate over EM field frequencies
     for omega_idx, omega in enumerate(omegas):
-        c1 = pk.excited_overlap(t, omega)
+        c1 = ho.excited_overlap(t, omega)
         prob_excited_state[omega_idx] = abs(c1)**2
 
     for idx in range(len(omegas)):
@@ -758,7 +759,7 @@ def field_test4():
     # iterate over EM field frequencies
     for omega_idx, omega in enumerate(omegas):
         # calculate overlaps and integrate
-        c1t = pk.excited_overlap(t, omega)
+        c1t = ho.excited_overlap(t, omega)
         A_trans = pk.complex_simps(c1t, t)
         ir_spectrum[omega_idx] = np.absolute(A_trans)**2
 
@@ -803,7 +804,7 @@ def phase_space_test2():
     p = np.linspace(-3.0, 3.0, 50)
 
     xx, pp = np.meshgrid(x, p)
-    wxp = pk.harmonic_oscillator_wigner(xx, pp, omega)
+    wxp = ho.harmonic_oscillator_wigner(xx, pp, omega)
 
     pk_plot.plot_contours(xx, pp, wxp)
     plt.show()
@@ -823,7 +824,7 @@ def phase_space_test3():
     wxpt = np.zeros(len(t)*len(x)*len(p)).reshape(len(t),len(x),len(p))
 
     for i, time in enumerate(t):
-        wxpt[i] = pk.harmonic_oscillator_wigner(
+        wxpt[i] = ho.harmonic_oscillator_wigner(
             xx - np.cos(omega*time),
             pp - np.sin(omega*time),
             omega
@@ -851,7 +852,7 @@ def phase_space_test4():
     wxpt = np.zeros(len(t)*len(x)*len(p)).reshape(len(t),len(x),len(p))
 
     for i, time in enumerate(t):
-        wxpt[i] = pk.harmonic_oscillator_wigner_01(xx, pp, time)
+        wxpt[i] = ho.harmonic_oscillator_wigner_01(xx, pp, time)
 
     z_min = np.min(wxpt)
     z_max = np.max(wxpt)
@@ -1414,11 +1415,11 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    pib_test1()
-    pib_test2()
-    pib_test3()
-    pib_interference_test1()
-    pib_interference_test2()
+    # pib_test1()
+    # pib_test2()
+    # pib_test3()
+    # pib_interference_test1()
+    # pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
 
@@ -1426,11 +1427,11 @@ if __name__=='__main__':
     # QM postulates
     # ====================
 
-    normalize_test1()
-    schroedinger_test1()
-    schroedinger_test2()
-    operator_test1()
-    operator_test2()
+    # normalize_test1()
+    # schroedinger_test1()
+    # schroedinger_test2()
+    # operator_test1()
+    # operator_test2()
 
     # ====================
     # 1D Time-Independent Schroedinger Equation (TISE)
@@ -1445,10 +1446,10 @@ if __name__=='__main__':
     # Quantum Mechanics in 2D
     # ====================
 
-    # harmonic_2d_test1()
-    # harmonic_2d_test2()
-    # harmonic_2d_test3()
-    # harmonic_2d_test4()
+    harmonic_2d_test1()
+    harmonic_2d_test2()
+    harmonic_2d_test3()
+    harmonic_2d_test4()
 
     # ====================
     # Spectrum via a Time-Dependent field
@@ -1456,8 +1457,8 @@ if __name__=='__main__':
 
     # field_test1()
     # field_test2()
-    # field_test3()
-    # field_test4()
+    field_test3()
+    field_test4()
 
     # ====================
     # Phase and Momentum Space Intro
