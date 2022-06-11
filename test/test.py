@@ -12,6 +12,7 @@ from scipy.optimize import minimize
 
 import psiko.psiko as pk
 import psiko.plot as pk_plot
+import psiko.model.particle_in_a_box as pib
 
 
 def square_comp_test1():
@@ -177,7 +178,7 @@ def pib_test1():
     # calculate 3 harmonics
     for n in range(1,4):
         # y[n-1] = pk.pib_ti_1D(x, n, l)
-        y.append(pk.pib_ti_1D_psi(x, n, l))
+        y.append(pib.pib_ti_1D_psi(x, n, l))
 
     for psi in y:
         plt.plot(psi.x, psi.y)
@@ -197,7 +198,7 @@ def pib_test2():
 
     # use a for loop for the multiple harmonics
     for n in range(1,5):
-        y[n-1] = pk.pib_td_1D(t, c, n, l)
+        y[n-1] = pib.pib_td_1D(t, c, n, l)
 
     for i in y:
         plt.plot(t, i)
@@ -216,13 +217,13 @@ def pib_test3():
     dt = 0.1
     t = np.arange(0, 66, dt)
 
-    psi = pk.pib_ti_1D_psi(x, n, l)
+    psi = pib.pib_ti_1D_psi(x, n, l)
     options = {'c': c, 'n': n, 'l': l}
-    psi_traj = pk.PsiTraj(psi, t, dt, pk.pib_wave_solution_psi, **options)
+    psi_traj = pk.PsiTraj(psi, t, dt, pib.pib_wave_solution_psi, **options)
 
     # traj = np.zeros((len(x), len(t)))
     # for step, time in enumerate(t):
-    #     traj[:, step] = pk.pib_wave_solution_psi(psi, time, c, n, l)
+    #     traj[:, step] = pib.pib_wave_solution_psi(psi, time, c, n, l)
 
     # pk_plot.time_plot(x, traj, t)
     # plt.show()
@@ -261,14 +262,14 @@ def pib_interference_test1():
     x = np.array([l/3.0])
 
     # Single point wavefunctions.
-    psi1 = pk.pib_ti_1D_psi(x, 1, l)
-    psi2 = pk.pib_ti_1D_psi(x, 2, l)
+    psi1 = pib.pib_ti_1D_psi(x, 1, l)
+    psi2 = pib.pib_ti_1D_psi(x, 2, l)
     wave = np.zeros(len(t))
 
     # sum 2 eigenstates
     for step, time in enumerate(t):
-        wave[step] = (pk.pib_wave_solution_psi(psi1, time, c, 1, l)[0] +
-                      pk.pib_wave_solution_psi(psi2, time, c, 2, l)[0])
+        wave[step] = (pib.pib_wave_solution_psi(psi1, time, c, 1, l)[0] +
+                      pib.pib_wave_solution_psi(psi2, time, c, 2, l)[0])
 
     plt.plot(t, wave)
     plt.show()
@@ -282,15 +283,15 @@ def pib_interference_test2():
     c = 0.5
     l = 10
     x = np.linspace(0, l, 100)
-    psi1 = pk.pib_ti_1D_psi(x, 1, l)
-    psi2 = pk.pib_ti_1D_psi(x, 2, l)
+    psi1 = pib.pib_ti_1D_psi(x, 1, l)
+    psi2 = pib.pib_ti_1D_psi(x, 2, l)
     dt = 0.1
     t = np.arange(0, 30, dt)
     traj = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
 
     for step, time in enumerate(t):
-        traj[:, step] = (pk.pib_wave_solution_psi(psi1, time, c, 1, l) +
-                         pk.pib_wave_solution_psi(psi2, time, c, 2, l))
+        traj[:, step] = (pib.pib_wave_solution_psi(psi1, time, c, 1, l) +
+                         pib.pib_wave_solution_psi(psi2, time, c, 2, l))
 
     pk_plot.time_plot(x, traj, t, timestep=1)
     plt.show()
@@ -346,7 +347,7 @@ def normalize_test1():
 
     # Build wavefunction from 4 eigenfunctions
     for n in range(1,5):
-        psi_x += pk.pib_ti_1D(x, n, l)
+        psi_x += pib.pib_ti_1D(x, n, l)
 
     # Get PDF and normalize for psi_x
     pdf = pk.prob_density(psi_x)
@@ -371,14 +372,14 @@ def schroedinger_test1():
     x = np.arange(0, l, 0.01)
 
     # First eigenstate
-    psi1_x = pk.pib_ti_1D(x, 1, l)
+    psi1_x = pib.pib_ti_1D(x, 1, l)
     c1 = 1.0/np.sqrt(2)
-    E1 = pk.pib_energy(1, l)
+    E1 = pib.pib_energy(1, l)
 
     # Second eigenstate
-    psi2_x = pk.pib_ti_1D(x, 2, l)
+    psi2_x = pib.pib_ti_1D(x, 2, l)
     c2 = 1.0/np.sqrt(2)
-    E2 = pk.pib_energy(2, l)
+    E2 = pib.pib_energy(2, l)
 
     # Mixed state
     psi0 = c1*psi1_x + c2*psi2_x
@@ -401,13 +402,13 @@ def schroedinger_test2():
 
     # First eigenstate
     c1_0 = 1/np.sqrt(2)
-    psi1_x = pk.pib_ti_1D(x, 1, l)
-    E1 = pk.pib_energy(1, l)
+    psi1_x = pib.pib_ti_1D(x, 1, l)
+    E1 = pib.pib_energy(1, l)
 
     # Second eigenstate
     c2_0 = 1/np.sqrt(2)
-    psi2_x = pk.pib_ti_1D(x, 2, l)
-    E2 = pk.pib_energy(2, l)
+    psi2_x = pib.pib_ti_1D(x, 2, l)
+    E2 = pib.pib_energy(2, l)
 
     for step, time in enumerate(t):
         # Get time evolved coefficients
@@ -461,8 +462,8 @@ def operator_test1():
     x = np.arange(0, l, dx)
     c1 = 1.0/np.sqrt(2)
     c2 = 1.0/np.sqrt(2)
-    psi1_x = pk.pib_ti_1D(x, 1, l)
-    psi2_x = pk.pib_ti_1D(x, 2, l)
+    psi1_x = pib.pib_ti_1D(x, 1, l)
+    psi2_x = pib.pib_ti_1D(x, 2, l)
 
     psi0 = c1*psi1_x + c2*psi2_x
 
@@ -483,7 +484,7 @@ def operator_test2():
     dx = 0.01
     x = np.arange(0, l, dx)
     t = np.arange(0, 100)
-    psi = pk.pib_superposition(x, t, l, 1, 2)
+    psi = pib.pib_superposition(x, t, l, 1, 2)
     p_array = np.zeros(len(t), dtype=complex)
     x_array = np.zeros(len(t), dtype=complex)
 
@@ -1413,11 +1414,11 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    # pib_test1()
-    # pib_test2()
+    pib_test1()
+    pib_test2()
     pib_test3()
-    # pib_interference_test1()
-    # pib_interference_test2()
+    pib_interference_test1()
+    pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
 
@@ -1425,11 +1426,11 @@ if __name__=='__main__':
     # QM postulates
     # ====================
 
-    # normalize_test1()
-    # schroedinger_test1()
-    # schroedinger_test2()
-    # operator_test1()
-    # operator_test2()
+    normalize_test1()
+    schroedinger_test1()
+    schroedinger_test2()
+    operator_test1()
+    operator_test2()
 
     # ====================
     # 1D Time-Independent Schroedinger Equation (TISE)
