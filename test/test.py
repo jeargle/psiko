@@ -14,6 +14,7 @@ import psiko.psiko as pk
 import psiko.plot as pk_plot
 import psiko.model.particle_in_a_box as pib
 import psiko.model.harmonic_oscillator as ho
+import psiko.model.hydrogen as pk_h
 
 
 def square_comp_test1():
@@ -1117,7 +1118,7 @@ def hydrogen_test1():
 
     for i, (l, m) in enumerate(l_m_list):
         # radial wavefunction and PDF
-        psi = pk.radial_psi(r, l, m) * r
+        psi = pk_h.radial_psi(r, l, m) * r
         r_psi[i] = pk.prob_density(psi)
         plt.plot(r, r_psi[i])
 
@@ -1130,7 +1131,7 @@ def hydrogen_test1():
     for i, n in enumerate(ns):
         # radial expectation value
         r_exp[i], _ = quad(
-            pk.radial_integrand,
+            pk_h.radial_integrand,
             0.0, np.inf, args=(n, l)
         )
         plt.axvline(r_exp[i])
@@ -1154,7 +1155,7 @@ def hydrogen_test2():
         for m in range(-l, l+1):
             # make dictionary, calculate and store the energy, add to a list
             qdict = {'n': n, 'l': l, 'm': m}
-            qdict['energy'] = pk.hydrogen_energy(qdict['n'])
+            qdict['energy'] = pk_h.hydrogen_energy(qdict['n'])
             energy_list.append(qdict)
 
     # sorted energy values
@@ -1175,7 +1176,7 @@ def hydrogen_test3():
             # check for valid transition
             if n1 != n2:
                 qdict = {'n1': n1, 'n2': n2, 'l': 0, 'm': 0}
-                qdict['energy'] = pk.hydrogen_transition_energy(
+                qdict['energy'] = pk_h.hydrogen_transition_energy(
                     qdict['n1'], qdict['n2']
                 )
                 spectrum.append(qdict)
@@ -1244,14 +1245,14 @@ def hydrogen2_test1():
 
     r = np.linspace(0.2, 6, 100)
 
-    plt.plot(r, pk.J(r))
-    plt.plot(r, pk.S(r))
-    plt.plot(r, pk.K(r))
+    plt.plot(r, pk_h.J(r))
+    plt.plot(r, pk_h.S(r))
+    plt.plot(r, pk_h.K(r))
     plt.show()
     plt.clf()
 
-    plt.plot(r, pk.E_plus(r))
-    plt.plot(r, pk.E_minus(r))
+    plt.plot(r, pk_h.E_plus(r))
+    plt.plot(r, pk_h.E_minus(r))
     plt.show()
 
 
@@ -1261,19 +1262,19 @@ def hydrogen2_test2():
     """
     r = np.linspace(0.2, 6, 100)
 
-    plt.plot(r, pk.J11(r))
+    plt.plot(r, pk_h.J11(r))
     plt.show()
     plt.clf()
 
-    plt.plot(r, pk.H2_H11(r))
-    plt.plot(r, pk.H2_H12(r))
+    plt.plot(r, pk_h.H2_H11(r))
+    plt.plot(r, pk_h.H2_H12(r))
     plt.show()
     plt.clf()
 
-    plt.plot(r, pk.int_1111(r))
-    plt.plot(r, pk.int_1212(r))
-    plt.plot(r, pk.int_1122(r))
-    plt.plot(r, pk.int_1112(r))
+    plt.plot(r, pk_h.int_1111(r))
+    plt.plot(r, pk_h.int_1212(r))
+    plt.plot(r, pk_h.int_1122(r))
+    plt.plot(r, pk_h.int_1112(r))
     plt.show()
 
 
@@ -1283,8 +1284,8 @@ def hydrogen2_test3():
     """
     r = np.linspace(0.2, 6.0, 100)
 
-    e_ground = pk.H2_E_ground(r)
-    e_excited = pk.H2_E_excited(r)
+    e_ground = pk_h.H2_E_ground(r)
+    e_excited = pk_h.H2_E_excited(r)
     e_min = np.min(e_ground)
     i_min = np.argmin(e_ground)
     r_min = r[i_min]
@@ -1309,12 +1310,12 @@ def ci_test1():
     ci_excited = np.zeros_like(r)
 
     for i, rad in enumerate(r):
-        ci_g, ci_e = pk.H2_energy_CI(rad)
-        ci_ground[i] = ci_g + pk.V(rad)
-        ci_excited[i] = ci_e + pk.V(rad)
+        ci_g, ci_e = pk_h.H2_energy_CI(rad)
+        ci_ground[i] = ci_g + pk_h.V(rad)
+        ci_excited[i] = ci_e + pk_h.V(rad)
 
-    e_ground = pk.H2_E_ground(r)
-    e_excited = pk.H2_E_excited(r)
+    e_ground = pk_h.H2_E_ground(r)
+    e_excited = pk_h.H2_E_excited(r)
 
     plt.plot(r, ci_ground)
     plt.plot(r, ci_excited)
@@ -1446,10 +1447,10 @@ if __name__=='__main__':
     # Quantum Mechanics in 2D
     # ====================
 
-    harmonic_2d_test1()
-    harmonic_2d_test2()
-    harmonic_2d_test3()
-    harmonic_2d_test4()
+    # harmonic_2d_test1()
+    # harmonic_2d_test2()
+    # harmonic_2d_test3()
+    # harmonic_2d_test4()
 
     # ====================
     # Spectrum via a Time-Dependent field
@@ -1457,8 +1458,8 @@ if __name__=='__main__':
 
     # field_test1()
     # field_test2()
-    field_test3()
-    field_test4()
+    # field_test3()
+    # field_test4()
 
     # ====================
     # Phase and Momentum Space Intro
@@ -1492,9 +1493,9 @@ if __name__=='__main__':
     # The Hydrogen Atom Intro
     # ====================
 
-    # hydrogen_test1()
-    # hydrogen_test2()
-    # hydrogen_test3()
+    hydrogen_test1()
+    hydrogen_test2()
+    hydrogen_test3()
 
     # ====================
     # Helium Atom through Configuration Interaction (CI)
@@ -1508,22 +1509,22 @@ if __name__=='__main__':
     # The Hydrogen Molecule
     # ====================
 
-    # hydrogen2_test1()
-    # hydrogen2_test2()
-    # hydrogen2_test3()
+    hydrogen2_test1()
+    hydrogen2_test2()
+    hydrogen2_test3()
 
     # ====================
     # Configuration Interaction
     # ====================
 
-    # ci_test1()
+    ci_test1()
 
     # ====================
     # The variational principle
     # ====================
 
     # Note: long runtime
-    # vpm_test1()
+    vpm_test1()
 
     # ====================
     # First Order Perturbation theory
