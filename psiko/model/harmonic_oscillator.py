@@ -9,6 +9,7 @@ __all__ = ["harmonic_oscillator_1D", "harmonic_oscillator_1D_in_field",
            "excited_overlap", "harmonic_potential_2D", "harmonic_oscillator_2D",
            "harmonic_oscillator_wigner", "harmonic_oscillator_wigner_01"]
 
+
 # ====================
 # Harmonic Oscillator
 # ====================

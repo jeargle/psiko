@@ -15,6 +15,7 @@ import psiko.plot as pk_plot
 import psiko.model.particle_in_a_box as pib
 import psiko.model.harmonic_oscillator as ho
 import psiko.model.hydrogen as pk_h
+import psiko.model.helium as pk_he
 
 
 def square_comp_test1():
@@ -1198,7 +1199,7 @@ def helium_test1():
     Building the Helium Hamiltonian: H11
     """
     Z = 2
-    h11 = pk.He_H11(Z)
+    h11 = pk_he.He_H11(Z)
     print('h11:', h11)
 
 
@@ -1206,9 +1207,9 @@ def helium_test2():
     """
     Hamiltonian of a CI basis set
     """
-    H11 = pk.H11_pm
-    H12 = pk.H12_pm
-    H22 = pk.H22_pm
+    H11 = pk_he.H11_pm
+    H12 = pk_he.H12_pm
+    H22 = pk_he.H22_pm
     H = np.array([[H11, H12], [H12, H22]])
 
 
@@ -1220,7 +1221,7 @@ def helium_test3():
     hartree_to_ev = 27.211399  # conversion factor
     exact_g = -79.0
     verypoor_g = -108.8
-    H11, H12, H22 = pk.H11_pm, pk.H12_pm, pk.H22_pm
+    H11, H12, H22 = pk_he.H11_pm, pk_he.H12_pm, pk_he.H22_pm
     H = np.array([[H11, H12], [H12, H22]])
     evals, evecs = np.linalg.eigh(H)
     ci_g = evals[0] * hartree_to_ev
@@ -1333,7 +1334,7 @@ def vpm_test1():
     zeta = 1.6875
     ev_per_hartree = 27.2114
     exact_e = -2.903
-    e = pk.He_expected_phi1(zeta)
+    e = pk_he.He_expected_phi1(zeta)
     print('expectation value for phi:', e)
 
     x_init = np.linspace(0.5, 2.0, 6)
@@ -1341,12 +1342,12 @@ def vpm_test1():
     e_exact = -2.903
 
     for x in x_init:
-        res = minimize(pk.He_expected_phi1, x)
+        res = minimize(pk_he.He_expected_phi1, x)
         print('starting x:', x)
         print('res.x:', res.x)
         print('res.success:', res.success)
         print('res.message:', res.message)
-        e_opt = pk.He_expected_phi1(res.x)
+        e_opt = pk_he.He_expected_phi1(res.x)
         e_diff = np.abs(e_exact - e_opt)
         print('e_diff:', e_diff)
 
@@ -1356,9 +1357,9 @@ def pert_test1():
     Make H(lambda) for He
     """
 
-    test1 = pk.H0()
-    test2 = pk.H1(0.5)
-    test3 = pk.H_lambda(0.75)
+    test1 = pk_he.H0()
+    test2 = pk_he.H1(0.5)
+    test3 = pk_he.H_lambda(0.75)
 
     print('H0:\n', test1)
     print('H1:\n', test2)
@@ -1376,7 +1377,7 @@ def pert_test2():
     e_ground = np.zeros(len(lambdas))
 
     for i, lam in enumerate(lambdas):
-        H = pk.H_lambda(lam)
+        H = pk_he.H_lambda(lam)
         evals, evecs = np.linalg.eigh(H)
         e_ground[i] = evals[0]
         c_g[i] = evecs[0][0]
@@ -1493,31 +1494,31 @@ if __name__=='__main__':
     # The Hydrogen Atom Intro
     # ====================
 
-    hydrogen_test1()
-    hydrogen_test2()
-    hydrogen_test3()
+    # hydrogen_test1()
+    # hydrogen_test2()
+    # hydrogen_test3()
 
     # ====================
     # Helium Atom through Configuration Interaction (CI)
     # ====================
 
-    # helium_test1()
-    # helium_test2()
-    # helium_test3()
+    helium_test1()
+    helium_test2()
+    helium_test3()
 
     # ====================
     # The Hydrogen Molecule
     # ====================
 
-    hydrogen2_test1()
-    hydrogen2_test2()
-    hydrogen2_test3()
+    # hydrogen2_test1()
+    # hydrogen2_test2()
+    # hydrogen2_test3()
 
     # ====================
     # Configuration Interaction
     # ====================
 
-    ci_test1()
+    # ci_test1()
 
     # ====================
     # The variational principle
@@ -1530,5 +1531,5 @@ if __name__=='__main__':
     # First Order Perturbation theory
     # ====================
 
-    # pert_test1()
-    # pert_test2()
+    pert_test1()
+    pert_test2()
