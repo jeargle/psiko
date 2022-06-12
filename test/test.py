@@ -236,26 +236,38 @@ def pib_test3():
     dt = 0.1
     t = np.arange(0, 66, dt)
 
+    traj = np.zeros((len(x), len(t)))
+    for step, time in enumerate(t):
+        traj[:, step] = pib.pib_wave_solution(x, time, c, n, l)
+
+    pk_plot.time_plot(x, traj, t)
+    plt.show()
+    plt.clf()
+
+    pk_plot.traj_plot(
+        x, traj, t, dt,
+        xlim=(0, l),
+        ylim=(-0.5, 0.5),
+        skip=10,
+        show=True
+    )
+
+
+def pib_test3_1():
+    """
+    Plot time series for third eigenfunction of particle in a box.
+    """
+    c = 0.1
+    n = 3
+    l = 10
+    x = np.arange(0, l, 0.01)
+    dt = 0.1
+    t = np.arange(0, 66, dt)
+
     psi = pib.pib_ti_1D_psi(x, n, l)
     options = {'c': c, 'n': n, 'l': l}
     psi_traj = pk.PsiTraj(psi, t, dt, pib.pib_wave_solution_psi, **options)
 
-    # traj = np.zeros((len(x), len(t)))
-    # for step, time in enumerate(t):
-    #     traj[:, step] = pib.pib_wave_solution_psi(psi, time, c, n, l)
-
-    # pk_plot.time_plot(x, traj, t)
-    # plt.show()
-    # plt.clf()
-
-
-    # pk_plot.traj_plot(
-    #     x, traj, t, dt,
-    #     xlim=(0, l),
-    #     ylim=(-0.5, 0.5),
-    #     skip=10,
-    #     show=True
-    # )
 
     pk_plot.time_plot_psi(psi_traj)
     plt.show()
@@ -264,8 +276,8 @@ def pib_test3():
     pk_plot.traj_plot_psi(
         psi_traj,
         ylim=(-0.5, 0.5),
-        skip=5,
-        # skip=10,
+        # skip=5,
+        skip=10,
         show=True
     )
 
@@ -1433,10 +1445,11 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    pib_test1()
-    pib_test1_1()
+    # pib_test1()
+    # pib_test1_1()
     # pib_test2()
-    # pib_test3()
+    pib_test3()
+    pib_test3_1()
     # pib_interference_test1()
     # pib_interference_test2()
     # quadrature_test1()
