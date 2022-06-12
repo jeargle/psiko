@@ -317,8 +317,8 @@ class Psi(object):
     Wavefunction evaluated at discrete points x.
     """
 
-    def __init__(self, x, y, dx=None,
-                 wf_type=_wf_type['position'], normalize=True):
+    def __init__(self, x, y, dx=None, wf_type=_wf_type['position'],
+                 normalize=True, hbar=1.0, eigenstate_params=None):
         """
         x: wavefunction domain
         y: wavefunction values at time 0
@@ -337,6 +337,29 @@ class Psi(object):
                 self._normalize()
 
         self.wf_type = wf_type
+        self.hbar = hbar
+
+        self.eigenstates = []
+
+        # if eigenstate_params is None or len(eigenstate_params) <= 0:
+        #     raise ValueError('Must provide list of eigenstate parameters: eigenstate_params')
+
+        # # Validate mixture coefficients.
+        # mix_coeff_sum = sum(ep['mix_coeff'] for ep in eigenstate_params)
+        # print(f'mix_coeff_sum: {mix_coeff_sum}')
+
+        # # Build eigenstates.
+        # for ep in eigenstate_params:
+        #     n = ep['quantum_numbers']['n']
+        #     self.eigenstates.append(
+        #         Eigenstate(
+        #             self.eigenfunction(n),
+        #             self.energy(n),
+        #             mix_coeff=ep['mix_coeff'],
+        #             hbar=self.hbar,
+        #             quantum_numbers=ep.get('quantum_numbers', None)
+        #         )
+        #     )
 
     def prob_density(self):
         """
@@ -357,7 +380,7 @@ class Psi(object):
         """
         self.y = self.y / self.psi_norm()
 
-    def expectation(operator):
+    def expectation(self, operator):
         """
         Expectation value for an operator on this wavefunction.
 

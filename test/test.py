@@ -174,17 +174,33 @@ def pib_test1():
     Plot first three eigenfunctions for a particle in a box.
     """
     l = 10
-    x = np.linspace(0, l, 1000)
-    # y = np.zeros(3*len(x)).reshape(3, len(x))
+    x = np.linspace(0, l, 1001)
     y = []
 
-    # calculate 3 harmonics
+    # Calculate 3 harmonics.
     for n in range(1,4):
-        # y[n-1] = pk.pib_ti_1D(x, n, l)
+        y.append(pib.pib_ti_1D(x, n, l))
+
+    for i, psi in enumerate(y):
+        plt.plot(x, psi, label=f'{i+1}')
+    plt.legend()
+    plt.show()
+
+
+def pib_test1_1():
+    """
+    Plot first three eigenfunctions for a particle in a box.
+    """
+    l = 10
+    x = np.linspace(0, l, 1001)
+    y = []
+
+    # Calculate 3 harmonics.
+    for n in range(1,4):
         y.append(pib.pib_ti_1D_psi(x, n, l))
 
-    for psi in y:
-        plt.plot(psi.x, psi.y)
+    for i, psi in enumerate(y):
+        plt.plot(psi.x, psi.y, label=f'{i+1}')
     plt.legend()
     plt.show()
 
@@ -199,7 +215,7 @@ def pib_test2():
     t = np.linspace(0, 100, 1000)
     y = np.zeros(4*len(t)).reshape(4, len(t))
 
-    # use a for loop for the multiple harmonics
+    # Use a for loop for the multiple harmonics.
     for n in range(1,5):
         y[n-1] = pib.pib_td_1D(t, c, n, l)
 
@@ -1034,8 +1050,8 @@ def rotation_test4():
     E2 = 2.0*B
 
     for i, ti in enumerate(t):
-        c1 = pk.cnt_evolve(c1_0, ti, E1, hbar=1.0)
-        c2 = pk.cnt_evolve(c2_0, ti, E2, hbar=1.0)
+        c1 = pk.cnt_evolve(c1_0, ti, E1)
+        c2 = pk.cnt_evolve(c2_0, ti, E2)
 
         # compute dipole moments, get values, and store absolute values
         m2 = 0
@@ -1417,7 +1433,8 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    # pib_test1()
+    pib_test1()
+    pib_test1_1()
     # pib_test2()
     # pib_test3()
     # pib_interference_test1()
@@ -1502,9 +1519,9 @@ if __name__=='__main__':
     # Helium Atom through Configuration Interaction (CI)
     # ====================
 
-    helium_test1()
-    helium_test2()
-    helium_test3()
+    # helium_test1()
+    # helium_test2()
+    # helium_test3()
 
     # ====================
     # The Hydrogen Molecule
@@ -1525,11 +1542,11 @@ if __name__=='__main__':
     # ====================
 
     # Note: long runtime
-    vpm_test1()
+    # vpm_test1()
 
     # ====================
     # First Order Perturbation theory
     # ====================
 
-    pert_test1()
-    pert_test2()
+    # pert_test1()
+    # pert_test2()
