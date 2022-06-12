@@ -290,6 +290,29 @@ def pib_interference_test1():
     t = np.arange(0, 100, 0.1)
     c = 0.5
     l = 10
+    # Track specific point within the space l.
+    x = np.array([l/3.0])
+
+    wave = np.zeros(len(t))
+
+    # Sum 2 eigenstates.
+    for step, time in enumerate(t):
+        wave[step] = (pib.pib_wave_solution(x, time, c, 1, l)[0] +
+                      pib.pib_wave_solution(x, time, c, 2, l)[0])
+
+    plt.plot(t, wave)
+    plt.show()
+
+
+def pib_interference_test1_1():
+    """
+    Plot time trace for a single position in a wavefunction made from
+    the first two eigenstates.
+    """
+    t = np.arange(0, 100, 0.1)
+    c = 0.5
+    l = 10
+    # Track specific point within the space l.
     x = np.array([l/3.0])
 
     # Single point wavefunctions.
@@ -297,7 +320,7 @@ def pib_interference_test1():
     psi2 = pib.pib_ti_1D_psi(x, 2, l)
     wave = np.zeros(len(t))
 
-    # sum 2 eigenstates
+    # Sum 2 eigenstates.
     for step, time in enumerate(t):
         wave[step] = (pib.pib_wave_solution_psi(psi1, time, c, 1, l)[0] +
                       pib.pib_wave_solution_psi(psi2, time, c, 2, l)[0])
@@ -1448,9 +1471,10 @@ if __name__=='__main__':
     # pib_test1()
     # pib_test1_1()
     # pib_test2()
-    pib_test3()
-    pib_test3_1()
-    # pib_interference_test1()
+    # pib_test3()
+    # pib_test3_1()
+    pib_interference_test1()
+    pib_interference_test1_1()
     # pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
