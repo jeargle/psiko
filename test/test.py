@@ -336,7 +336,34 @@ def pib_interference_test2():
     """
     c = 0.5
     l = 10
-    x = np.linspace(0, l, 100)
+    x = np.linspace(0, l, 101)
+    dt = 0.1
+    t = np.arange(0, 30, dt)
+    traj = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+
+    for step, time in enumerate(t):
+        traj[:, step] = (pib.pib_wave_solution(x, time, c, 1, l) +
+                         pib.pib_wave_solution(x, time, c, 2, l))
+
+    pk_plot.time_plot(x, traj, t, timestep=1)
+    plt.show()
+    plt.clf()
+
+    pk_plot.traj_plot(
+        x, traj, t, dt,
+        xlim=(0, l), ylim=(-1.0, 1.0),
+        skip=5, show=True
+    )
+
+
+def pib_interference_test2_1():
+    """
+    Plot time evolution of full wavefunction made from the first two
+    eigenstates.
+    """
+    c = 0.5
+    l = 10
+    x = np.linspace(0, l, 101)
     psi1 = pib.pib_ti_1D_psi(x, 1, l)
     psi2 = pib.pib_ti_1D_psi(x, 2, l)
     dt = 0.1
@@ -1475,7 +1502,8 @@ if __name__=='__main__':
     # pib_test3_1()
     pib_interference_test1()
     pib_interference_test1_1()
-    # pib_interference_test2()
+    pib_interference_test2()
+    pib_interference_test2_1()
     # quadrature_test1()
     # quadrature_test2()
 
