@@ -2,7 +2,7 @@
 # 2017-2022
 
 
-from __future__ import print_function
+# from __future__ import print_function
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -32,11 +32,12 @@ def square_test1():
     x = np.linspace(0,1,500)
     ns = [1, 2, 8, 32, 128, 512]
     y = np.array([pk.square(x, omega, i) for i in ns])
-    print('np.shape(y):', np.shape(y))
+    print(f'np.shape(y): {np.shape(y)}')
     y2 = np.array([pk.square2(x, omega, i) for i in ns])
-    print('np.shape(y2):', np.shape(y2))
-    print('np.abs(y-y2).max():', np.abs(y-y2).max())
-    print('np.abs(y-y2).sum():', np.abs(y-y2).sum())
+    print(f'np.shape(y2): {np.shape(y2)}')
+    print(f'np.abs(y-y2).max(): {np.abs(y-y2).max()}')
+    print(f'np.abs(y-y2).sum(): {np.abs(y-y2).sum()}')
+
     for i in y:
         plt.plot(x,i)
     plt.show()
@@ -436,8 +437,8 @@ def normalize_test1():
 
     norm_pre = pk.psi_norm(x, psi_x)
     norm_post = pk.psi_norm(x, psi_normed)
-    print('Norm pre:', norm_pre)
-    print('Norm post:', norm_post)
+    print(f'Norm pre: {norm_pre}')
+    print(f'Norm post: {norm_post}')
 
     plt.plot(x, psi_x)
     plt.plot(x, pdf)
@@ -465,7 +466,7 @@ def schroedinger_test1():
     # Mixed state
     psi0 = c1*psi1_x + c2*psi2_x
     psi0_norm = pk.psi_norm(x, psi0)
-    print('Norm is ', psi0_norm)
+    print(f'Norm is {psi0_norm}')
 
     plt.plot(x, psi0)
     plt.show()
@@ -550,11 +551,11 @@ def operator_test1():
 
     x_integrand = psi0 * x * psi0
     exp_x = pk.complex_simps(x_integrand, x)
-    print('Expectation of position:', exp_x)
+    print(f'Expectation of position: {exp_x}')
 
     p_integrand = psi0 * pk.momentum_operator(psi0, x, dx)
     exp_p = pk.complex_simps(p_integrand, x)
-    print('Expectation of momentum:', exp_p)
+    print(f'Expectation of momentum: {exp_p}')
 
 
 def operator_test2():
@@ -865,9 +866,9 @@ def phase_space_test1():
     delta_x = np.sqrt(exp_x2 - exp_x**2)
     delta_p = np.sqrt(exp_p2 - exp_p**2)
     uncertainty = delta_x*delta_p
-    print('delta_x:', delta_x)
-    print('delta_p:', delta_p)
-    print('uncertainty:', uncertainty)
+    print(f'delta_x: {delta_x}')
+    print(f'delta_p: {delta_p}')
+    print(f'uncertainty: {uncertainty}')
 
     grid = np.linspace(-10.0, 10.0, 1000)
     plt.plot(grid, pk.gaussian_x(grid, sigma))
@@ -910,10 +911,10 @@ def phase_space_test3():
             omega
         )
 
-    zmin = np.min(wxpt)
-    zmax = np.max(wxpt)
-    print('zmin:', zmin)
-    print('zmax:', zmax)
+    z_min = np.min(wxpt)
+    z_max = np.max(wxpt)
+    print(f'z_min: {z_min}')
+    print(f'z_max: {z_max}')
 
     for i in range(0, 80, 20):
         pk_plot.plot_contours(xx, pp, wxpt[i])
@@ -936,8 +937,8 @@ def phase_space_test4():
 
     z_min = np.min(wxpt)
     z_max = np.max(wxpt)
-    print('z_min:', z_min)
-    print('z_max:', z_max)
+    print(f'z_min: {z_min}')
+    print(f'z_max: {z_max}')
 
     for i in range(0, 80, 8):
         pk_plot.plot_contours(xx, pp, wxpt[i])
@@ -1040,9 +1041,9 @@ def rotation_test2():
         args=[mu, 0, 0, 0, 0]
     )
 
-    print("Dipole moment for $Y^0_0$ is (nquad): ", dipole_00)
-    print("Dipole moment for $Y^0_0$ is (complex_nquad): ", dipole_00_alt)
-    print("Difference between approaches", np.abs(dipole_00-dipole_00_alt))
+    print(f'Dipole moment for $Y^0_0$ is (nquad): {dipole_00}')
+    print(f'Dipole moment for $Y^0_0$ is (complex_nquad): {dipole_00_alt}')
+    print(f'Difference between approaches {np.abs(dipole_00-dipole_00_alt)}')
 
     # Expectation for dipole moment Y_1^1
     dipole_11, _ = nquad(
@@ -1056,9 +1057,9 @@ def rotation_test2():
         args=[mu, 1, 1, 1, 1]
     )
 
-    print("The dipole moment for $Y^1_1$ is (nquad): ", dipole_11)
-    print("The dipole moment for $Y^1_1$ is (complex_nquad): ", dipole_11_alt)
-    print("Difference between approaches", np.abs(dipole_11-dipole_11_alt))
+    print(f'The dipole moment for $Y^1_1$ is (nquad): {dipole_11}')
+    print(f'The dipole moment for $Y^1_1$ is (complex_nquad): {dipole_11_alt}')
+    print(f'Difference between approaches {np.abs(dipole_11-dipole_11_alt)}')
 
 
 def rotation_test3():
@@ -1075,21 +1076,21 @@ def rotation_test3():
         [[0, 2.0*np.pi], [0, np.pi]],
         args=[mu, c1_0, c2_0, 0, 0, 1, 0, True]
     )
-    print("The dipole moment for $Y^0_0$+$Y^1_0$ is (nquad): ", dipole_1)
+    print(f'The dipole moment for $Y^0_0$+$Y^1_0$ is (nquad): {dipole_1}')
 
     dipole_2, _ = nquad(
         pk.dipole_moment_superposition_integrand,
         [[0, 2.0*np.pi], [0, np.pi]],
         args=[mu, c1_0, c2_0, 0, 0, 1, 1, True]
     )
-    print("The dipole moment for $Y^0_0$+$Y^1_1$ is (nquad): ", dipole_2)
+    print(f'The dipole moment for $Y^0_0$+$Y^1_1$ is (nquad): {dipole_2}')
 
     dipole_3, _ = nquad(
         pk.dipole_moment_superposition_integrand,
         [[0, 2.0*np.pi], [0, np.pi]],
         args=[mu, c1_0, c2_0, 0, 0, 1, -1, True]
     )
-    print("The dipole moment for $Y^0_0$+$Y^1_-1$ is (nquad): ", dipole_3)
+    print(f'The dipole moment for $Y^0_0$+$Y^1_-1$ is (nquad): {dipole_3}')
 
 
 def rotation_test4():
@@ -1278,7 +1279,7 @@ def helium_test1():
     """
     Z = 2
     h11 = pk_he.He_H11(Z)
-    print('h11:', h11)
+    print(f'h11: {h11}')
 
 
 def helium_test2():
@@ -1307,14 +1308,14 @@ def helium_test3():
     c1_g = evecs[1][0]
     rel_error = (abs(exact_g - ci_g)/abs(exact_g)) * 100
 
-    print('evals:', evals)
-    print('H[0][0]:', H[0][0])
-    print('11/4:', 11.0/4)
+    print(f'evals: {evals}')
+    print(f'H[0][0]: {H[0][0]}')
+    print(f'11/4: {11.0/4}')
 
-    print('Exact Energy -->', exact_g, 'eV')
-    print('Very Poor Mans approx. --> ', verypoor_g, 'eV')
-    print('Our Configuration interaction estimate --> ', ci_g, 'eV')
-    print('With a relative error of ', rel_error, '%')
+    print(f'Exact Energy --> {exact_g} eV')
+    print(f'Very Poor Mans approx. --> {verypoor_g} eV')
+    print(f'Our Configuration interaction estimate --> {ci_g} eV')
+    print(f'With a relative error of {rel_error}%')
 
 
 def hydrogen2_test1():
@@ -1372,7 +1373,7 @@ def hydrogen2_test3():
     print(i_min)
     print(r_min)
 
-    print('Ground minima at %2.2f Bohr with E=%f Hartrees'%(r_min,e_min))
+    print(f'Ground minima at {r_min} Bohr with E={e_min} Hartrees')
 
     plt.plot(r, e_ground)
     plt.plot(r, e_excited)
@@ -1413,7 +1414,7 @@ def vpm_test1():
     ev_per_hartree = 27.2114
     exact_e = -2.903
     e = pk_he.He_expected_phi1(zeta)
-    print('expectation value for phi:', e)
+    print(f'expectation value for phi: {e}')
 
     x_init = np.linspace(0.5, 2.0, 6)
     # x_init = np.linspace(1.68745, 1.6755, 3)
@@ -1421,13 +1422,13 @@ def vpm_test1():
 
     for x in x_init:
         res = minimize(pk_he.He_expected_phi1, x)
-        print('starting x:', x)
-        print('res.x:', res.x)
-        print('res.success:', res.success)
-        print('res.message:', res.message)
+        print(f'starting x: {x}')
+        print(f'res.x: {res.x}')
+        print(f'res.success: {res.success}')
+        print(f'res.message: {res.message}')
         e_opt = pk_he.He_expected_phi1(res.x)
         e_diff = np.abs(e_exact - e_opt)
-        print('e_diff:', e_diff)
+        print(f'e_diff: {e_diff}')
 
 
 def pert_test1():
@@ -1500,10 +1501,10 @@ if __name__=='__main__':
     # pib_test2()
     # pib_test3()
     # pib_test3_1()
-    pib_interference_test1()
-    pib_interference_test1_1()
-    pib_interference_test2()
-    pib_interference_test2_1()
+    # pib_interference_test1()
+    # pib_interference_test1_1()
+    # pib_interference_test2()
+    # pib_interference_test2_1()
     # quadrature_test1()
     # quadrature_test2()
 
@@ -1550,68 +1551,68 @@ if __name__=='__main__':
 
     # phase_space_test1()
     # phase_space_test2()
-    # phase_space_test3()
-    # phase_space_test4()
+    phase_space_test3()
+    phase_space_test4()
 
     # ====================
     # Quantum Tunneling and reactions
     # ====================
 
-    # tunnel_test1()
-    # tunnel_test2()
-    # tunnel_test3()
+    tunnel_test1()
+    tunnel_test2()
+    tunnel_test3()
 
     # ====================
     # Rotation theory
     # ====================
 
-    # rotation_test1()
-    # rotation_test2()
-    # rotation_test3()
-    # rotation_test4()
-    # rotation_test5()
-    # rotation_test6()
+    rotation_test1()
+    rotation_test2()
+    rotation_test3()
+    rotation_test4()
+    rotation_test5()
+    rotation_test6()
 
     # ====================
     # The Hydrogen Atom Intro
     # ====================
 
-    # hydrogen_test1()
-    # hydrogen_test2()
-    # hydrogen_test3()
+    hydrogen_test1()
+    hydrogen_test2()
+    hydrogen_test3()
 
     # ====================
     # Helium Atom through Configuration Interaction (CI)
     # ====================
 
-    # helium_test1()
-    # helium_test2()
-    # helium_test3()
+    helium_test1()
+    helium_test2()
+    helium_test3()
 
     # ====================
     # The Hydrogen Molecule
     # ====================
 
-    # hydrogen2_test1()
-    # hydrogen2_test2()
-    # hydrogen2_test3()
+    hydrogen2_test1()
+    hydrogen2_test2()
+    hydrogen2_test3()
 
     # ====================
     # Configuration Interaction
     # ====================
 
-    # ci_test1()
+    ci_test1()
 
     # ====================
     # The variational principle
     # ====================
 
     # Note: long runtime
-    # vpm_test1()
+    vpm_test1()
 
     # ====================
     # First Order Perturbation theory
     # ====================
 
-    # pert_test1()
-    # pert_test2()
+    pert_test1()
+    pert_test2()
