@@ -193,15 +193,29 @@ def pib_test1_1():
     Plot first three eigenfunctions for a particle in a box.
     """
     l = 10
-    x = np.linspace(0, l, 1001)
-    y = []
+
+    # x = np.linspace(0, l, 1001)
+    # y = []
 
     # Calculate 3 harmonics.
-    for n in range(1,4):
-        y.append(pib.pib_ti_1D_psi(x, n, l))
+    # for n in range(1,4):
+    #     y.append(pib.pib_ti_1D_psi(x, n, l))
 
-    for i, psi in enumerate(y):
-        plt.plot(psi.x, psi.y, label=f'{i+1}')
+    # Calculate 3 harmonics.
+    mix_coeff = np.sqrt(1/3)
+    eigenstate_params = [
+        {
+            'mix_coeff': mix_coeff,
+            'quantum_numbers': {
+                'n': n
+            }
+        }
+        for n in range(1,4)
+    ]
+    psi = pib.PibPsi(l, num_points=1001, eigenstate_params=eigenstate_params)
+
+    for eigen_state in psi.eigenstates:
+        plt.plot(psi.x, eigen_state.y, label=f'{eigen_state.quantum_numbers["n"]}')
     plt.legend()
     plt.show()
 
@@ -1496,8 +1510,8 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    # pib_test1()
-    # pib_test1_1()
+    pib_test1()
+    pib_test1_1()
     # pib_test2()
     # pib_test3()
     # pib_test3_1()
@@ -1551,68 +1565,68 @@ if __name__=='__main__':
 
     # phase_space_test1()
     # phase_space_test2()
-    phase_space_test3()
-    phase_space_test4()
+    # phase_space_test3()
+    # phase_space_test4()
 
     # ====================
     # Quantum Tunneling and reactions
     # ====================
 
-    tunnel_test1()
-    tunnel_test2()
-    tunnel_test3()
+    # tunnel_test1()
+    # tunnel_test2()
+    # tunnel_test3()
 
     # ====================
     # Rotation theory
     # ====================
 
-    rotation_test1()
-    rotation_test2()
-    rotation_test3()
-    rotation_test4()
-    rotation_test5()
-    rotation_test6()
+    # rotation_test1()
+    # rotation_test2()
+    # rotation_test3()
+    # rotation_test4()
+    # rotation_test5()
+    # rotation_test6()
 
     # ====================
     # The Hydrogen Atom Intro
     # ====================
 
-    hydrogen_test1()
-    hydrogen_test2()
-    hydrogen_test3()
+    # hydrogen_test1()
+    # hydrogen_test2()
+    # hydrogen_test3()
 
     # ====================
     # Helium Atom through Configuration Interaction (CI)
     # ====================
 
-    helium_test1()
-    helium_test2()
-    helium_test3()
+    # helium_test1()
+    # helium_test2()
+    # helium_test3()
 
     # ====================
     # The Hydrogen Molecule
     # ====================
 
-    hydrogen2_test1()
-    hydrogen2_test2()
-    hydrogen2_test3()
+    # hydrogen2_test1()
+    # hydrogen2_test2()
+    # hydrogen2_test3()
 
     # ====================
     # Configuration Interaction
     # ====================
 
-    ci_test1()
+    # ci_test1()
 
     # ====================
     # The variational principle
     # ====================
 
     # Note: long runtime
-    vpm_test1()
+    # vpm_test1()
 
     # ====================
     # First Order Perturbation theory
     # ====================
 
-    pert_test1()
-    pert_test2()
+    # pert_test1()
+    # pert_test2()

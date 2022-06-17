@@ -121,7 +121,8 @@ class PibPsi(Psi):
         n: eigenfunction index
         l: length of box spanned by x
         """
-        return np.sqrt(2.0/self.l) * np.sin(n*np.pi*x/self.l)
+        return np.sqrt(2.0/self.length) * np.sin(n*np.pi*self.x/self.length)
 
     def energy(self, n):
-        return (n**2 * self.hbar**2 * np.pi**2) / (2.0 * m * self.l**2)
+        m = 1.0
+        return (n**2 * self.hbar**2 * np.pi**2) / (2.0 * m * self.length**2)

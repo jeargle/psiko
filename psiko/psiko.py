@@ -317,49 +317,60 @@ class Psi(object):
     Wavefunction evaluated at discrete points x.
     """
 
-    def __init__(self, x, y, dx=None, wf_type=_wf_type['position'],
+    # def __init__(self, x, y, dx=None, wf_type=_wf_type['position'],
+    #              normalize=True, hbar=1.0, eigenstate_params=None):
+    #     """
+    #     x: wavefunction domain
+    #     y: wavefunction values at time 0
+    #     dx: distance between points of x
+    #     wf_type: wavefunction type
+    #     normalize: whether or not to normalize the wavefunction
+    #     """
+    def __init__(self, length, num_points=None, dx=None, wf_type=_wf_type['position'],
                  normalize=True, hbar=1.0, eigenstate_params=None):
-        """
-        x: wavefunction domain
-        y: wavefunction values at time 0
-        dx: distance between points of x
-        wf_type: wavefunction type
-        normalize: whether or not to normalize the wavefunction
-        """
-        self.x = x
-        self.y = y
+        self.length = length
 
-        self.dx = dx
-        if len(x) > 1:
-            if self.dx is None:
-                self.dx = x[1] - x[0]
-            if normalize:  # Do not normalize if there is only one point.
-                self._normalize()
+        if num_points is not None:
+            self.x = np.linspace(0, self.length, num_points)
+        elif dx is not None:
+            self.x = np.arange(0, self.length, dx)
+
+        # self.x = x
+        # self.y = y
+
+        # self.dx = dx
+        # if len(x) > 1:
+        #     if self.dx is None:
+        #         self.dx = x[1] - x[0]
+        #     if normalize:  # Do not normalize if there is only one point.
+        #         self._normalize()
 
         self.wf_type = wf_type
         self.hbar = hbar
 
         self.eigenstates = []
 
-        # if eigenstate_params is None or len(eigenstate_params) <= 0:
-        #     raise ValueError('Must provide list of eigenstate parameters: eigenstate_params')
+        if eigenstate_params is None or len(eigenstate_params) <= 0:
+            raise ValueError('Must provide list of eigenstate parameters: eigenstate_params')
 
-        # # Validate mixture coefficients.
-        # mix_coeff_sum = sum(ep['mix_coeff'] for ep in eigenstate_params)
-        # print(f'mix_coeff_sum: {mix_coeff_sum}')
+        # Validate mixture coefficients.
+        mix_coeff_sum = sum(ep['mix_coeff'] for ep in eigenstate_params)
+        print(f'mix_coeff_sum: {mix_coeff_sum}')
+        mix_coeff_sum = sum(ep['mix_coeff']**2 for ep in eigenstate_params)
+        print(f'mix_coeff_sum: {mix_coeff_sum}')
 
-        # # Build eigenstates.
-        # for ep in eigenstate_params:
-        #     n = ep['quantum_numbers']['n']
-        #     self.eigenstates.append(
-        #         Eigenstate(
-        #             self.eigenfunction(n),
-        #             self.energy(n),
-        #             mix_coeff=ep['mix_coeff'],
-        #             hbar=self.hbar,
-        #             quantum_numbers=ep.get('quantum_numbers', None)
-        #         )
-        #     )
+        # Build eigenstates.
+        for ep in eigenstate_params:
+            n = ep['quantum_numbers']['n']
+            self.eigenstates.append(
+                Eigenstate(
+                    self.eigenfunction(n),
+                    self.energy(n),
+                    mix_coeff=ep['mix_coeff'],
+                    hbar=self.hbar,
+                    quantum_numbers=ep.get('quantum_numbers', None)
+                )
+            )
 
     def prob_density(self):
         """
