@@ -170,7 +170,7 @@ def forces_test3():
     plt.show()
 
 
-def pib_test1():
+def pib_test1_old():
     """
     Plot first three eigenfunctions for a particle in a box.
     """
@@ -188,21 +188,13 @@ def pib_test1():
     plt.show()
 
 
-def pib_test1_1():
+def pib_test1():
     """
     Plot first three eigenfunctions for a particle in a box.
     """
-    l = 10
-
-    # x = np.linspace(0, l, 1001)
-    # y = []
-
     # Calculate 3 harmonics.
-    # for n in range(1,4):
-    #     y.append(pib.pib_ti_1D_psi(x, n, l))
-
-    # Calculate 3 harmonics.
-    mix_coeff = np.sqrt(1/3)
+    num_harmonics = 3
+    mix_coeff = np.sqrt(1/num_harmonics)
     eigenstate_params = [
         {
             'mix_coeff': mix_coeff,
@@ -210,9 +202,14 @@ def pib_test1_1():
                 'n': n
             }
         }
-        for n in range(1,4)
+        for n in range(1, num_harmonics+1)
     ]
-    psi = pib.PibPsi(l, num_points=1001, eigenstate_params=eigenstate_params)
+    l = 10
+    psi = pib.PibPsi(
+        l,
+        num_points=1001,
+        eigenstate_params=eigenstate_params
+    )
 
     for eigen_state in psi.eigenstates:
         plt.plot(psi.x, eigen_state.y, label=f'{eigen_state.quantum_numbers["n"]}')
@@ -227,15 +224,15 @@ def pib_test2():
     """
     l = 10.0
     c = 0.1
-    t = np.linspace(0, 100, 1000)
+    t = np.linspace(0, 100, 1001)
     y = np.zeros(4*len(t)).reshape(4, len(t))
 
     # Use a for loop for the multiple harmonics.
     for n in range(1,5):
         y[n-1] = pib.pib_td_1D(t, c, n, l)
 
-    for i in y:
-        plt.plot(t, i)
+    for i, psi in enumerate(y):
+        plt.plot(t, psi, label=f'{i+1}')
     plt.legend()
     plt.show()
 
@@ -272,17 +269,22 @@ def pib_test3_1():
     """
     Plot time series for third eigenfunction of particle in a box.
     """
-    c = 0.1
-    n = 3
-    l = 10
-    x = np.arange(0, l, 0.01)
-    dt = 0.1
-    t = np.arange(0, 66, dt)
+    length = np.pi
+    psi = pib.PibPsi(
+        length,
+        # dx = 0.01,
+        num_points=101,
+        eigenstate_params=[{
+            'mix_coeff': 1,
+            'quantum_numbers': {
+                'n': 3
+            }
+        }]
+    )
 
-    psi = pib.pib_ti_1D_psi(x, n, l)
-    options = {'c': c, 'n': n, 'l': l}
-    psi_traj = pk.PsiTraj(psi, t, dt, pib.pib_wave_solution_psi, **options)
-
+    t_wavelength = 2*np.pi/psi.eigenstates[0].energy
+    t = np.linspace(0, t_wavelength, 660)
+    psi_traj = pk.PsiTraj(psi, t)
 
     pk_plot.time_plot_psi(psi_traj)
     plt.show()
@@ -290,7 +292,8 @@ def pib_test3_1():
 
     pk_plot.traj_plot_psi(
         psi_traj,
-        ylim=(-0.5, 0.5),
+        # ylim=(-0.5, 0.5),
+        ylim=(-1.0, 1.0),
         # skip=5,
         skip=10,
         show=True
@@ -1510,11 +1513,11 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    pib_test1()
-    pib_test1_1()
+    # pib_test1()
+    # pib_test1_old()
     # pib_test2()
-    # pib_test3()
-    # pib_test3_1()
+    pib_test3()
+    pib_test3_1()
     # pib_interference_test1()
     # pib_interference_test1_1()
     # pib_interference_test2()

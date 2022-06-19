@@ -286,7 +286,7 @@ class Eigenstate(object):
         y:
         energy: energy of this Eigenstate
         mix_coeff: mixture coefficient for Eigenstate's contribution to Psi
-        hbar: Plank's constant
+        hbar: Planck's constant
         """
         self.y = y
         self.energy = energy
@@ -294,13 +294,26 @@ class Eigenstate(object):
         self.hbar = hbar
         self.quantum_numbers = quantum_numbers
 
+        print(f'*** Eigenstate {self.quantum_numbers["n"]} ***')
+        print(f'  energy: {self.energy}')
+        print(f'  mixture coefficient: {self.mix_coeff}')
+        print(f'  hbar: {self.hbar}')
+
     def _cnt_evolve(self, t):
         """
         Time-evolve a complex, time-dependent coefficient.
+
+        t: time; number or array
         """
+        # print(np.exp(-1j * self.energy * t / self.hbar))
         return np.exp(-1j * self.energy * t / self.hbar)
 
     def at_time(self, t):
+        """
+        Time-evolve a complex, time-dependent coefficient.
+
+        t: time; number or array
+        """
         return self.mix_coeff * self._cnt_evolve(t) * self.y
 
 
@@ -317,26 +330,23 @@ class Psi(object):
     Wavefunction evaluated at discrete points x.
     """
 
-    # def __init__(self, x, y, dx=None, wf_type=_wf_type['position'],
-    #              normalize=True, hbar=1.0, eigenstate_params=None):
-    #     """
-    #     x: wavefunction domain
-    #     y: wavefunction values at time 0
-    #     dx: distance between points of x
-    #     wf_type: wavefunction type
-    #     normalize: whether or not to normalize the wavefunction
-    #     """
-    def __init__(self, length, num_points=None, dx=None, wf_type=_wf_type['position'],
+    def __init__(self, length=None, num_points=None, dx=None, wf_type=_wf_type['position'],
                  normalize=True, hbar=1.0, eigenstate_params=None):
+        """
+        length: length of domain
+        num_points: number of points to track in domain (x)
+        dx: distance between points of x
+        wf_type: wavefunction type
+        normalize: whether or not to normalize the wavefunction
+        hbar: Planck's constant
+        eigenstate_params: list of parameters for eigenstates
+        """
         self.length = length
 
         if num_points is not None:
             self.x = np.linspace(0, self.length, num_points)
         elif dx is not None:
             self.x = np.arange(0, self.length, dx)
-
-        # self.x = x
-        # self.y = y
 
         # self.dx = dx
         # if len(x) > 1:
@@ -409,13 +419,30 @@ class Psi(object):
     def energy(self):
         raise NotImplementedError()
 
+    def at_time(self, t):
+        return sum(eigenstate.at_time(t)
+                   for eigenstate in self.eigenstates)
+
+
 
 class PsiTraj(object):
     """
     Trajectory of a wavefunction evaluated at discrete points x and times t.
     """
 
-    def __init__(self, psi, time, dt=None, wave_soln=None, **values):
+    # def __init__old(self, psi, time, dt=None, wave_soln=None, **values):
+    #     self.psi = psi
+    #     self.time = time
+    #     self.traj = np.zeros((len(self.psi.x), len(self.time)))
+
+    #     self.dt = dt
+    #     if self.dt is None:
+    #         self.dt = self.time[1] - self.time[0]
+
+    #     for step, t in enumerate(time):
+    #         self.traj[:, step] = wave_soln(self.psi, t, **values)
+
+    def __init__(self, psi, time, dt=None):
         self.psi = psi
         self.time = time
         self.traj = np.zeros((len(self.psi.x), len(self.time)))
@@ -425,7 +452,8 @@ class PsiTraj(object):
             self.dt = self.time[1] - self.time[0]
 
         for step, t in enumerate(time):
-            self.traj[:, step] = wave_soln(self.psi, t, **values)
+            # self.traj[:, step] = wave_soln(self.psi, t, **values)
+            self.traj[:, step] = self.psi.at_time(t)
 
 
 # ====================

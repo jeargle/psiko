@@ -45,7 +45,7 @@ def pib_td_1D(t, c, n, l):
     Note: could be replaced by cnt_evolve()
 
     t: time
-    c: scaling factor???
+    c: mixture coefficient for Eigenstate's contribution to Psi
     n: eigenfunction index
     l: length of box spanned by x
     """
@@ -57,7 +57,7 @@ def pib_wave_solution(x, t, c, n, l):
 
     x: domain numpy array starting at 0
     t: time array
-    c: scaling factor???
+    c: mixture coefficient for Eigenstate's contribution to Psi
     n: eigenfunction index
     l: length of box spanned by psi.x
     """
@@ -70,7 +70,7 @@ def pib_wave_solution_psi(psi, t, c=None, n=None, l=None):
 
     psi: Psi for particle in a box
     t: time array
-    c: scaling factor???
+    c: mixture coefficient for Eigenstate's contribution to Psi
     n: eigenfunction index
     l: length of box spanned by psi.x
     """
@@ -83,7 +83,7 @@ def pib_energy(n, l, hbar=1.0, m=1):
 
     n: eigenfunction index
     l: length of box spanned by psi.x
-    hbar: Plank's constant
+    hbar: Planck's constant
     m: mass
     """
     return (n**2 * hbar**2 * np.pi**2) / (2.0 * m * l**2)
