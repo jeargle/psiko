@@ -170,24 +170,6 @@ def forces_test3():
     plt.show()
 
 
-def pib_test1_old():
-    """
-    Plot first three eigenfunctions for a particle in a box.
-    """
-    l = 10
-    x = np.linspace(0, l, 1001)
-    y = []
-
-    # Calculate 3 harmonics.
-    for n in range(1,4):
-        y.append(pib.pib_ti_1D(x, n, l))
-
-    for i, psi in enumerate(y):
-        plt.plot(x, psi, label=f'{i+1}')
-    plt.legend()
-    plt.show()
-
-
 def pib_test1():
     """
     Plot first three eigenfunctions for a particle in a box.
@@ -217,6 +199,24 @@ def pib_test1():
     plt.show()
 
 
+def pib_test1_old():
+    """
+    Plot first three eigenfunctions for a particle in a box.
+    """
+    l = 10
+    x = np.linspace(0, l, 1001)
+    y = []
+
+    # Calculate 3 harmonics.
+    for n in range(1,4):
+        y.append(pib.pib_ti_1D(x, n, l))
+
+    for i, psi in enumerate(y):
+        plt.plot(x, psi, label=f'{i+1}')
+    plt.legend()
+    plt.show()
+
+
 def pib_test2():
     """
     Plot time evolution of time-dependent prefactor for first four
@@ -238,34 +238,6 @@ def pib_test2():
 
 
 def pib_test3():
-    """
-    Plot time series for third eigenfunction of particle in a box.
-    """
-    c = 0.1
-    n = 3
-    l = 10
-    x = np.arange(0, l, 0.01)
-    dt = 0.1
-    t = np.arange(0, 66, dt)
-
-    traj = np.zeros((len(x), len(t)))
-    for step, time in enumerate(t):
-        traj[:, step] = pib.pib_wave_solution(x, time, c, n, l)
-
-    pk_plot.time_plot(x, traj, t)
-    plt.show()
-    plt.clf()
-
-    pk_plot.traj_plot(
-        x, traj, t, dt,
-        xlim=(0, l),
-        ylim=(-0.5, 0.5),
-        skip=10,
-        show=True
-    )
-
-
-def pib_test3_1():
     """
     Plot time series for third eigenfunction of particle in a box.
     """
@@ -300,29 +272,35 @@ def pib_test3_1():
     )
 
 
-def pib_interference_test1():
+def pib_test3_old():
     """
-    Plot time trace for a single position in a wavefunction made from
-    the first two eigenstates.
+    Plot time series for third eigenfunction of particle in a box.
     """
-    t = np.arange(0, 100, 0.1)
-    c = 0.5
+    c = 0.1
+    n = 3
     l = 10
-    # Track specific point within the space l.
-    x = np.array([l/3.0])
+    x = np.arange(0, l, 0.01)
+    dt = 0.1
+    t = np.arange(0, 66, dt)
 
-    wave = np.zeros(len(t))
-
-    # Sum 2 eigenstates.
+    traj = np.zeros((len(x), len(t)))
     for step, time in enumerate(t):
-        wave[step] = (pib.pib_wave_solution(x, time, c, 1, l)[0] +
-                      pib.pib_wave_solution(x, time, c, 2, l)[0])
+        traj[:, step] = pib.pib_wave_solution(x, time, c, n, l)
 
-    plt.plot(t, wave)
+    pk_plot.time_plot(x, traj, t)
     plt.show()
+    plt.clf()
+
+    pk_plot.traj_plot(
+        x, traj, t, dt,
+        xlim=(0, l),
+        ylim=(-0.5, 0.5),
+        skip=10,
+        show=True
+    )
 
 
-def pib_interference_test1_1():
+def pib_interference_test1():
     """
     Plot time trace for a single position in a wavefunction made from
     the first two eigenstates.
@@ -357,6 +335,28 @@ def pib_interference_test1_1():
     psi_traj = pk.PsiTraj(psi, t)
 
     plt.plot(t, psi_traj.traj[1,:])
+    plt.show()
+
+
+def pib_interference_test1_old():
+    """
+    Plot time trace for a single position in a wavefunction made from
+    the first two eigenstates.
+    """
+    t = np.arange(0, 100, 0.1)
+    c = 0.5
+    l = 10
+    # Track specific point within the space l.
+    x = np.array([l/3.0])
+
+    wave = np.zeros(len(t))
+
+    # Sum 2 eigenstates.
+    for step, time in enumerate(t):
+        wave[step] = (pib.pib_wave_solution(x, time, c, 1, l)[0] +
+                      pib.pib_wave_solution(x, time, c, 2, l)[0])
+
+    plt.plot(t, wave)
     plt.show()
 
 
@@ -1526,13 +1526,13 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    # pib_test1()
-    # pib_test1_old()
+    pib_test1()
+    pib_test1_old()
     # pib_test2()
-    # pib_test3()
-    # pib_test3_1()
+    pib_test3()
+    pib_test3_old()
     pib_interference_test1()
-    pib_interference_test1_1()
+    pib_interference_test1_old()
     # pib_interference_test2()
     # pib_interference_test2_1()
     # quadrature_test1()
