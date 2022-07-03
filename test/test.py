@@ -470,8 +470,53 @@ def normalize_test1():
     Set up a mixed state from the ground and first three excited states
     for the particle in a box.  Normalize the wavefunction.
     """
+    # Build wavefunctions from 4 eigenfunctions
+    length = 10.0
+    num_harmonics = 4
+    eigenstate_params = [
+        {
+            'quantum_numbers': {
+                'n': n
+            }
+        }
+        for n in range(1, num_harmonics+1)
+    ]
+
+    psi = pib.PibPsi(
+        length=length,
+        dx=0.01,
+        normalize=False,
+        eigenstate_params=eigenstate_params
+    )
+
+    psi_normed = pib.PibPsi(
+        length=length,
+        dx=0.01,
+        eigenstate_params=eigenstate_params
+    )
+
+    norm_pre = psi.psi_norm()
+    norm_post = psi_normed.psi_norm()
+
+    print(f'Norm pre: {norm_pre}')
+    print(f'Norm post: {norm_post}')
+
+    plt.plot(psi.x, psi.at_time(0.0))
+    plt.plot(psi.x, psi.prob_density())
+    plt.show()
+    plt.clf()
+
+    plt.plot(psi_normed.x, psi_normed.at_time(0.0))
+    plt.plot(psi_normed.x, psi_normed.prob_density())
+    plt.show()
+
+
+def normalize_test1_old():
+    """
+    Set up a mixed state from the ground and first three excited states
+    for the particle in a box.  Normalize the wavefunction.
+    """
     l = 10.0
-    # l = 1.0
     x = np.arange(0, l, 0.01)
     psi_x = np.zeros(len(x))
 
@@ -485,6 +530,7 @@ def normalize_test1():
 
     norm_pre = pk.psi_norm(x, psi_x)
     norm_post = pk.psi_norm(x, psi_normed)
+
     print(f'Norm pre: {norm_pre}')
     print(f'Norm post: {norm_post}')
 
@@ -1551,8 +1597,8 @@ if __name__=='__main__':
     # pib_test3_old()
     # pib_interference_test1()
     # pib_interference_test1_old()
-    pib_interference_test2()
-    pib_interference_test2_old()
+    # pib_interference_test2()
+    # pib_interference_test2_old()
     # quadrature_test1()
     # quadrature_test2()
 
@@ -1560,7 +1606,8 @@ if __name__=='__main__':
     # QM postulates
     # ====================
 
-    # normalize_test1()
+    normalize_test1()
+    normalize_test1_old()
     # schroedinger_test1()
     # schroedinger_test2()
     # operator_test1()

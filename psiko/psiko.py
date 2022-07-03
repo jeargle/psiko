@@ -346,14 +346,8 @@ class Psi(object):
         if num_points is not None:
             self.x = np.linspace(0, self.length, num_points)
         elif dx is not None:
+            self.dx = dx
             self.x = np.arange(0, self.length, dx)
-
-        # self.dx = dx
-        # if len(x) > 1:
-        #     if self.dx is None:
-        #         self.dx = x[1] - x[0]
-        #     if normalize:  # Do not normalize if there is only one point.
-        #         self._normalize()
 
         self.wf_type = wf_type
         self.hbar = hbar
@@ -364,9 +358,9 @@ class Psi(object):
             raise ValueError('Must provide list of eigenstate parameters: eigenstate_params')
 
         # Validate mixture coefficients.
-        mix_coeff_sum = sum(ep['mix_coeff'] for ep in eigenstate_params)
+        mix_coeff_sum = sum(ep.get('mix_coeff', 1.0) for ep in eigenstate_params)
         print(f'mix_coeff_sum: {mix_coeff_sum}')
-        mix_coeff_sum = sum(ep['mix_coeff']**2 for ep in eigenstate_params)
+        mix_coeff_sum = sum(ep.get('mix_coeff', 1.0)**2 for ep in eigenstate_params)
         print(f'mix_coeff_sum: {mix_coeff_sum}')
 
         # Build eigenstates.
@@ -376,38 +370,47 @@ class Psi(object):
                 Eigenstate(
                     self.eigenfunction(n),
                     self.energy(n),
-                    mix_coeff=ep['mix_coeff'],
+                    mix_coeff=ep.get('mix_coeff', 1.0),
                     hbar=self.hbar,
                     quantum_numbers=ep.get('quantum_numbers', None)
                 )
             )
 
-    def prob_density(self):
+        if len(self.x) > 1:
+            if normalize:  # Do not normalize if there is only one point.
+                self._normalize()
+
+    def prob_density(self, t=0.0):
         """
         Probability density for the wavefunction.
         """
-        return (np.conjugate(self.y) * self.y).real
+        y = self.at_time(t)
+        return (np.conjugate(y) * y).real
 
-    def psi_norm(self):
+    def psi_norm(self, t=0.0):
         """
         Norm of the wavefunction.
         """
-        result = simps(prob_density(self.y), self.x)
+        result = simps(self.prob_density(t), self.x)
         return np.sqrt(result)
 
     def _normalize(self):
         """
-        Normalize the wavefunction.
+        Normalize the wavefunction by scaling the mixture
+        coefficients of the eigenstates.
         """
-        self.y = self.y / self.psi_norm()
+        psi_norm = self.psi_norm()
+        for eigenstate in self.eigenstates:
+            eigenstate.mix_coeff /= psi_norm
 
-    def expectation(self, operator):
+    def expectation(self, operator, t=0.0):
         """
         Expectation value for an operator on this wavefunction.
 
         operator: operator function to take the expectation for
         """
-        integrand = np.conjugate(self.y) * operator(self.y)
+        y = self.at_time(t)
+        integrand = np.conjugate(y) * operator(y)
         exp = complex_simps(integrand, self.x)
         exp = 0.0 if np.abs(exp) < 1e-7 else exp
 
