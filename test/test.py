@@ -255,7 +255,7 @@ def pib_test3():
     )
 
     t_wavelength = 2*np.pi/psi.eigenstates[0].energy
-    t = np.linspace(0, t_wavelength, 660)
+    t = np.linspace(0, t_wavelength, 661)
     psi_traj = pk.PsiTraj(psi, t)
 
     pk_plot.time_plot_psi(psi_traj)
@@ -331,7 +331,7 @@ def pib_interference_test1():
     # Plot single point (length/3) from wavefunction.
     t_wavelength = 2*np.pi/psi.eigenstates[0].energy
     t_extent = 2.5
-    t = np.linspace(0, t_wavelength*t_extent, 660)
+    t = np.linspace(0, t_wavelength*t_extent, 661)
     psi_traj = pk.PsiTraj(psi, t)
 
     plt.plot(t, psi_traj.traj[1,:])
@@ -365,6 +365,53 @@ def pib_interference_test2():
     Plot time evolution of full wavefunction made from the first two
     eigenstates.
     """
+    length = 10
+    mix_coeff = 0.5
+
+    # Sum 2 eigenstates.
+    psi = pib.PibPsi(
+        length,
+        num_points=101,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': 1
+                }
+            },
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': 2
+                }
+            }
+        ]
+    )
+
+    t_wavelength = 2*np.pi/psi.eigenstates[0].energy
+    t_extent = 1.0
+    t = np.linspace(0, t_wavelength*t_extent, 661)
+    psi_traj = pk.PsiTraj(psi, t)
+
+    pk_plot.time_plot_psi(psi_traj)
+    plt.show()
+    plt.clf()
+
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        ylim=(-0.5, 0.5),
+        # ylim=(-1.0, 1.0),
+        skip=5,
+        # skip=10,
+        show=True
+    )
+
+
+def pib_interference_test2_old():
+    """
+    Plot time evolution of full wavefunction made from the first two
+    eigenstates.
+    """
     c = 0.5
     l = 10
     x = np.linspace(0, l, 101)
@@ -375,35 +422,6 @@ def pib_interference_test2():
     for step, time in enumerate(t):
         traj[:, step] = (pib.pib_wave_solution(x, time, c, 1, l) +
                          pib.pib_wave_solution(x, time, c, 2, l))
-
-    pk_plot.time_plot(x, traj, t, timestep=1)
-    plt.show()
-    plt.clf()
-
-    pk_plot.traj_plot(
-        x, traj, t, dt,
-        xlim=(0, l), ylim=(-1.0, 1.0),
-        skip=5, show=True
-    )
-
-
-def pib_interference_test2_1():
-    """
-    Plot time evolution of full wavefunction made from the first two
-    eigenstates.
-    """
-    c = 0.5
-    l = 10
-    x = np.linspace(0, l, 101)
-    psi1 = pib.pib_ti_1D_psi(x, 1, l)
-    psi2 = pib.pib_ti_1D_psi(x, 2, l)
-    dt = 0.1
-    t = np.arange(0, 30, dt)
-    traj = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
-
-    for step, time in enumerate(t):
-        traj[:, step] = (pib.pib_wave_solution_psi(psi1, time, c, 1, l) +
-                         pib.pib_wave_solution_psi(psi2, time, c, 2, l))
 
     pk_plot.time_plot(x, traj, t, timestep=1)
     plt.show()
@@ -1526,15 +1544,15 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    pib_test1()
-    pib_test1_old()
+    # pib_test1()
+    # pib_test1_old()
     # pib_test2()
-    pib_test3()
-    pib_test3_old()
-    pib_interference_test1()
-    pib_interference_test1_old()
-    # pib_interference_test2()
-    # pib_interference_test2_1()
+    # pib_test3()
+    # pib_test3_old()
+    # pib_interference_test1()
+    # pib_interference_test1_old()
+    pib_interference_test2()
+    pib_interference_test2_old()
     # quadrature_test1()
     # quadrature_test2()
 
