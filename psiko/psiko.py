@@ -359,9 +359,9 @@ class Psi(object):
 
         # Validate mixture coefficients.
         mix_coeff_sum = sum(ep.get('mix_coeff', 1.0) for ep in eigenstate_params)
-        print(f'mix_coeff_sum: {mix_coeff_sum}')
+        print(f'sum(mix_coeff): {mix_coeff_sum}')
         mix_coeff_sum = sum(ep.get('mix_coeff', 1.0)**2 for ep in eigenstate_params)
-        print(f'mix_coeff_sum: {mix_coeff_sum}')
+        print(f'sum(mix_coeff**2): {mix_coeff_sum}')
 
         # Build eigenstates.
         for ep in eigenstate_params:

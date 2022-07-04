@@ -544,6 +544,41 @@ def schroedinger_test1():
     Set up a mixed state from the ground and first excited states for
     the particle in a box.  Normalize the wavefunction.
     """
+    length = 10
+    mix_coeff = 1.0/np.sqrt(2)
+
+    # Sum 2 eigenstates.
+    psi = pib.PibPsi(
+        length,
+        dx=0.01,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': 1
+                }
+            },
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': 2
+                }
+            }
+        ]
+    )
+
+    print(f'Norm is {psi.psi_norm()}')
+
+    plt.plot(psi.x, psi.at_time(0.0))
+    plt.show()
+
+
+def schroedinger_test1_old():
+    """
+    Set up a mixed state from the ground and first excited states for
+    the particle in a box.  Normalize the wavefunction.
+    """
     l = 10
     x = np.arange(0, l, 0.01)
 
@@ -567,6 +602,69 @@ def schroedinger_test1():
 
 
 def schroedinger_test2():
+    """
+    Time-dependent Schroedinger equation.
+    """
+    l = 10
+    x = np.arange(0, l, 0.01)
+    t = np.linspace(0, 50, 100)
+    psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
+    pdf = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+
+    # First eigenstate
+    c1_0 = 1/np.sqrt(2)
+    psi1_x = pib.pib_ti_1D(x, 1, l)
+    E1 = pib.pib_energy(1, l)
+
+    # Second eigenstate
+    c2_0 = 1/np.sqrt(2)
+    psi2_x = pib.pib_ti_1D(x, 2, l)
+    E2 = pib.pib_energy(2, l)
+
+    for step, time in enumerate(t):
+        # Get time evolved coefficients
+        c1 = pk.cnt_evolve(c1_0, time, E1)
+        c2 = pk.cnt_evolve(c2_0, time, E2)
+        psi[:, step] = c1*psi1_x + c2*psi2_x
+        pdf[:, step] = pk.prob_density(psi[:, step])
+
+    pk_plot.time_plot(x, psi.real, t)
+    plt.show()
+    plt.clf()
+
+    pk_plot.traj_plot(
+        x, psi.real, t,
+        # xlim=(0, l),
+        ylim=(-0.5, 0.75),
+        # skip=5,
+        show=True
+    )
+
+    pk_plot.time_plot(x, psi.imag, t)
+    plt.show()
+    plt.clf()
+
+    pk_plot.traj_plot(
+        x, psi.imag, t,
+        # xlim=(0, l),
+        ylim=(-0.6, 0.3),
+        # skip=5,
+        show=True
+    )
+
+    pk_plot.time_plot(x, pdf, t)
+    plt.show()
+
+    pk_plot.traj_plot(
+        x, pdf, t,
+        # xlim=(0, l),
+        ylim=(-0.1, 0.4),
+        # skip=5,
+        show=True
+    )
+
+
+def schroedinger_test2_old():
     """
     Time-dependent Schroedinger equation.
     """
@@ -1606,9 +1704,11 @@ if __name__=='__main__':
     # QM postulates
     # ====================
 
-    normalize_test1()
-    normalize_test1_old()
-    # schroedinger_test1()
+    # normalize_test1()
+    # normalize_test1_old()
+    schroedinger_test1_old()
+    schroedinger_test1()
+    # schroedinger_test2_old()
     # schroedinger_test2()
     # operator_test1()
     # operator_test2()
