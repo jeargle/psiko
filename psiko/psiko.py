@@ -430,22 +430,16 @@ class Psi(object):
 
 class PsiTraj(object):
     """
-    Trajectory of a wavefunction evaluated at discrete points x and times t.
+    Trajectory of a wavefunction or its pdf evaluated at discrete points.
     """
 
-    # def __init__old(self, psi, time, dt=None, wave_soln=None, **values):
-    #     self.psi = psi
-    #     self.time = time
-    #     self.traj = np.zeros((len(self.psi.x), len(self.time)))
-
-    #     self.dt = dt
-    #     if self.dt is None:
-    #         self.dt = self.time[1] - self.time[0]
-
-    #     for step, t in enumerate(time):
-    #         self.traj[:, step] = wave_soln(self.psi, t, **values)
-
-    def __init__(self, psi, time, dt=None):
+    def __init__(self, psi, time, dt=None, pdf=False):
+        """
+        psi:
+        time:
+        dt: distance between time points
+        pdf:
+        """
         self.psi = psi
         self.time = time
         self.traj = np.zeros((len(self.psi.x), len(self.time)))
@@ -454,9 +448,14 @@ class PsiTraj(object):
         if self.dt is None:
             self.dt = self.time[1] - self.time[0]
 
-        for step, t in enumerate(time):
-            # self.traj[:, step] = wave_soln(self.psi, t, **values)
-            self.traj[:, step] = self.psi.at_time(t)
+        self.pdf = pdf
+
+        if self.pdf:
+            for step, t in enumerate(time):
+                self.traj[:, step] = self.psi.prob_density(t)
+        else:
+            for step, t in enumerate(time):
+                self.traj[:, step] = self.psi.at_time(t)
 
 
 # ====================

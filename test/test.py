@@ -605,61 +605,66 @@ def schroedinger_test2():
     """
     Time-dependent Schroedinger equation.
     """
-    l = 10
-    x = np.arange(0, l, 0.01)
-    t = np.linspace(0, 50, 100)
-    psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
-    pdf = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+    length = 10
+    mix_coeff = 1.0/np.sqrt(2)
 
-    # First eigenstate
-    c1_0 = 1/np.sqrt(2)
-    psi1_x = pib.pib_ti_1D(x, 1, l)
-    E1 = pib.pib_energy(1, l)
+    # Sum 2 eigenstates.
+    num_harmonics = 2
+    psi = pib.PibPsi(
+        length,
+        dx=0.01,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in range(1, num_harmonics+1)
+        ]
+    )
 
-    # Second eigenstate
-    c2_0 = 1/np.sqrt(2)
-    psi2_x = pib.pib_ti_1D(x, 2, l)
-    E2 = pib.pib_energy(2, l)
+    # t_wavelength = 2*np.pi/psi.eigenstates[0].energy
+    # t_extent = 1.0
+    # t = np.linspace(0, t_wavelength*t_extent, 101)
+    t_len = 50
+    t = np.linspace(0, t_len, 101)
+    psi_traj = pk.PsiTraj(psi, t)
 
-    for step, time in enumerate(t):
-        # Get time evolved coefficients
-        c1 = pk.cnt_evolve(c1_0, time, E1)
-        c2 = pk.cnt_evolve(c2_0, time, E2)
-        psi[:, step] = c1*psi1_x + c2*psi2_x
-        pdf[:, step] = pk.prob_density(psi[:, step])
-
-    pk_plot.time_plot(x, psi.real, t)
+    # Psi real
+    pk_plot.time_plot_psi(psi_traj)
     plt.show()
     plt.clf()
 
-    pk_plot.traj_plot(
-        x, psi.real, t,
-        # xlim=(0, l),
+    pk_plot.traj_plot_psi(
+        psi_traj,
         ylim=(-0.5, 0.75),
-        # skip=5,
         show=True
     )
 
-    pk_plot.time_plot(x, psi.imag, t)
+    # Psi imaginary
+    # pk_plot.time_plot(x, psi.imag, t)
+    # plt.show()
+    # plt.clf()
+
+    # pk_plot.traj_plot(
+    #     x, psi.imag, t,
+    #     # xlim=(0, l),
+    #     ylim=(-0.6, 0.3),
+    #     # skip=5,
+    #     show=True
+    # )
+
+    # Probability density function
+    pdf_traj = pk.PsiTraj(psi, t, pdf=True)
+
+    pk_plot.time_plot_psi(pdf_traj)
     plt.show()
-    plt.clf()
 
-    pk_plot.traj_plot(
-        x, psi.imag, t,
-        # xlim=(0, l),
-        ylim=(-0.6, 0.3),
-        # skip=5,
-        show=True
-    )
-
-    pk_plot.time_plot(x, pdf, t)
-    plt.show()
-
-    pk_plot.traj_plot(
-        x, pdf, t,
-        # xlim=(0, l),
+    pk_plot.traj_plot_psi(
+        pdf_traj,
         ylim=(-0.1, 0.4),
-        # skip=5,
         show=True
     )
 
@@ -691,6 +696,7 @@ def schroedinger_test2_old():
         psi[:, step] = c1*psi1_x + c2*psi2_x
         pdf[:, step] = pk.prob_density(psi[:, step])
 
+    # Psi real
     pk_plot.time_plot(x, psi.real, t)
     plt.show()
     plt.clf()
@@ -703,6 +709,7 @@ def schroedinger_test2_old():
         show=True
     )
 
+    # Psi imaginary
     pk_plot.time_plot(x, psi.imag, t)
     plt.show()
     plt.clf()
@@ -715,6 +722,7 @@ def schroedinger_test2_old():
         show=True
     )
 
+    # Probability density function
     pk_plot.time_plot(x, pdf, t)
     plt.show()
 
@@ -1706,10 +1714,10 @@ if __name__=='__main__':
 
     # normalize_test1()
     # normalize_test1_old()
-    schroedinger_test1_old()
-    schroedinger_test1()
-    # schroedinger_test2_old()
-    # schroedinger_test2()
+    # schroedinger_test1()
+    # schroedinger_test1_old()
+    schroedinger_test2_old()
+    schroedinger_test2()
     # operator_test1()
     # operator_test2()
 
