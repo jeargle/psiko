@@ -644,17 +644,16 @@ def schroedinger_test2():
     )
 
     # Psi imaginary
-    # pk_plot.time_plot(x, psi.imag, t)
-    # plt.show()
-    # plt.clf()
+    pk_plot.time_plot_psi(psi_traj, imaginary=True)
+    plt.show()
+    plt.clf()
 
-    # pk_plot.traj_plot(
-    #     x, psi.imag, t,
-    #     # xlim=(0, l),
-    #     ylim=(-0.6, 0.3),
-    #     # skip=5,
-    #     show=True
-    # )
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        imaginary=True,
+        ylim=(-0.6, 0.3),
+        show=True
+    )
 
     # Probability density function
     pdf_traj = pk.PsiTraj(psi, t, pdf=True)
@@ -716,9 +715,7 @@ def schroedinger_test2_old():
 
     pk_plot.traj_plot(
         x, psi.imag, t,
-        # xlim=(0, l),
         ylim=(-0.6, 0.3),
-        # skip=5,
         show=True
     )
 
@@ -728,9 +725,7 @@ def schroedinger_test2_old():
 
     pk_plot.traj_plot(
         x, pdf, t,
-        # xlim=(0, l),
         ylim=(-0.1, 0.4),
-        # skip=5,
         show=True
     )
 
@@ -1716,7 +1711,7 @@ if __name__=='__main__':
     # normalize_test1_old()
     # schroedinger_test1()
     # schroedinger_test1_old()
-    schroedinger_test2_old()
+    # schroedinger_test2_old()
     schroedinger_test2()
     # operator_test1()
     # operator_test2()

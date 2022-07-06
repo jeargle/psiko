@@ -47,7 +47,7 @@ def time_plot(x, y, t, timestep=1):
     for i in range(0, len(t), timestep):
         plt.plot(x, y[:,i])
 
-def time_plot_psi(psi_traj, timestep=1):
+def time_plot_psi(psi_traj, timestep=1, imaginary=False):
     """
     Plot full wavefunction trajectory on a static graph.  Timesteps
     are plotted in order so that later states are drawn on top of
@@ -63,8 +63,12 @@ def time_plot_psi(psi_traj, timestep=1):
     t = psi_traj.time
     # dt = psi_traj.dt
 
-    for i in range(0, len(t), timestep):
-        plt.plot(x, y[:,i])
+    if imaginary:
+        for i in range(0, len(t), timestep):
+            plt.plot(x, y[:,i].imag)
+    else:
+        for i in range(0, len(t), timestep):
+            plt.plot(x, y[:,i].real)
 
 def plot_surface(xx, yy, zz):
     """
@@ -298,7 +302,8 @@ def traj_plot(x, traj, t, dt=1, xlim=None, ylim=None, skip=1, gif=None, mp4=None
     if show:
         plt.show()
 
-def traj_plot_psi(psi_traj, xlim=None, ylim=None, skip=1, gif=None, mp4=None, show=False):
+def traj_plot_psi(psi_traj, imaginary=False, xlim=None, ylim=None, skip=1,
+                  gif=None, mp4=None, show=False):
     """
     Create an animated plot for a wavefunction trajectory.
 
@@ -338,7 +343,11 @@ def traj_plot_psi(psi_traj, xlim=None, ylim=None, skip=1, gif=None, mp4=None, sh
 
     def animate(i):
         thisx = x
-        thisy = psi_traj.traj[:,i]
+
+        if imaginary:
+            thisy = psi_traj.traj[:,i].imag
+        else:
+            thisy = psi_traj.traj[:,i].real
 
         line.set_data(thisx, thisy)
         time_text.set_text(time_template % (i*dt))

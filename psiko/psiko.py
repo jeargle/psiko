@@ -442,7 +442,7 @@ class PsiTraj(object):
         """
         self.psi = psi
         self.time = time
-        self.traj = np.zeros((len(self.psi.x), len(self.time)))
+        self.traj = np.zeros((len(self.psi.x), len(self.time)), dtype=complex)
 
         self.dt = dt
         if self.dt is None:
