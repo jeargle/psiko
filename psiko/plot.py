@@ -302,12 +302,13 @@ def traj_plot(x, traj, t, dt=1, xlim=None, ylim=None, skip=1, gif=None, mp4=None
     if show:
         plt.show()
 
-def traj_plot_psi(psi_traj, imaginary=False, xlim=None, ylim=None, skip=1,
+def traj_plot_psi(psi_traj, d_type='real', imaginary=False, xlim=None, ylim=None, skip=1,
                   gif=None, mp4=None, show=False):
     """
     Create an animated plot for a wavefunction trajectory.
 
     psi_traj: PsiTraj
+    d_type: 'real', 'imaginary', or 'complex' (2 lines)
     xlim: tuple with x-axis bounds
     ylim: tuple with y-axis bounds
     skip: number of timepoints to skip between each frame
@@ -332,26 +333,47 @@ def traj_plot_psi(psi_traj, imaginary=False, xlim=None, ylim=None, skip=1,
     ax.grid()
 
     # line, = ax.plot([], [], 'o-', lw=2)
-    line, = ax.plot([], [])
+    # line, = ax.plot([], [])
     time_template = 'time = %.1fs'
     time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
 
+    plot_num = 1
+    if d_type == 'complex':
+        plot_num = 2
+
+    colors = ["blue", "green"]
+    lines = []
+    for index in range(plot_num):
+        # lobj = ax.plot([], [], lw=2, color=colors[index])[0]
+        lobj = ax.plot([], [], color=colors[index])[0]
+        lines.append(lobj)
+
     def init():
-        line.set_data([], [])
-        time_text.set_text('')
-        return line, time_text
+        for line in lines:
+            line.set_data([],[])
+        return lines
 
     def animate(i):
         thisx = x
 
-        if imaginary:
-            thisy = psi_traj.traj[:,i].imag
-        else:
-            thisy = psi_traj.traj[:,i].real
+        if d_type == 'real':
+            thisy1 = psi_traj.traj[:,i].real
+            xlist = [thisx]
+            ylist = [thisy1]
+        elif d_type == 'imaginary':
+            thisy1 = psi_traj.traj[:,i].imag
+            xlist = [thisx]
+            ylist = [thisy1]
+        elif d_type == 'complex':
+            thisy1 = psi_traj.traj[:,i].real
+            thisy2 = psi_traj.traj[:,i].imag
+            xlist = [thisx, thisx]
+            ylist = [thisy1, thisy2]
 
-        line.set_data(thisx, thisy)
-        time_text.set_text(time_template % (i*dt))
-        return line, time_text
+        for i, line in enumerate(lines):
+            line.set_data(xlist[i], ylist[i]) # set data for each line separately.
+
+        return lines
 
     ani = animation.FuncAnimation(fig, animate, np.arange(0, len(t), skip),
                                   interval=50, blit=True, init_func=init)

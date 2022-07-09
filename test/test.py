@@ -628,8 +628,8 @@ def schroedinger_test2():
     # t_wavelength = 2*np.pi/psi.eigenstates[0].energy
     # t_extent = 1.0
     # t = np.linspace(0, t_wavelength*t_extent, 101)
-    t_len = 50
-    t = np.linspace(0, t_len, 101)
+    t_len = 150
+    t = np.linspace(0, t_len, 301)
     psi_traj = pk.PsiTraj(psi, t)
 
     # Psi real
@@ -639,7 +639,7 @@ def schroedinger_test2():
 
     pk_plot.traj_plot_psi(
         psi_traj,
-        ylim=(-0.5, 0.75),
+        ylim=(-0.75, 0.75),
         show=True
     )
 
@@ -650,8 +650,17 @@ def schroedinger_test2():
 
     pk_plot.traj_plot_psi(
         psi_traj,
-        imaginary=True,
-        ylim=(-0.6, 0.3),
+        d_type='imaginary',
+        # imaginary=True,
+        ylim=(-0.75, 0.75),
+        show=True
+    )
+
+    # Psi complex
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        d_type='complex',
+        ylim=(-0.75, 0.75),
         show=True
     )
 
