@@ -39,7 +39,7 @@ def square_test1():
     print(f'np.abs(y-y2).sum(): {np.abs(y-y2).sum()}')
 
     for i in y:
-        plt.plot(x,i)
+        plt.plot(x, i)
     plt.show()
 
 
@@ -117,13 +117,13 @@ def forces_test2():
 
     for i in range(1,len(t)):
         # particle 1: update velocity then position
-        v1 = v1 + dt*pk.force1(t[i-1],m1)
+        v1 = v1 + dt*pk.force1(t[i-1], m1)
         x1[i]=x1[i-1]+dt*v1
         # particle 1: boundary condition
         v1 = pk.boundary_1d(x1[i], v1, l)
 
         # particle 2: update velocity than position
-        v2 = v2 + dt*pk.force1(t[i-1],m2)
+        v2 = v2 + dt*pk.force1(t[i-1], m2)
         x2[i]=x2[i-1]+dt*v2
         # particle 2: boundary conditions
         v2 = pk.boundary_1d(x2[i], v2, l)

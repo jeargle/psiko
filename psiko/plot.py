@@ -302,7 +302,7 @@ def traj_plot(x, traj, t, dt=1, xlim=None, ylim=None, skip=1, gif=None, mp4=None
     if show:
         plt.show()
 
-def traj_plot_psi(psi_traj, d_type='real', imaginary=False, xlim=None, ylim=None, skip=1,
+def traj_plot_psi(psi_traj, d_type='real', xlim=None, ylim=None, skip=1,
                   gif=None, mp4=None, show=False):
     """
     Create an animated plot for a wavefunction trajectory.
