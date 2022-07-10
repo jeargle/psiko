@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
+from matplotlib.tri import Triangulation
 from mpl_toolkits import axes_grid1
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.special import sph_harm
@@ -69,6 +70,30 @@ def time_plot_psi(psi_traj, timestep=1, imaginary=False):
     else:
         for i in range(0, len(t), timestep):
             plt.plot(x, y[:,i].real)
+
+def plot_trisurf(x, y):
+    """
+    Plot complex wavefunction cylindrically around an origin
+    axis.  The function is connected to the origin axis by a
+    surface.
+
+    x: domain; origin axis
+    y: complex-valued wavefunction
+    """
+    # Order points by those on the domain axis followed by those in
+    # the wavefunction.
+    len_x = len(x)
+    pointx = np.concatenate((x, x))
+    pointy = np.concatenate((np.zeros(len_x), y.real))
+    pointz = np.concatenate((np.zeros(len_x), y.imag))
+
+    tri1 = [[i, i+len_x+1, i+len_x] for i in range(len_x-1)]
+    tri2 = [[i, i+1, i+len_x+1] for i in range(len_x-1)]
+    triangles = np.concatenate((tri1, tri2))
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.plot_trisurf(pointx, pointy, pointz, triangles=triangles)
 
 def plot_surface(xx, yy, zz):
     """

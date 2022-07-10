@@ -739,6 +739,37 @@ def schroedinger_test2_old():
     )
 
 
+def schroedinger_test3():
+    """
+    Time-dependent Schroedinger equation.
+    """
+    length = 10
+    mix_coeff = 1.0/np.sqrt(2)
+
+    # Sum 2 eigenstates.
+    num_harmonics = 2
+    psi = pib.PibPsi(
+        length,
+        dx=0.01,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in range(1, num_harmonics+1)
+        ]
+    )
+
+    pk_plot.plot_trisurf(psi.x, psi.at_time(0))
+    pk_plot.plot_trisurf(psi.x, psi.at_time(5))
+    pk_plot.plot_trisurf(psi.x, psi.at_time(10))
+    pk_plot.plot_trisurf(psi.x, psi.at_time(15))
+    plt.show()
+
+
 def operator_test1():
     """
     Position and momentum operators.
@@ -1526,7 +1557,6 @@ def hydrogen2_test1():
     """
     Energies and operators
     """
-
     r = np.linspace(0.2, 6, 100)
 
     plt.plot(r, pk_h.J(r))
@@ -1721,7 +1751,8 @@ if __name__=='__main__':
     # schroedinger_test1()
     # schroedinger_test1_old()
     # schroedinger_test2_old()
-    schroedinger_test2()
+    # schroedinger_test2()
+    schroedinger_test3()
     # operator_test1()
     # operator_test2()
 
