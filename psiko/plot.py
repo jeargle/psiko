@@ -127,9 +127,8 @@ def plot_quiver(x, y):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     plt.ylim([-1.0, 1.0])
-    # ax.quiver(point_x, point_y, point_z, dir_u, dir_v, dir_w, length=0.1)
-    # ax.quiver(point_x, point_y, point_z, dir_u, dir_v, dir_w, normalize=True)
     cmap = mpl.cm.get_cmap('jet')
+    # quiver() also has options length=0.1 and normalize=True
     q = ax.quiver(
         point_x, point_y, point_z,
         dir_u, dir_v, dir_w,
@@ -139,7 +138,8 @@ def plot_quiver(x, y):
     # q.set_array(np.random.rand(np.prod(x.shape)))
     q.set_array(dir_w)
     ax.set_zlim([-1.0, 1.0])  # No plt.zlim() available.
-    ax.view_init(0, -90)
+    # ax.view_init(0, -90)
+    ax.view_init(10, -45)
 
 def plot_surface(xx, yy, zz):
     """

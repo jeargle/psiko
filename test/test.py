@@ -747,10 +747,10 @@ def schroedinger_test3():
     mix_coeff = 1.0/np.sqrt(2)
 
     # Sum 2 eigenstates.
-    num_harmonics = 3
+    harmonics = [2, 7]
     psi = pib.PibPsi(
         length,
-        dx=0.2,
+        dx=0.1,
         normalize=False,
         eigenstate_params=[
             {
@@ -759,18 +759,19 @@ def schroedinger_test3():
                     'n': n
                 }
             }
-            for n in range(1, num_harmonics+1)
+            for n in harmonics
         ]
     )
 
-    pk_plot.plot_trisurf(psi.x, psi.at_time(20))
-    # pk_plot.plot_trisurf(psi.x, psi.at_time(5))
-    # pk_plot.plot_trisurf(psi.x, psi.at_time(10))
-    # pk_plot.plot_trisurf(psi.x, psi.at_time(15))
+    times = np.arange(0, 5, 0.5)
+
+    for time in times:
+        pk_plot.plot_trisurf(psi.x, psi.at_time(time))
     plt.show()
     plt.clf()
 
-    pk_plot.plot_quiver(psi.x, psi.at_time(20))
+    for time in times:
+        pk_plot.plot_quiver(psi.x, psi.at_time(time))
     plt.show()
 
 
