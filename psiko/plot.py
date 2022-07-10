@@ -83,17 +83,63 @@ def plot_trisurf(x, y):
     # Order points by those on the domain axis followed by those in
     # the wavefunction.
     len_x = len(x)
-    pointx = np.concatenate((x, x))
-    pointy = np.concatenate((np.zeros(len_x), y.real))
-    pointz = np.concatenate((np.zeros(len_x), y.imag))
+    point_x = np.concatenate((x, x))
+    point_y = np.concatenate((np.zeros(len_x), y.real))
+    point_z = np.concatenate((np.zeros(len_x), y.imag))
 
     tri1 = [[i, i+len_x+1, i+len_x] for i in range(len_x-1)]
     tri2 = [[i, i+1, i+len_x+1] for i in range(len_x-1)]
     triangles = np.concatenate((tri1, tri2))
 
+    # viridis, plasma, inferno, magma, cividis
+    # spring, summer, autumn, winter, cool, hot, copper
+    # coolwarm, bwr, seismic
+    # twilight, hsv
+    # flag, prism, brg, rainbow, jet, turbo
+    cmap = mpl.cm.get_cmap('jet')
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_trisurf(pointx, pointy, pointz, triangles=triangles)
+    ax.plot_trisurf(point_x, point_y, point_z, triangles=triangles, cmap=cmap)
+
+def plot_quiver(x, y):
+    """
+    Plot complex wavefunction cylindrically as arrows pointing
+    out from an origin axis.  The function lies at the tips of
+    the arrows.
+
+    x: domain; origin axis
+    y: complex-valued wavefunction
+    """
+    # Order points by those on the domain axis followed by those in
+    # the wavefunction.
+    len_x = len(x)
+
+    # Origin points.
+    point_x = x
+    point_y = np.zeros(len_x)
+    point_z = np.zeros(len_x)
+
+    # Arrow directions.
+    dir_u = np.zeros(len_x)
+    dir_v = y.real
+    dir_w = y.imag
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    plt.ylim([-1.0, 1.0])
+    # ax.quiver(point_x, point_y, point_z, dir_u, dir_v, dir_w, length=0.1)
+    # ax.quiver(point_x, point_y, point_z, dir_u, dir_v, dir_w, normalize=True)
+    cmap = mpl.cm.get_cmap('jet')
+    q = ax.quiver(
+        point_x, point_y, point_z,
+        dir_u, dir_v, dir_w,
+        arrow_length_ratio=0,
+        cmap=cmap,
+    )
+    # q.set_array(np.random.rand(np.prod(x.shape)))
+    q.set_array(dir_w)
+    ax.set_zlim([-1.0, 1.0])  # No plt.zlim() available.
+    ax.view_init(0, -90)
 
 def plot_surface(xx, yy, zz):
     """
