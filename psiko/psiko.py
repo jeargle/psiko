@@ -253,15 +253,6 @@ def complex_plane_wave(x, energy, mass=1.0, hbar=1.0):
 
     return psi
 
-def eval_expectation(psi, x, dx, operator):
-    """
-    """
-    integrand = np.conjugate(psi) * operator(psi, x, dx)
-    exp = complex_simps(integrand, x)
-    exp = 0.0 if np.abs(exp) < 1e-7 else exp
-
-    return exp
-
 def tunnel_finite_diff(x, psi_x, v_x, E):
     """
     tunnel function
@@ -605,3 +596,17 @@ def hartrees_to_wavelength(energy):
     """
 
     return np.abs(45.56 * 1.0 / energy)
+
+
+# --------------------
+# Old
+# --------------------
+
+def eval_expectation(psi, x, dx, operator):
+    """
+    """
+    integrand = np.conjugate(psi) * operator(psi, x, dx)
+    exp = complex_simps(integrand, x)
+    exp = 0.0 if np.abs(exp) < 1e-7 else exp
+
+    return exp

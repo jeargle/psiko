@@ -833,23 +833,39 @@ def operator_test2():
     """
     Observables and expectation values.
     """
-    l = 10
-    dx = 0.01
-    x = np.arange(0, l, dx)
-    t = np.arange(0, 100)
-    psi = pib.pib_superposition(x, t, l, 1, 2)
-    p_array = np.zeros(len(t), dtype=complex)
-    x_array = np.zeros(len(t), dtype=complex)
+    length = 10
+    mix_coeff = 1.0/np.sqrt(2)
 
-    for step, time in enumerate(t):
-        p_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.momentum_operator)
-        x_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.position_operator)
+    # Sum 2 eigenstates.
+    harmonics = [1, 2]
+    psi = pib.PibPsi(
+        length,
+        dx=0.01,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in harmonics
+        ]
+    )
 
-    plt.plot(t, p_array)
+    time = np.arange(0, 100)
+    x_array = np.zeros(len(time), dtype=complex)
+    p_array = np.zeros(len(time), dtype=complex)
+
+    for t in time:
+        x_array[t] = psi.expectation(psi.position, t)
+        p_array[t] = psi.expectation(psi.momentum, t)
+
+    plt.plot(time, p_array)
     plt.show()
 
     plt.clf()
-    plt.plot(t, x_array)
+    plt.plot(time, x_array)
     plt.show()
 
 
@@ -1815,8 +1831,8 @@ if __name__=='__main__':
     # schroedinger_test3()
     # operator_test1()
     # operator_test1_old()
-    operator_test2_old()
     operator_test2()
+    # operator_test2_old()
 
     # ====================
     # 1D Time-Independent Schroedinger Equation (TISE)

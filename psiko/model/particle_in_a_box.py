@@ -87,22 +87,22 @@ def pib_energy(n, l, hbar=1.0, m=1):
     return (n**2 * hbar**2 * np.pi**2) / (2.0 * m * l**2)
 
 def pib_superposition(x, t, l, n1, n2):
+    mixture_coeff = 1.0/np.sqrt(2) + 0.0j
+
     # First eigenstate
     psi1 = pib_ti_1D(x, n1, l)
-    c1_0 = 1.0/np.sqrt(2) + 0.0j
     E1 = pib_energy(n1, l)
 
     # Second eigenstate
     psi2 = pib_ti_1D(x, n2, l)
-    c2_0 = 1.0/np.sqrt(2) + 0.0j
     E2 = pib_energy(n2, l)
 
     psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
 
     for step, time in enumerate(t):
         # Get time evolved coefficients
-        c1 = cnt_evolve(c1_0, time, E1)
-        c2 = cnt_evolve(c2_0, time, E2)
+        c1 = cnt_evolve(mixture_coeff, time, E1)
+        c2 = cnt_evolve(mixture_coeff, time, E2)
         psi[:, step] = c1*psi1 + c2*psi2
 
     return psi
