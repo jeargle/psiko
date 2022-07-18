@@ -779,6 +779,50 @@ def operator_test1():
     """
     Position and momentum operators.
     """
+    # l = 10
+    # dx = 0.01
+    # x = np.arange(0, l, dx)
+    # c1 = 1.0/np.sqrt(2)
+    # c2 = 1.0/np.sqrt(2)
+    # psi1_x = pib.pib_ti_1D(x, 1, l)
+    # psi2_x = pib.pib_ti_1D(x, 2, l)
+
+    # psi0 = c1*psi1_x + c2*psi2_x
+    length = 10
+    mix_coeff = 1.0/np.sqrt(2)
+
+    # Sum 2 eigenstates.
+    harmonics = [1, 2]
+    psi = pib.PibPsi(
+        length,
+        dx=0.01,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in harmonics
+        ]
+    )
+
+    # x_integrand = psi0 * x * psi0
+    # exp_x = pk.complex_simps(x_integrand, x)
+    exp_x = psi.expectation(psi.position)
+    print(f'Expectation of position: {exp_x}')
+
+    # p_integrand = psi0 * pk.momentum_operator(psi0, x, dx)
+    # exp_p = pk.complex_simps(p_integrand, x)
+    exp_p = psi.expectation(psi.momentum)
+    print(f'Expectation of momentum: {exp_p}')
+
+
+def operator_test1_old():
+    """
+    Position and momentum operators.
+    """
     l = 10
     dx = 0.01
     x = np.arange(0, l, dx)
@@ -799,6 +843,30 @@ def operator_test1():
 
 
 def operator_test2():
+    """
+    Observables and expectation values.
+    """
+    l = 10
+    dx = 0.01
+    x = np.arange(0, l, dx)
+    t = np.arange(0, 100)
+    psi = pib.pib_superposition(x, t, l, 1, 2)
+    p_array = np.zeros(len(t), dtype=complex)
+    x_array = np.zeros(len(t), dtype=complex)
+
+    for step, time in enumerate(t):
+        p_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.momentum_operator)
+        x_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.position_operator)
+
+    plt.plot(t, p_array)
+    plt.show()
+
+    plt.clf()
+    plt.plot(t, x_array)
+    plt.show()
+
+
+def operator_test2_old():
     """
     Observables and expectation values.
     """
@@ -1757,8 +1825,10 @@ if __name__=='__main__':
     # schroedinger_test1_old()
     # schroedinger_test2_old()
     # schroedinger_test2()
-    schroedinger_test3()
-    # operator_test1()
+    # schroedinger_test3()
+    operator_test1()
+    # operator_test1_old()
+    # operator_test2_old()
     # operator_test2()
 
     # ====================

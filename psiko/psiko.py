@@ -403,6 +403,18 @@ class Psi(object):
         for eigenstate in self.eigenstates:
             eigenstate.mix_coeff /= psi_norm
 
+    def position(self, y):
+        """
+        Position operator
+        """
+        return self.x * y
+
+    def momentum(self, y):
+        """
+        Momentum operator
+        """
+        return -1j * self.hbar * finite_diff(y, self.dx)
+
     def expectation(self, operator, t=0.0):
         """
         Expectation value for an operator on this wavefunction.
