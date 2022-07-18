@@ -779,15 +779,6 @@ def operator_test1():
     """
     Position and momentum operators.
     """
-    # l = 10
-    # dx = 0.01
-    # x = np.arange(0, l, dx)
-    # c1 = 1.0/np.sqrt(2)
-    # c2 = 1.0/np.sqrt(2)
-    # psi1_x = pib.pib_ti_1D(x, 1, l)
-    # psi2_x = pib.pib_ti_1D(x, 2, l)
-
-    # psi0 = c1*psi1_x + c2*psi2_x
     length = 10
     mix_coeff = 1.0/np.sqrt(2)
 
@@ -808,13 +799,9 @@ def operator_test1():
         ]
     )
 
-    # x_integrand = psi0 * x * psi0
-    # exp_x = pk.complex_simps(x_integrand, x)
     exp_x = psi.expectation(psi.position)
     print(f'Expectation of position: {exp_x}')
 
-    # p_integrand = psi0 * pk.momentum_operator(psi0, x, dx)
-    # exp_p = pk.complex_simps(p_integrand, x)
     exp_p = psi.expectation(psi.momentum)
     print(f'Expectation of momentum: {exp_p}')
 
@@ -1826,10 +1813,10 @@ if __name__=='__main__':
     # schroedinger_test2_old()
     # schroedinger_test2()
     # schroedinger_test3()
-    operator_test1()
+    # operator_test1()
     # operator_test1_old()
-    # operator_test2_old()
-    # operator_test2()
+    operator_test2_old()
+    operator_test2()
 
     # ====================
     # 1D Time-Independent Schroedinger Equation (TISE)
