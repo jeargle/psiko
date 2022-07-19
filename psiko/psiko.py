@@ -87,82 +87,11 @@ def complex_nquad(func, ranges, **kwargs):
 # Wavefunction Functions
 # ====================
 
-def prob_density(psi):
-    """
-    Probability density for a normalized wavefunction.
-    """
-    return (np.conjugate(psi) * psi).real
-
-def normalize_wfn(x, psi):
-    """
-    Normalize a wavefunction.
-    """
-    return psi / psi_norm(x, psi)
-
-def psi_norm(x, psi):
-    """
-    Norm of a wavefunction.
-    """
-    result = simps(prob_density(psi), x)
-    return np.sqrt(result)
-
-def finite_diff(y, dx):
-    """
-    Finite difference method.
-    """
-    diff = np.zeros(len(y), dtype=complex)
-
-    # start at step 0
-    diff[0] = (y[1] - y[0])/dx
-
-    for i in range(1, len(y)-1):
-        diff[i] = (y[i+1] - y[i-1]) / (2*dx)
-
-    # end at step n-1
-    diff[-1] = (y[-1] - y[-2])/dx
-
-    return diff
-
-# def finite_diff(psi):
-#     """
-#     Finite difference method.
-#     """
-#     diff = np.zeros(len(psi.x))
-
-#     # start at step 0
-#     diff[0] = (psi.x[1] - psi.x[0])/psi.dx
-
-#     for i in range(1, len(psi.x)-1):
-#         diff[i] = (psi.x[i+1] - psi.x[i-1]) / (2*psi.dx)
-
-#     # end at step n-1
-#     diff[-1] = (psi.x[-1] - psi.x[-2])/psi.dx
-
-#     return diff
-
 def cnt_evolve(cn_0, t, E_n, hbar=1.0):
     """
     Time-evolve a complex, time-dependent coefficient.
     """
     return cn_0 * np.exp(-1j*E_n*t/hbar)
-
-def position_operator(psi, x, dx, hbar=1.0):
-    """
-    Position operator.
-    """
-    return x*psi
-
-def momentum_operator(psi, x, dx, hbar=1.0):
-    """
-    Momentum operator.
-    """
-    return -1j * hbar * finite_diff(psi, dx)
-
-# def momentum_operator(psi, hbar=1.0):
-#     """
-#     Momentum operator.
-#     """
-#     return -1j * hbar * finite_diff(psi)
 
 def kinetic_mat_operator(x, dx=None, m=1, h_bar=1):
     """
@@ -597,11 +526,43 @@ def hartrees_to_wavelength(energy):
 
     return np.abs(45.56 * 1.0 / energy)
 
+def finite_diff(y, dx):
+    """
+    Finite difference method.
+    """
+    diff = np.zeros(len(y), dtype=complex)
+
+    # start at step 0
+    diff[0] = (y[1] - y[0])/dx
+
+    for i in range(1, len(y)-1):
+        diff[i] = (y[i+1] - y[i-1]) / (2*dx)
+
+    # end at step n-1
+    diff[-1] = (y[-1] - y[-2])/dx
+
+    return diff
+
 
 # --------------------
 # Old
 # --------------------
 
+# DEPRECATED
+def position_operator(psi, x, dx, hbar=1.0):
+    """
+    Position operator.
+    """
+    return x*psi
+
+# DEPRECATED
+def momentum_operator(psi, x, dx, hbar=1.0):
+    """
+    Momentum operator.
+    """
+    return -1j * hbar * finite_diff(psi, dx)
+
+# DEPRECATED
 def eval_expectation(psi, x, dx, operator):
     """
     """
@@ -610,3 +571,23 @@ def eval_expectation(psi, x, dx, operator):
     exp = 0.0 if np.abs(exp) < 1e-7 else exp
 
     return exp
+
+def prob_density(psi):
+    """
+    Probability density for a normalized wavefunction.
+    """
+    return (np.conjugate(psi) * psi).real
+
+def normalize_wfn(x, psi):
+    """
+    Normalize a wavefunction.
+    """
+    return psi / psi_norm(x, psi)
+
+# DEPRECATED
+def psi_norm(x, psi):
+    """
+    Norm of a wavefunction.
+    """
+    result = simps(prob_density(psi), x)
+    return np.sqrt(result)

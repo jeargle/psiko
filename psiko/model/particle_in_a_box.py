@@ -20,13 +20,16 @@ class PibPsi(Psi):
         Normalized energy eigenfunctions to time-independent Particle In a
         Box.
 
-        x: domain numpy array starting at 0
         n: eigenfunction index
-        l: length of box spanned by x
         """
         return np.sqrt(2.0/self.length) * np.sin(n*np.pi*self.x/self.length)
 
     def energy(self, n):
+        """
+        Energy eigenvalue for given eigenfunction.
+
+        n: eigenfunction index
+        """
         m = 1.0
         return (n**2 * self.hbar**2 * np.pi**2) / (2.0 * m * self.length**2)
 
@@ -36,6 +39,7 @@ class PibPsi(Psi):
 # Old
 # --------------------
 
+# DEPRECATED
 def pib_ti_1D(x, n, l):
     """
     Normalized energy eigenfunctions to time-independent Particle In a
@@ -62,6 +66,7 @@ def pib_td_1D(t, c, n, l):
     """
     return np.cos(n*np.pi*c*t/l)
 
+# DEPRECATED
 def pib_wave_solution(x, t, c, n, l):
     """
     Harmonic solutions to time-dependent Particle In a Box.
@@ -75,6 +80,7 @@ def pib_wave_solution(x, t, c, n, l):
     # time-dependent and time-independent terms
     return pib_td_1D(t, c, n, l) * pib_ti_1D(x, n, l)
 
+# DEPRECATED
 def pib_energy(n, l, hbar=1.0, m=1):
     """
     Energy eigenvalues
@@ -86,6 +92,7 @@ def pib_energy(n, l, hbar=1.0, m=1):
     """
     return (n**2 * hbar**2 * np.pi**2) / (2.0 * m * l**2)
 
+# DEPRECATED
 def pib_superposition(x, t, l, n1, n2):
     mixture_coeff = 1.0/np.sqrt(2) + 0.0j
 
