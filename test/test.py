@@ -217,7 +217,7 @@ def pib_test1_old():
     plt.show()
 
 
-def pib_test2():
+def pib_test2_old():
     """
     Plot time evolution of time-dependent prefactor for first four
     eigenfunctions of a particle in a box.
@@ -228,7 +228,7 @@ def pib_test2():
     y = np.zeros(4*len(t)).reshape(4, len(t))
 
     # Use a for loop for the multiple harmonics.
-    for n in range(1,5):
+    for n in range(1, 5):
         y[n-1] = pib.pib_td_1D(t, c, n, l)
 
     for i, psi in enumerate(y):
@@ -1808,7 +1808,7 @@ if __name__=='__main__':
 
     # pib_test1()
     # pib_test1_old()
-    # pib_test2()
+    # pib_test2_old()
     # pib_test3()
     # pib_test3_old()
     # pib_interference_test1()
@@ -1831,7 +1831,7 @@ if __name__=='__main__':
     # schroedinger_test3()
     # operator_test1()
     # operator_test1_old()
-    operator_test2()
+    # operator_test2()
     # operator_test2_old()
 
     # ====================

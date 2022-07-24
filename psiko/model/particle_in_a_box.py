@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from psiko.psiko import Eigenstate, Psi, cnt_evolve
+from psiko.psiko import Psi, cnt_evolve
 
 __all__ = ["pib_ti_1D", "pib_td_1D", "pib_wave_solution", "pib_energy"]
 
@@ -30,13 +30,12 @@ class PibPsi(Psi):
 
         n: eigenfunction index
         """
-        m = 1.0
-        return (n**2 * self.hbar**2 * np.pi**2) / (2.0 * m * self.length**2)
-
+        mass = 1.0
+        return (n**2 * self.hbar**2 * np.pi**2) / (2.0 * mass * self.length**2)
 
 
 # --------------------
-# Old
+# Old - DEPRECATED
 # --------------------
 
 # DEPRECATED
@@ -51,6 +50,7 @@ def pib_ti_1D(x, n, l):
     """
     return np.sqrt(2.0/l) * np.sin(n*np.pi*x/l)
 
+# DEPRECATED
 def pib_td_1D(t, c, n, l):
     """
     Time varying prefactor to time-independent Particle In a Box.
