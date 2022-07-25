@@ -317,7 +317,7 @@ class Psi(object):
     Wavefunction evaluated at discrete points x.
     """
 
-    def __init__(self, length=None, num_points=None, dx=None, wf_type=_wf_type['position'],
+    def __init__(self, length=None, num_points=None, dx=None, x_left=None, wf_type=_wf_type['position'],
                  normalize=True, hbar=1.0, eigenstate_params=None):
         """
         length: length of domain
@@ -330,11 +330,18 @@ class Psi(object):
         """
         self.length = length
 
+        if x_left is None:
+            self.x_left = 0
+        else:
+            self.x_left = x_left
+
         if num_points is not None:
-            self.x = np.linspace(0, self.length, num_points)
+            # self.x = np.linspace(0, self.length, num_points)
+            self.x = np.linspace(self.x_left, self.length+self.x_left, num_points)
         elif dx is not None:
             self.dx = dx
-            self.x = np.arange(0, self.length, dx)
+            # self.x = np.arange(0, self.length, dx)
+            self.x = np.arange(self.x_left, self.length+self.x_left, dx)
 
         self.wf_type = wf_type
         self.hbar = hbar

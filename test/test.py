@@ -980,6 +980,79 @@ def operator_test6():
     plt.show()
 
 
+def harmonic_1d_test1():
+    """
+    The 1D Harmonic potential
+    """
+    mix_coeff = 1.0/np.sqrt(2)
+
+    # Sum 2 eigenstates.
+    num_harmonics = 2
+    psi = ho.HarmPsi(
+        length=10,
+        x_left=-5,
+        dx=0.01,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in range(1, num_harmonics+1)
+        ]
+    )
+
+    # t_len = 150
+    t_len = 75
+    t = np.linspace(0, t_len, 501)
+    psi_traj = pk.PsiTraj(psi, t)
+
+    # Psi real
+    pk_plot.time_plot_psi(psi_traj)
+    plt.show()
+    plt.clf()
+
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        ylim=(-0.8, 0.8),
+        show=True
+    )
+
+    # Psi imaginary
+    pk_plot.time_plot_psi(psi_traj, imaginary=True)
+    plt.show()
+    plt.clf()
+
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        d_type='imaginary',
+        ylim=(-0.8, 0.8),
+        show=True
+    )
+
+    # Psi complex
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        d_type='complex',
+        ylim=(-0.8, 0.8),
+        show=True
+    )
+
+    # Probability density function
+    pdf_traj = pk.PsiTraj(psi, t, pdf=True)
+
+    pk_plot.time_plot_psi(pdf_traj)
+    plt.show()
+
+    pk_plot.traj_plot_psi(
+        pdf_traj,
+        ylim=(-0.1, 0.7),
+        show=True
+    )
+
+
 def harmonic_2d_test1():
     """
     The 2D Harmonic potential
@@ -1826,8 +1899,8 @@ if __name__=='__main__':
     # normalize_test1_old()
     # schroedinger_test1()
     # schroedinger_test1_old()
-    # schroedinger_test2_old()
     # schroedinger_test2()
+    # schroedinger_test2_old()
     # schroedinger_test3()
     # operator_test1()
     # operator_test1_old()
@@ -1847,6 +1920,7 @@ if __name__=='__main__':
     # Quantum Mechanics in 2D
     # ====================
 
+    harmonic_1d_test1()
     # harmonic_2d_test1()
     # harmonic_2d_test2()
     # harmonic_2d_test3()
