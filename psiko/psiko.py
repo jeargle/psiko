@@ -18,12 +18,20 @@ __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
 def square_comp(x, omega, k):
     """
     Single component of square function.
+
+    x:
+    omega:
+    k:
     """
     return (4.0/np.pi) * np.sin(2*np.pi*(2*k-1)*omega*x)/(2*k-1)
 
 def square(x, omega, n):
     """
     Approximate a square wave with sin() series.
+
+    x:
+    omega:
+    n:
     """
     a = np.array([square_comp(x, omega, k) for k in range(1,n+1)])
     sum = np.zeros(len(x))
@@ -34,6 +42,10 @@ def square(x, omega, n):
 def square2(x, omega, n):
     """
     Approximate a square wave with sin() series.
+
+    x:
+    omega:
+    n:
     """
     a = np.array([square_comp(x, omega, k) for k in range(1,n+1)])
     return np.array([a[:n,i].sum() for i in range(len(x))])
@@ -41,11 +53,16 @@ def square2(x, omega, n):
 def force1(ti, m):
     """
     Time dependent force calculation.
+
+    ti:
+    n:
     """
     return 5.0*np.sin(2*ti)/m
 
 def repulsion(r1, r2):
     """
+    r1:
+    r2:
     """
     #return 5.0*np.sin(2*ti)/m
     return 5/(abs(r1-r2))
@@ -63,6 +80,9 @@ def boundary_1d(xi, v, l):
 def complex_simps(y, x):
     """
     Complex Simpson's rule.
+
+    y:
+    x:
     """
     if np.all(np.isreal(y)):
         return simps(y, x) + 0j
@@ -72,6 +92,10 @@ def complex_simps(y, x):
 def complex_nquad(func, ranges, **kwargs):
     """
     Complex quadrature.
+
+    func:
+    ranges:
+    kwargs:
     """
     real_integral = nquad(
         lambda *args: sp.real(func(*args)), ranges, **kwargs
@@ -90,12 +114,19 @@ def complex_nquad(func, ranges, **kwargs):
 def cnt_evolve(cn_0, t, E_n, hbar=1.0):
     """
     Time-evolve a complex, time-dependent coefficient.
+
+    cn_0:
+    t: time
+    E_n:
+    hbar: Planck's constant
     """
     return cn_0 * np.exp(-1j*E_n*t/hbar)
 
 def kinetic_mat_operator(x, dx=None, m=1, h_bar=1):
     """
     Kinetic energy matrix operator.
+
+    hbar: Planck's constant
     """
     if dx is None:
         dx = x[1]-x[0]
@@ -120,6 +151,8 @@ def kinetic_mat_operator(x, dx=None, m=1, h_bar=1):
 def linear_ramp(x):
     """
     Linear potential.
+
+    x:
     """
     b = 2
     return b*x
@@ -127,6 +160,12 @@ def linear_ramp(x):
 def build_hamiltonian(x, vx, dx=None, m=1.0, h_bar=1.0):
     """
     Get kinetic energy, potential energy, and hamiltonian
+
+    x:
+    vx:
+    dx:
+    m: mass
+    hbar: Planck's constant
     """
     if dx is None:
         dx = x[1]-x[0]
@@ -139,6 +178,9 @@ def build_hamiltonian(x, vx, dx=None, m=1.0, h_bar=1.0):
 def coulomb_double_well(x, r):
     """
     Build Coulomb-like double well potential centered around 0.
+
+    x:
+    r:
     """
     x0_1 = -r / 2.0  # first well
     x0_2 = r / 2.0   # second well
@@ -153,12 +195,20 @@ def coulomb_double_well(x, r):
 def coulomb_well(x, x0=0.0):
     """
     Build Coulomb-like well potential at x0.
+
+    x:
+    x0:
     """
     return -1.0 / np.abs(x-x0)
 
 def square_barrier(x, length=1.0, height=9.0, x0=4.0):
     """
     Build square barrier potential at x0.
+
+    x:
+    length:
+    height:
+    x0:
     """
     result = np.zeros(len(x))
     for i, xval in enumerate(x):
@@ -169,12 +219,19 @@ def square_barrier(x, length=1.0, height=9.0, x0=4.0):
 
 def transmission_probability(pdf, n_cutoff=300):
     """
+    pdf:
+    n_cutoff:
     """
     return (2.0 / (1.0 + np.mean(pdf[-n_cutoff:]))).real
 
 def complex_plane_wave(x, energy, mass=1.0, hbar=1.0):
     """
     Complex plane wave.
+
+    x:
+    energy:
+    mass: mass
+    hbar: Planck's constant
     """
     k = np.sqrt(2 * mass * energy / hbar**2)
     psi = np.zeros(len(x), dtype=complex)
@@ -186,6 +243,11 @@ def tunnel_finite_diff(x, psi_x, v_x, E):
     """
     tunnel function
 
+    x:
+    psi_x:
+    v_x:
+    E:
+
     return time-propagated wavefunction
     """
     psi_new = np.copy(psi_x)
@@ -195,6 +257,10 @@ def tunnel_finite_diff(x, psi_x, v_x, E):
 
     return psi_new
 
+
+# ====================
+# Wavefunction Classes
+# ====================
 
 class Eigenstate(object):
     """
@@ -207,6 +273,7 @@ class Eigenstate(object):
         energy: energy of this Eigenstate
         mix_coeff: mixture coefficient for Eigenstate's contribution to Psi
         hbar: Planck's constant
+        quantum_numbers: quantum numbers that define this Eigenstate
         """
         self.y = y
         self.energy = energy
@@ -219,7 +286,7 @@ class Eigenstate(object):
         print(f'  mixture coefficient: {self.mix_coeff}')
         print(f'  hbar: {self.hbar}')
 
-    def _cnt_evolve(self, t):
+    def _coeff_evolve(self, t):
         """
         Time-evolve a complex, time-dependent coefficient.
 
@@ -234,7 +301,7 @@ class Eigenstate(object):
 
         t: time; number or array
         """
-        return self.mix_coeff * self._cnt_evolve(t) * self.y
+        return self.mix_coeff * self._coeff_evolve(t) * self.y
 
 
 _wf_type = {
@@ -303,6 +370,8 @@ class Psi(object):
     def prob_density(self, t=0.0):
         """
         Probability density for the wavefunction.
+
+        t: time
         """
         y = self.at_time(t)
         return (np.conjugate(y) * y).real
@@ -310,6 +379,8 @@ class Psi(object):
     def psi_norm(self, t=0.0):
         """
         Norm of the wavefunction.
+
+        t: time
         """
         result = simps(self.prob_density(t), self.x)
         return np.sqrt(result)
@@ -326,12 +397,16 @@ class Psi(object):
     def position(self, y):
         """
         Position operator
+
+        y:
         """
         return self.x * y
 
     def momentum(self, y):
         """
         Momentum operator
+
+        y:
         """
         return -1j * self.hbar * finite_diff(y, self.dx)
 
@@ -340,6 +415,7 @@ class Psi(object):
         Expectation value for an operator on this wavefunction.
 
         operator: operator function to take the expectation for
+        t: time
         """
         y = self.at_time(t)
         integrand = np.conjugate(y) * operator(y)
@@ -355,9 +431,11 @@ class Psi(object):
         raise NotImplementedError()
 
     def at_time(self, t):
+        """
+        t: time
+        """
         return sum(eigenstate.at_time(t)
                    for eigenstate in self.eigenstates)
-
 
 
 class PsiTraj(object):
@@ -367,10 +445,10 @@ class PsiTraj(object):
 
     def __init__(self, psi, time, dt=None, pdf=False):
         """
-        psi:
-        time:
+        psi: Psi
+        time: time
         dt: distance between time points
-        pdf:
+        pdf: create probability density function instead of wavefunction
         """
         self.psi = psi
         self.time = time

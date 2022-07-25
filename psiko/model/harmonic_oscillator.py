@@ -84,7 +84,7 @@ def harmonic_oscillator_1D_in_field(x, t, omega_f, omega_0=1, lam=1,
 
     return psi0 + c1*psi1
 
-def excited_overlap(t, omega_f, omega_0=1, lam=1, E_0=1.0, m=1.0, hbar=1.0):
+def excited_overlap(t, omega_f, omega_0=1, lam=1, E_0=1.0, mass=1.0, hbar=1.0):
     """
     Overlap of the ground state and first excited states for 1D
     time-dependent Harmonic Oscillator.
@@ -94,14 +94,14 @@ def excited_overlap(t, omega_f, omega_0=1, lam=1, E_0=1.0, m=1.0, hbar=1.0):
     omega_0: frequency of harmonic oscillator
     lam:
     E_0:
-    m: mass
+    mass: mass
     hbar: Planck's constant
     """
     omega_diff = omega_0 - omega_f
     omega_sum = omega_0 + omega_f
-    c1 = ((1j*E_0*(2.0*np.pi/lam))/(2.0*np.sqrt(2.0*m*hbar*omega_0))) * \
-        ( ((np.exp(-1j*omega_diff*t) - 1.0) / omega_diff) + \
-        ((np.exp(1j*omega_sum*t) - 1.0) / omega_sum))
+    c1 = ( ( ( 1j*E_0*( 2.0*np.pi/lam ) ) / ( 2.0*np.sqrt( 2.0*mass*hbar*omega_0 ) ) ) *
+           ( ( ( np.exp(-1j*omega_diff*t ) - 1.0 ) / omega_diff ) +
+             ( ( np.exp(1j*omega_sum*t ) - 1.0 ) / omega_sum ) ) )
     return c1
 
 def harmonic_potential_2D(xx, yy, kx, ky, x0=0, y0=0):
@@ -161,6 +161,9 @@ def harmonic_oscillator_wigner(x, p, omega, mass=1.0, hbar=1.0):
 
 def harmonic_oscillator_wigner_01(x, p, t):
     """
+    x:
+    p:
+    t:
     """
     return ( np.exp(-x**2 - p**2) *
              (x**2 + p**2 + np.sqrt(2.0)*x*np.cos(t) - np.sqrt(2)*p*np.sin(t)) )
