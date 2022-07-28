@@ -16,11 +16,16 @@ from scipy.special import sph_harm
 # Helper Functions
 # ====================
 
-def sphere_harm_real(m, l, phi, theta):
+def sphere_harm_real(m, l, theta, phi):
     """
     Spherical harmonics in real space.
+
+    m: order of the harmonic
+    l: degree of the harmonic
+    theta: angle around z-axis (longitudinal)
+    phi: angle with respect to xy-plane (latitudinal)
     """
-    Y_lm = sph_harm(m, l, phi, theta)
+    Y_lm = sph_harm(m, l, theta, phi)
     if m < 0:
         Y_lm_real = np.sqrt(2.0) * (-1.0)**m * Y_lm.imag
     elif m > 0:
@@ -32,6 +37,10 @@ def sphere_harm_real(m, l, phi, theta):
 def sphere_to_cart(theta, phi, r=1.0):
     """
     Converts spherical coordinates to 3D cartesian coordinates.
+
+    theta: angle around z-axis (longitudinal)
+    phi: angle with respect to xy-plane (latitudinal)
+    r: radius
     """
     x = r * np.sin(phi) * np.cos(theta)
     y = r * np.sin(phi) * np.sin(theta)
@@ -44,10 +53,6 @@ def sphere_to_cart(theta, phi, r=1.0):
 # Plotting
 # ====================
 
-def time_plot(x, y, t, timestep=1):
-    for i in range(0, len(t), timestep):
-        plt.plot(x, y[:,i])
-
 def time_plot_psi(psi_traj, timestep=1, imaginary=False):
     """
     Plot full wavefunction trajectory on a static graph.  Timesteps
@@ -56,6 +61,7 @@ def time_plot_psi(psi_traj, timestep=1, imaginary=False):
 
     psi: Psi for particle in a box
     timestep: step to take through the trajectory array
+    imaginary:
     """
 
     psi = psi_traj.psi
@@ -144,6 +150,10 @@ def plot_quiver(x, y):
 def plot_surface(xx, yy, zz):
     """
     Plot a surface.
+
+    xx:
+    yy:
+    zz:
     """
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
@@ -159,6 +169,12 @@ def plot_surface(xx, yy, zz):
 def plot_contours(xx, yy, zz, vmin=None, vmax=None):
     """
     Plot a heatmap and contours for a 3d surface.
+
+    xx:
+    yy:
+    zz:
+    vmin:
+    vmax:
     """
     # Use viridis colormap
     cmap = mpl.cm.get_cmap('viridis')
@@ -175,6 +191,11 @@ def plot_contours(xx, yy, zz, vmin=None, vmax=None):
 def _add_colorbar(im, aspect=20, pad_fraction=0.5, **kwargs):
     """
     Add a vertical color bar to an image plot.
+
+    im:
+    aspect:
+    pad_fraction:
+    kwargs:
     """
     divider = axes_grid1.make_axes_locatable(im.axes)
     width = axes_grid1.axes_size.AxesY(im.axes, aspect=1.0/aspect)
@@ -188,6 +209,9 @@ def _add_colorbar(im, aspect=20, pad_fraction=0.5, **kwargs):
 def plot_sphere(m, l):
     """
     Plot a function onto a sphere.
+
+    m: order of the harmonic
+    l: degree of the harmonic
     """
     theta = np.arange(0, 2 * np.pi, 0.01)
     phi = np.arange(0, np.pi, 0.01)
@@ -217,6 +241,8 @@ def plot_energy_levels(energies, figsize=(14, 6), fontsize='xx-small'):
     Energy level plot.
 
     energies: list of dicts
+    figsize:
+    fontsize:
     """
     e = [i['energy'] for i in energies]
     e_max = np.max(e)
@@ -262,6 +288,8 @@ def plot_energy_levels(energies, figsize=(14, 6), fontsize='xx-small'):
 def _energy_label(energy_dict):
     """
     Create string with quantum numbers n, l, and m.
+
+    energy_dict:
     """
     vals = []
 
@@ -277,6 +305,8 @@ def _energy_label(energy_dict):
 def wavelength_to_colour(wavelength):
     """
     Get RGB values for a given wavelength of light.
+
+    wavelength:
     """
     if wavelength >= 380 and wavelength < 440:
         R = -(wavelength - 440.0) / (440.0 - 350.0)
@@ -319,64 +349,10 @@ def wavelength_to_colour(wavelength):
 
     return (intensity * R, intensity * G, intensity * B)
 
-def traj_plot(x, traj, t, dt=1, xlim=None, ylim=None, skip=1, gif=None, mp4=None, show=False):
-    """
-    Create an animated plot for a wavefunction trajectory.
-
-    x: x-axis array
-    traj: 2D array of function sampling at different timepoints
-    t: time point array
-    dt: timestep
-    xlim: tuple with x-axis bounds
-    ylim: tuple with y-axis bounds
-    skip: number of timepoints to skip between each frame
-    gif: gif filename
-    mp4: mp4 filename
-    show: whether or not to show the plot during execution
-    """
-
-    if xlim is None:
-        xlim = (x[0], x[-1])
-
-    if ylim is None:
-        ylim = (-1.0, 1.0)
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111, autoscale_on=False, xlim=xlim, ylim=ylim)
-    ax.grid()
-
-    # line, = ax.plot([], [], 'o-', lw=2)
-    line, = ax.plot([], [])
-    time_template = 'time = %.1fs'
-    time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
-
-    def init():
-        line.set_data([], [])
-        time_text.set_text('')
-        return line, time_text
-
-    def animate(i):
-        thisx = x
-        thisy = traj[:,i]
-
-        line.set_data(thisx, thisy)
-        time_text.set_text(time_template % (i*dt))
-        return line, time_text
-
-    ani = animation.FuncAnimation(fig, animate, np.arange(0, len(t), skip),
-                                  interval=50, blit=True, init_func=init)
-
-    if gif is not None:
-        ani.save(gif, dpi=80, fps=15, writer='imagemagick')
-    if mp4 is not None:
-        ani.save(mp4, fps=15)
-    if show:
-        plt.show()
-
 def traj_plot_psi(psi_traj, d_type='real', xlim=None, ylim=None, skip=1,
                   gif=None, mp4=None, show=False):
     """
-    Create an animated plot for a wavefunction trajectory.
+    Create an animated plot for a PsiTraj.
 
     psi_traj: PsiTraj
     d_type: 'real', 'imaginary', or 'complex' (2 lines)
@@ -445,6 +421,76 @@ def traj_plot_psi(psi_traj, d_type='real', xlim=None, ylim=None, skip=1,
             line.set_data(xlist[i], ylist[i]) # set data for each line separately.
 
         return lines
+
+    ani = animation.FuncAnimation(fig, animate, np.arange(0, len(t), skip),
+                                  interval=50, blit=True, init_func=init)
+
+    if gif is not None:
+        ani.save(gif, dpi=80, fps=15, writer='imagemagick')
+    if mp4 is not None:
+        ani.save(mp4, fps=15)
+    if show:
+        plt.show()
+
+
+# --------------------
+# Old
+# --------------------
+
+def time_plot(x, y, t, timestep=1):
+    """
+    x:
+    y:
+    t:
+    timestep:
+    """
+
+    for i in range(0, len(t), timestep):
+        plt.plot(x, y[:,i])
+
+def traj_plot(x, traj, t, dt=1, xlim=None, ylim=None, skip=1, gif=None, mp4=None, show=False):
+    """
+    Create an animated plot for a wavefunction trajectory.
+
+    x: x-axis array
+    traj: 2D array of function sampling at different timepoints
+    t: time point array
+    dt: timestep
+    xlim: tuple with x-axis bounds
+    ylim: tuple with y-axis bounds
+    skip: number of timepoints to skip between each frame
+    gif: gif filename
+    mp4: mp4 filename
+    show: whether or not to show the plot during execution
+    """
+
+    if xlim is None:
+        xlim = (x[0], x[-1])
+
+    if ylim is None:
+        ylim = (-1.0, 1.0)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, autoscale_on=False, xlim=xlim, ylim=ylim)
+    ax.grid()
+
+    # line, = ax.plot([], [], 'o-', lw=2)
+    line, = ax.plot([], [])
+    time_template = 'time = %.1fs'
+    time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+
+    def init():
+        line.set_data([], [])
+        time_text.set_text('')
+        return line, time_text
+
+    def animate(i):
+        thisx = x
+        thisy = traj[:,i]
+
+        line.set_data(thisx, thisy)
+        time_text.set_text(time_template % (i*dt))
+        return line, time_text
 
     ani = animation.FuncAnimation(fig, animate, np.arange(0, len(t), skip),
                                   interval=50, blit=True, init_func=init)
