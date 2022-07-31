@@ -349,6 +349,16 @@ def wavelength_to_colour(wavelength):
 
     return (intensity * R, intensity * G, intensity * B)
 
+
+def _animation_output(ani, gif=None, mp4=None, show=False):
+    if gif is not None:
+        ani.save(gif, dpi=80, fps=15, writer='imagemagick')
+    if mp4 is not None:
+        ani.save(mp4, fps=15)
+    if show:
+        plt.show()
+
+
 def traj_plot_psi(psi_traj, d_type='real', xlim=None, ylim=None, skip=1,
                   gif=None, mp4=None, show=False):
     """
@@ -425,16 +435,25 @@ def traj_plot_psi(psi_traj, d_type='real', xlim=None, ylim=None, skip=1,
     ani = animation.FuncAnimation(fig, animate, np.arange(0, len(t), skip),
                                   interval=50, blit=True, init_func=init)
 
-    if gif is not None:
-        ani.save(gif, dpi=80, fps=15, writer='imagemagick')
-    if mp4 is not None:
-        ani.save(mp4, fps=15)
-    if show:
-        plt.show()
+    _animation_output(ani, gif, mp4, show)
 
 
-def traj_plot_psi2(psi_traj, plot_type='trisurf', xlim=None, ylim=None, zlim=None,
-                   skip=1, gif=None, mp4=None, show=False):
+def _animation_set_view(ax, ylim=None, zlim=None, view_params=None):
+    if ylim is not None:
+        ax.set_ylim(ylim)  # No plt.zlim() available.
+
+    if zlim is not None:
+        ax.set_zlim(zlim)  # No plt.zlim() available.
+
+    if view_params is None:
+        view_params = (10, -75)
+    ax.view_init(*view_params)
+
+
+def traj_plot_psi2(psi_traj, plot_type='trisurf',
+                   xlim=None, ylim=None, zlim=None,
+                   skip=1, cmap_str=None, view_params=None,
+                   gif=None, mp4=None, show=False):
     """
     Create an animated plot for a PsiTraj.
 
@@ -443,17 +462,12 @@ def traj_plot_psi2(psi_traj, plot_type='trisurf', xlim=None, ylim=None, zlim=Non
     xlim: tuple with x-axis bounds
     ylim: tuple with y-axis bounds
     skip: number of timepoints to skip between each frame
+    cmap_str: cmap string
+    view_params: parameters to set viewpoint
     gif: gif filename
     mp4: mp4 filename
     show: whether or not to show the plot during execution
     """
-
-    def set_view():
-        ax.set_ylim(ylim)  # No plt.zlim() available.
-        ax.set_zlim(zlim)  # No plt.zlim() available.
-        # ax.view_init(10, -75)
-        # ax.view_init(5, -15)
-        ax.view_init(15, -55)
 
     def animate_trisurf(i):
         y = psi_traj.traj[:,i]
@@ -469,7 +483,7 @@ def traj_plot_psi2(psi_traj, plot_type='trisurf', xlim=None, ylim=None, zlim=Non
             triangles=triangles,
             cmap=cmap
         )
-        set_view()
+        _animation_set_view(ax, ylim, zlim, view_params)
 
         return lobj
 
@@ -489,7 +503,7 @@ def traj_plot_psi2(psi_traj, plot_type='trisurf', xlim=None, ylim=None, zlim=Non
             cmap=cmap,
         )
         lobj.set_array(dir_w)
-        set_view()
+        _animation_set_view(ax, ylim, zlim, view_params)
 
         return lobj
 
@@ -521,22 +535,28 @@ def traj_plot_psi2(psi_traj, plot_type='trisurf', xlim=None, ylim=None, zlim=Non
 
     len_x = len(x)
     y = psi_traj.traj[:,0]
-    # cmap = mpl.cm.get_cmap('jet')
-    cmap = mpl.cm.get_cmap('cool')
+
+    if cmap_str is None:
+        cmap_str = 'jet'
+    cmap = mpl.cm.get_cmap(cmap_str)
 
     if plot_type == 'trisurf':
-        animate = animate_trisurf
         point_x = np.concatenate((x, x))
         point_y = np.concatenate((np.zeros(len_x), y.real))
         point_z = np.concatenate((np.zeros(len_x), y.imag))
 
-        tri1 = [[i, i+len_x+1, i+len_x] for i in range(len_x-1)]
-        tri2 = [[i, i+1, i+len_x+1] for i in range(len_x-1)]
+        tri1 = [[i, i+len_x+1, i+len_x]
+                for i in range(len_x-1)]
+        tri2 = [[i, i+1, i+len_x+1]
+                for i in range(len_x-1)]
         triangles = np.concatenate((tri1, tri2))
 
-        lobj = ax.plot_trisurf(point_x, point_y, point_z,
-                               triangles=triangles, cmap=cmap)
-        set_view()
+        lobj = ax.plot_trisurf(
+            point_x, point_y, point_z,
+            triangles=triangles, cmap=cmap
+        )
+        _animation_set_view(ax, ylim, zlim, view_params)
+        animate = animate_trisurf
     elif plot_type == 'quiver':
         # Origin points.
         point_x = x
@@ -554,7 +574,7 @@ def traj_plot_psi2(psi_traj, plot_type='trisurf', xlim=None, ylim=None, zlim=Non
             arrow_length_ratio=0,
             cmap=cmap,
         )
-        set_view()
+        _animation_set_view(ax, ylim, zlim, view_params)
         animate = animate_quiver
 
     ani = animation.FuncAnimation(
@@ -566,12 +586,7 @@ def traj_plot_psi2(psi_traj, plot_type='trisurf', xlim=None, ylim=None, zlim=Non
         # blit=True,
     )
 
-    if gif is not None:
-        ani.save(gif, dpi=80, fps=15, writer='imagemagick')
-    if mp4 is not None:
-        ani.save(mp4, fps=15)
-    if show:
-        plt.show()
+    _animation_output(ani, gif, mp4, show)
 
 
 # --------------------

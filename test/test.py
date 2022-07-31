@@ -813,6 +813,7 @@ def schroedinger_test4():
         # ylim=(-0.1, 0.4),
         ylim=cylindrical_lim,
         zlim=cylindrical_lim,
+        cmap_str='cool',
         show=True
     )
 
@@ -854,6 +855,7 @@ def schroedinger_test5():
         plot_type='quiver',
         ylim=cylindrical_lim,
         zlim=cylindrical_lim,
+        cmap_str='cool',
         show=True
     )
 
