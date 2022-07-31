@@ -741,7 +741,7 @@ def schroedinger_test2_old():
 
 def schroedinger_test3():
     """
-    Time-dependent Schroedinger equation.
+    Plot trisurf and quiver.
     """
     length = 10
     mix_coeff = 1.0/np.sqrt(2)
@@ -777,13 +777,13 @@ def schroedinger_test3():
 
 def schroedinger_test4():
     """
-    Time-dependent Schroedinger equation.
+    Animated trisurf.
     """
     length = 10
     mix_coeff = 1.0/np.sqrt(2)
 
     # Sum 2 eigenstates.
-    harmonics = [2, 4, 7]
+    harmonics = [2, 3, 5, 7]
     psi = pib.PibPsi(
         length,
         dx=0.1,
@@ -804,12 +804,54 @@ def schroedinger_test4():
     # t = np.linspace(0, t_len, 301)
     t = np.linspace(0, t_len, 301)
     psi_traj = pk.PsiTraj(psi, t)
-    cylindrical_lim = (-0.4, 0.4)
+    # cylindrical_lim = (-0.4, 0.4)
+    cylindrical_lim = (-0.6, 0.6)
 
     pk_plot.traj_plot_psi2(
         psi_traj,
         # xlim=(-0.1, length),
         # ylim=(-0.1, 0.4),
+        ylim=cylindrical_lim,
+        zlim=cylindrical_lim,
+        show=True
+    )
+
+
+def schroedinger_test5():
+    """
+    Animated quiver.
+    """
+    length = 10
+    mix_coeff = 1.0/np.sqrt(2)
+
+    # Sum 2 eigenstates.
+    harmonics = [2, 3, 5, 7]
+    psi = pib.PibPsi(
+        length,
+        dx=0.1,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in harmonics
+        ]
+    )
+
+    # t_len = 150
+    t_len = 50
+    # t = np.linspace(0, t_len, 301)
+    t = np.linspace(0, t_len, 301)
+    psi_traj = pk.PsiTraj(psi, t)
+    # cylindrical_lim = (-0.4, 0.4)
+    cylindrical_lim = (-0.6, 0.6)
+
+    pk_plot.traj_plot_psi2(
+        psi_traj,
+        plot_type='quiver',
         ylim=cylindrical_lim,
         zlim=cylindrical_lim,
         show=True
@@ -1944,6 +1986,7 @@ if __name__=='__main__':
     # schroedinger_test2_old()
     # schroedinger_test3()
     schroedinger_test4()
+    schroedinger_test5()
     # operator_test1()
     # operator_test1_old()
     # operator_test2()

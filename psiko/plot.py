@@ -433,12 +433,13 @@ def traj_plot_psi(psi_traj, d_type='real', xlim=None, ylim=None, skip=1,
         plt.show()
 
 
-def traj_plot_psi2(psi_traj, xlim=None, ylim=None, zlim=None, skip=1,
-                   gif=None, mp4=None, show=False):
+def traj_plot_psi2(psi_traj, plot_type='trisurf', xlim=None, ylim=None, zlim=None,
+                   skip=1, gif=None, mp4=None, show=False):
     """
     Create an animated plot for a PsiTraj.
 
     psi_traj: PsiTraj
+    plot_type:
     xlim: tuple with x-axis bounds
     ylim: tuple with y-axis bounds
     skip: number of timepoints to skip between each frame
@@ -446,6 +447,51 @@ def traj_plot_psi2(psi_traj, xlim=None, ylim=None, zlim=None, skip=1,
     mp4: mp4 filename
     show: whether or not to show the plot during execution
     """
+
+    def set_view():
+        ax.set_ylim(ylim)  # No plt.zlim() available.
+        ax.set_zlim(zlim)  # No plt.zlim() available.
+        # ax.view_init(10, -75)
+        # ax.view_init(5, -15)
+        ax.view_init(15, -55)
+
+    def animate_trisurf(i):
+        y = psi_traj.traj[:,i]
+
+        point_y = np.concatenate((np.zeros(len_x), y.real))
+        point_z = np.concatenate((np.zeros(len_x), y.imag))
+
+        ax.clear()
+        lobj = ax.plot_trisurf(
+            point_x,
+            point_y,
+            point_z,
+            triangles=triangles,
+            cmap=cmap
+        )
+        set_view()
+
+        return lobj
+
+    def animate_quiver(i):
+        y = psi_traj.traj[:,i]
+
+        # Arrow directions.
+        dir_v = y.real
+        dir_w = y.imag
+
+        # quiver() also has options length=0.1 and normalize=True.
+        ax.clear()
+        lobj = ax.quiver(
+            point_x, point_y, point_z,
+            dir_u, dir_v, dir_w,
+            arrow_length_ratio=0,
+            cmap=cmap,
+        )
+        lobj.set_array(dir_w)
+        set_view()
+
+        return lobj
 
     psi = psi_traj.psi
     x = psi.x
@@ -475,38 +521,41 @@ def traj_plot_psi2(psi_traj, xlim=None, ylim=None, zlim=None, skip=1,
 
     len_x = len(x)
     y = psi_traj.traj[:,0]
-    point_x = np.concatenate((x, x))
-    point_y = np.concatenate((np.zeros(len_x), y.real))
-    point_z = np.concatenate((np.zeros(len_x), y.imag))
+    # cmap = mpl.cm.get_cmap('jet')
+    cmap = mpl.cm.get_cmap('cool')
 
-    tri1 = [[i, i+len_x+1, i+len_x] for i in range(len_x-1)]
-    tri2 = [[i, i+1, i+len_x+1] for i in range(len_x-1)]
-    triangles = np.concatenate((tri1, tri2))
-
-    cmap = mpl.cm.get_cmap('jet')
-    lobj = ax.plot_trisurf(point_x, point_y, point_z, triangles=triangles, cmap=cmap)
-
-
-    def animate(i):
-        y = psi_traj.traj[:,i]
-
+    if plot_type == 'trisurf':
+        animate = animate_trisurf
+        point_x = np.concatenate((x, x))
         point_y = np.concatenate((np.zeros(len_x), y.real))
         point_z = np.concatenate((np.zeros(len_x), y.imag))
 
-        ax.clear()
-        lobj = ax.plot_trisurf(
-            point_x,
-            point_y,
-            point_z,
-            triangles=triangles,
-            cmap=cmap
+        tri1 = [[i, i+len_x+1, i+len_x] for i in range(len_x-1)]
+        tri2 = [[i, i+1, i+len_x+1] for i in range(len_x-1)]
+        triangles = np.concatenate((tri1, tri2))
+
+        lobj = ax.plot_trisurf(point_x, point_y, point_z,
+                               triangles=triangles, cmap=cmap)
+        set_view()
+    elif plot_type == 'quiver':
+        # Origin points.
+        point_x = x
+        point_y = np.zeros(len_x)
+        point_z = np.zeros(len_x)
+
+        # Arrow directions.
+        dir_u = np.zeros(len_x)
+        dir_v = y.real
+        dir_w = y.imag
+
+        lobj = ax.quiver(
+            point_x, point_y, point_z,
+            dir_u, dir_v, dir_w,
+            arrow_length_ratio=0,
+            cmap=cmap,
         )
-
-        ax.set_ylim(ylim)  # No plt.zlim() available.
-        ax.set_zlim(zlim)  # No plt.zlim() available.
-        ax.view_init(10, -75)
-
-        return lobj
+        set_view()
+        animate = animate_quiver
 
     ani = animation.FuncAnimation(
         fig,
