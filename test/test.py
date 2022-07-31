@@ -775,6 +775,47 @@ def schroedinger_test3():
     plt.show()
 
 
+def schroedinger_test4():
+    """
+    Time-dependent Schroedinger equation.
+    """
+    length = 10
+    mix_coeff = 1.0/np.sqrt(2)
+
+    # Sum 2 eigenstates.
+    harmonics = [2, 4, 7]
+    psi = pib.PibPsi(
+        length,
+        dx=0.1,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in harmonics
+        ]
+    )
+
+    # t_len = 150
+    t_len = 50
+    # t = np.linspace(0, t_len, 301)
+    t = np.linspace(0, t_len, 301)
+    psi_traj = pk.PsiTraj(psi, t)
+    cylindrical_lim = (-0.4, 0.4)
+
+    pk_plot.traj_plot_psi2(
+        psi_traj,
+        # xlim=(-0.1, length),
+        # ylim=(-0.1, 0.4),
+        ylim=cylindrical_lim,
+        zlim=cylindrical_lim,
+        show=True
+    )
+
+
 def operator_test1():
     """
     Position and momentum operators.
@@ -987,7 +1028,7 @@ def harmonic_1d_test1():
     mix_coeff = 1.0/np.sqrt(2)
 
     # Sum 2 eigenstates.
-    num_harmonics = 2
+    harmonics = [0, 5]
     psi = ho.HarmPsi(
         length=10,
         x_left=-5,
@@ -1000,7 +1041,7 @@ def harmonic_1d_test1():
                     'n': n
                 }
             }
-            for n in range(1, num_harmonics+1)
+            for n in harmonics
         ]
     )
 
@@ -1902,6 +1943,7 @@ if __name__=='__main__':
     # schroedinger_test2()
     # schroedinger_test2_old()
     # schroedinger_test3()
+    schroedinger_test4()
     # operator_test1()
     # operator_test1_old()
     # operator_test2()
@@ -1920,7 +1962,7 @@ if __name__=='__main__':
     # Quantum Mechanics in 2D
     # ====================
 
-    harmonic_1d_test1()
+    # harmonic_1d_test1()
     # harmonic_2d_test1()
     # harmonic_2d_test2()
     # harmonic_2d_test3()

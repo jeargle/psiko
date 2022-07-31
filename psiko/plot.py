@@ -433,6 +433,98 @@ def traj_plot_psi(psi_traj, d_type='real', xlim=None, ylim=None, skip=1,
         plt.show()
 
 
+def traj_plot_psi2(psi_traj, xlim=None, ylim=None, zlim=None, skip=1,
+                   gif=None, mp4=None, show=False):
+    """
+    Create an animated plot for a PsiTraj.
+
+    psi_traj: PsiTraj
+    xlim: tuple with x-axis bounds
+    ylim: tuple with y-axis bounds
+    skip: number of timepoints to skip between each frame
+    gif: gif filename
+    mp4: mp4 filename
+    show: whether or not to show the plot during execution
+    """
+
+    psi = psi_traj.psi
+    x = psi.x
+    t = psi_traj.time
+    dt = psi_traj.dt
+
+    if xlim is None:
+        xlim = (x[0], x[-1])
+
+    if ylim is None:
+        ylim = (-1.0, 1.0)
+
+    if zlim is None:
+        zlim = (-1.0, 1.0)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(
+        111,
+        projection='3d',
+        autoscale_on=False,
+        xlim=xlim,
+        ylim=ylim
+    )
+
+    # time_template = 'time = %.1fs'
+    # time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+
+    len_x = len(x)
+    y = psi_traj.traj[:,0]
+    point_x = np.concatenate((x, x))
+    point_y = np.concatenate((np.zeros(len_x), y.real))
+    point_z = np.concatenate((np.zeros(len_x), y.imag))
+
+    tri1 = [[i, i+len_x+1, i+len_x] for i in range(len_x-1)]
+    tri2 = [[i, i+1, i+len_x+1] for i in range(len_x-1)]
+    triangles = np.concatenate((tri1, tri2))
+
+    cmap = mpl.cm.get_cmap('jet')
+    lobj = ax.plot_trisurf(point_x, point_y, point_z, triangles=triangles, cmap=cmap)
+
+
+    def animate(i):
+        y = psi_traj.traj[:,i]
+
+        point_y = np.concatenate((np.zeros(len_x), y.real))
+        point_z = np.concatenate((np.zeros(len_x), y.imag))
+
+        ax.clear()
+        lobj = ax.plot_trisurf(
+            point_x,
+            point_y,
+            point_z,
+            triangles=triangles,
+            cmap=cmap
+        )
+
+        ax.set_ylim(ylim)  # No plt.zlim() available.
+        ax.set_zlim(zlim)  # No plt.zlim() available.
+        ax.view_init(10, -75)
+
+        return lobj
+
+    ani = animation.FuncAnimation(
+        fig,
+        animate,
+        np.arange(0, len(t), skip),
+        # fargs=(zarray, plot),
+        interval=50,
+        # blit=True,
+    )
+
+    if gif is not None:
+        ani.save(gif, dpi=80, fps=15, writer='imagemagick')
+    if mp4 is not None:
+        ani.save(mp4, fps=15)
+    if show:
+        plt.show()
+
+
 # --------------------
 # Old
 # --------------------
