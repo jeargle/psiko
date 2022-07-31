@@ -10,7 +10,7 @@ As a toolkit, this library provides classes and functions for building simple qu
 
 ## Psi - Wavefunction
 
-`Psi` is the base class that represents wavefunctions (Ψ).  Its constructor accepts a domain and parameters for setting up the eigenstates that make up the wavefunction.  `Psi` is an abstract class, and its children are responsible for handling setup and calculation for specific Hamiltonians.  Wavefunction classes are provided for a few simple Hamiltonians, such as particle-in-a-box (`PsiPib`) and harmonic oscillator (`PsiHarm`), but you can also subclass `Psi` to build wavefunctions for other systems.
+`Psi` is the base class that represents wavefunctions (Ψ).  Its constructor accepts a domain and parameters for setting up the eigenstates that make up the wavefunction.  `Psi` is an abstract class, and its children are responsible for handling setup and calculation for specific Hamiltonians.  Wavefunction classes are provided for a few simple Hamiltonians, such as particle-in-a-box (`PibPsi`) and harmonic oscillator (`HarmPsi`), but you can also subclass `Psi` to build wavefunctions for other systems.
 
 You can construct a wavefunction from one or more eigenfunctions along with corresponding misture coefficients.  Eigenfunctions for a particular system are time-independent solutions to HΨ=EΨ where H is the Hamiltonian (linear operator) and E is the energy (eigenvalue) for the wavefunction Ψ.
 

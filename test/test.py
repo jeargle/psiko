@@ -777,7 +777,7 @@ def schroedinger_test3():
 
 def schroedinger_test4():
     """
-    Animated trisurf.
+    Animated trisurf for particle-in-a-box.
     """
     length = 10
     mix_coeff = 1.0/np.sqrt(2)
@@ -820,7 +820,7 @@ def schroedinger_test4():
 
 def schroedinger_test5():
     """
-    Animated quiver.
+    Animated quiver for particle-in-a-box.
     """
     length = 10
     mix_coeff = 1.0/np.sqrt(2)
@@ -1134,6 +1134,87 @@ def harmonic_1d_test1():
     pk_plot.traj_plot_psi(
         pdf_traj,
         ylim=(-0.1, 0.7),
+        show=True
+    )
+
+
+def harmonic_1d_test2():
+    """
+    Animated trisurf for harmonic oscillator.
+    """
+    mix_coeff = 1.0/np.sqrt(2)
+
+    # Sum 2 eigenstates.
+    harmonics = [0, 5]
+    psi = ho.HarmPsi(
+        length=10,
+        x_left=-5,
+        dx=0.05,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in harmonics
+        ]
+    )
+
+    # t_len = 150
+    t_len = 50
+    t = np.linspace(0, t_len, 301)
+    psi_traj = pk.PsiTraj(psi, t)
+    # cylindrical_lim = (-0.4, 0.4)
+    cylindrical_lim = (-0.6, 0.6)
+
+    pk_plot.traj_plot_psi2(
+        psi_traj,
+        ylim=cylindrical_lim,
+        zlim=cylindrical_lim,
+        cmap_str='hot',
+        show=True
+    )
+
+
+def harmonic_1d_test3():
+    """
+    Animated quiver for harmonic oscillator.
+    """
+    mix_coeff = 1.0/np.sqrt(2)
+
+    # Sum 2 eigenstates.
+    harmonics = [0, 5]
+    psi = ho.HarmPsi(
+        length=10,
+        x_left=-5,
+        dx=0.05,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in harmonics
+        ]
+    )
+
+    # t_len = 150
+    t_len = 50
+    t = np.linspace(0, t_len, 301)
+    psi_traj = pk.PsiTraj(psi, t)
+    # cylindrical_lim = (-0.4, 0.4)
+    cylindrical_lim = (-0.6, 0.6)
+
+    pk_plot.traj_plot_psi2(
+        psi_traj,
+        plot_type='quiver',
+        ylim=cylindrical_lim,
+        zlim=cylindrical_lim,
+        cmap_str='hot',
         show=True
     )
 
@@ -1987,8 +2068,8 @@ if __name__=='__main__':
     # schroedinger_test2()
     # schroedinger_test2_old()
     # schroedinger_test3()
-    schroedinger_test4()
-    schroedinger_test5()
+    # schroedinger_test4()
+    # schroedinger_test5()
     # operator_test1()
     # operator_test1_old()
     # operator_test2()
@@ -2008,6 +2089,8 @@ if __name__=='__main__':
     # ====================
 
     # harmonic_1d_test1()
+    harmonic_1d_test2()
+    harmonic_1d_test3()
     # harmonic_2d_test1()
     # harmonic_2d_test2()
     # harmonic_2d_test3()
