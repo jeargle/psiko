@@ -1207,6 +1207,63 @@ def pir_1D_test2():
     )
 
 
+def pir_1D_test3():
+    """
+    Animated quiver for Particle in a Ring.
+    """
+    mix_coeff = 1.0/np.sqrt(2)
+
+    # Sum 2 eigenstates.
+    harmonics = [1, -2]
+    psi = pir.PirPsi(
+        length=10,
+        dx=0.1,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in harmonics
+        ]
+    )
+
+    t_len = 150
+    t = np.linspace(0, t_len, 201)
+    psi_traj = pk.PsiTraj(psi, t)
+    cylindrical_lim = (-0.6, 0.6)
+
+    pk_plot.traj_plot_psi2(
+        psi_traj,
+        plot_type='quiver',
+        ylim=cylindrical_lim,
+        zlim=cylindrical_lim,
+        cmap_str='cool',
+        show=True
+    )
+
+    # Psi complex
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        d_type='complex',
+        ylim=cylindrical_lim,
+        show=True
+    )
+
+    pdf_traj = pk.PsiTraj(psi, t, pdf=True)
+
+    # pk_plot.time_plot_psi(pdf_traj)
+    # plt.show()
+
+    pk_plot.traj_plot_psi(
+        pdf_traj,
+        ylim=(-0.1, 0.6),
+        show=True
+    )
+
+
 def harmonic_1D_test1():
     """
     The 1D Harmonic potential
@@ -2256,8 +2313,8 @@ if __name__=='__main__':
     # ====================
 
     # pir_1D_test1()
-    pir_1D_test2()
-    # pir_1D_test3()
+    # pir_1D_test2()
+    pir_1D_test3()
 
     # ====================
     # 1D Harmonic Oscillator tests
