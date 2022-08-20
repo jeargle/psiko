@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from psiko.psiko import Psi, cnt_evolve
+from psiko.psiko import Psi, cnt_evolve, _wf_type
 
 __all__ = ["PirPsi"]
 
@@ -22,6 +22,9 @@ class PirPsi(Psi):
     within the ring, and the energy eigenvalues depend on the radius.
     """
 
+    theta = None
+    radius = None
+
     def __init__(self, length=None, num_points=None, dx=None, x_left=None,
                  wf_type=_wf_type['position'], normalize=True, hbar=1.0,
                  eigenstate_params=None):
@@ -35,22 +38,33 @@ class PirPsi(Psi):
         eigenstate_params: list of parameters for eigenstates
         """
         # TODO - does x need to have a point removed for the periodic connection?
-        super().__init__(
-            length=length,
-            num_points=num_points,
-            dx=dx,
-            x_left=x_left,
-            wf_type=wf_type,
-            normalize=normalize,
-            hbar=hbar,
-            eigenstate_params=eigenstate_params,
-        )
+        self.length = length
+
+        if x_left is None:
+            self.x_left = 0
+        else:
+            self.x_left = x_left
+
+        if num_points is not None:
+            self.x = np.linspace(self.x_left, self.length+self.x_left, num_points)
+        elif dx is not None:
+            self.dx = dx
+            self.x = np.arange(self.x_left, self.length+self.x_left, dx)
+
+        self.wf_type = wf_type
+        self.hbar = hbar
 
         # Translation of x to periodic angle theta.
         self.theta = (2.0 * np.pi * self.x) / self.length
+        print(f'theta: {self.theta}')
 
         # Translation of length to radius.
         self.radius = self.length / (2.0 * np.pi)
+
+        self._init_eigenstates(
+            eigenstate_params,
+            normalize
+        )
 
     def eigenfunction(self, n):
         """
@@ -59,7 +73,7 @@ class PirPsi(Psi):
 
         n: eigenfunction index; 0, ±1, ±2, ...
         """
-        return 1.0/sqrt(2.0*np.pi) * np.exp(1j*n*self.theta)
+        return 1.0/np.sqrt(2.0*np.pi) * np.exp(1j*n*self.theta)
 
     def energy(self, n):
         """

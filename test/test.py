@@ -13,6 +13,7 @@ from scipy.optimize import minimize
 import psiko.psiko as pk
 import psiko.plot as pk_plot
 import psiko.model.particle_in_a_box as pib
+import psiko.model.particle_in_a_ring as pir
 import psiko.model.harmonic_oscillator as ho
 import psiko.model.hydrogen as pk_h
 import psiko.model.helium as pk_he
@@ -606,10 +607,12 @@ def schroedinger_test2():
     Time-dependent Schroedinger equation.
     """
     length = 10
-    mix_coeff = 1.0/np.sqrt(2)
 
     # Sum 2 eigenstates.
-    num_harmonics = 2
+    # num_harmonics = 2
+    harmonics = [1, 2]
+    # mix_coeff = 1.0/np.sqrt(2)
+    mix_coeff = 1.0/np.sqrt(len(harmonics))
     psi = pib.PibPsi(
         length,
         dx=0.01,
@@ -621,7 +624,8 @@ def schroedinger_test2():
                     'n': n
                 }
             }
-            for n in range(1, num_harmonics+1)
+            # for n in range(1, num_harmonics+1)
+            for n in harmonics
         ]
     )
 
@@ -629,7 +633,8 @@ def schroedinger_test2():
     # t_extent = 1.0
     # t = np.linspace(0, t_wavelength*t_extent, 101)
     t_len = 150
-    t = np.linspace(0, t_len, 301)
+    # t = np.linspace(0, t_len, 301)
+    t = np.linspace(0, t_len, 201)
     psi_traj = pk.PsiTraj(psi, t)
 
     # Psi real
@@ -673,6 +678,7 @@ def schroedinger_test2():
     pk_plot.traj_plot_psi(
         pdf_traj,
         ylim=(-0.1, 0.4),
+        gif='pdf-1-2-line.gif',
         show=True
     )
 
@@ -744,10 +750,11 @@ def schroedinger_test3():
     Plot trisurf and quiver.
     """
     length = 10
-    mix_coeff = 1.0/np.sqrt(2)
 
     # Sum 2 eigenstates.
     harmonics = [2, 7]
+    # mix_coeff = 1.0/np.sqrt(2)
+    mix_coeff = 1.0/np.sqrt(len(harmonics))
     psi = pib.PibPsi(
         length,
         dx=0.1,
@@ -780,13 +787,15 @@ def schroedinger_test4():
     Animated trisurf for particle-in-a-box.
     """
     length = 10
-    mix_coeff = 1.0/np.sqrt(2)
 
     # Sum 2 eigenstates.
-    harmonics = [2, 3, 5, 7]
+    # harmonics = [2, 3, 5, 7]
+    harmonics = [1, 2]
+    # mix_coeff = 1.0/np.sqrt(2)
+    mix_coeff = 1.0/np.sqrt(len(harmonics))
     psi = pib.PibPsi(
         length,
-        dx=0.1,
+        dx=0.2,
         normalize=False,
         eigenstate_params=[
             {
@@ -799,21 +808,20 @@ def schroedinger_test4():
         ]
     )
 
-    # t_len = 150
-    t_len = 50
+    t_len = 150
+    # t_len = 50
+    t = np.linspace(0, t_len, 201)
     # t = np.linspace(0, t_len, 301)
-    t = np.linspace(0, t_len, 301)
     psi_traj = pk.PsiTraj(psi, t)
     # cylindrical_lim = (-0.4, 0.4)
     cylindrical_lim = (-0.6, 0.6)
 
     pk_plot.traj_plot_psi2(
         psi_traj,
-        # xlim=(-0.1, length),
-        # ylim=(-0.1, 0.4),
         ylim=cylindrical_lim,
         zlim=cylindrical_lim,
         cmap_str='cool',
+        gif='trisurf-1-2-front.gif',
         show=True
     )
 
@@ -823,13 +831,15 @@ def schroedinger_test5():
     Animated quiver for particle-in-a-box.
     """
     length = 10
-    mix_coeff = 1.0/np.sqrt(2)
 
     # Sum 2 eigenstates.
-    harmonics = [2, 3, 5, 7]
+    # harmonics = [2, 3, 5, 7]
+    harmonics = [1, 2]
+    # mix_coeff = 1.0/np.sqrt(2)
+    mix_coeff = 1.0/np.sqrt(len(harmonics))
     psi = pib.PibPsi(
         length,
-        dx=0.1,
+        dx=0.2,
         normalize=False,
         eigenstate_params=[
             {
@@ -842,10 +852,10 @@ def schroedinger_test5():
         ]
     )
 
-    # t_len = 150
-    t_len = 50
+    t_len = 150
+    # t_len = 50
+    t = np.linspace(0, t_len, 201)
     # t = np.linspace(0, t_len, 301)
-    t = np.linspace(0, t_len, 301)
     psi_traj = pk.PsiTraj(psi, t)
     # cylindrical_lim = (-0.4, 0.4)
     cylindrical_lim = (-0.6, 0.6)
@@ -856,6 +866,7 @@ def schroedinger_test5():
         ylim=cylindrical_lim,
         zlim=cylindrical_lim,
         cmap_str='cool',
+        gif='quiver-1-2-front.gif',
         show=True
     )
 
@@ -1065,7 +1076,82 @@ def operator_test6():
     plt.show()
 
 
-def harmonic_1d_test1():
+def pir_1D_test1():
+    """
+    The 1D Particle in a Ring potential
+    """
+    mix_coeff = 1.0/np.sqrt(2)
+
+    # Sum 2 eigenstates.
+    harmonics = [1, -1]
+    psi = pir.PirPsi(
+        length=10,
+        # x_left=-5,
+        dx=0.01,
+        normalize=False,
+        eigenstate_params=[
+            {
+                'mix_coeff': mix_coeff,
+                'quantum_numbers': {
+                    'n': n
+                }
+            }
+            for n in harmonics
+        ]
+    )
+
+    # t_len = 150
+    # t_len = 75
+    # t = np.linspace(0, t_len, 501)
+    t_len = 150
+    t = np.linspace(0, t_len, 201)
+    psi_traj = pk.PsiTraj(psi, t)
+
+    # Psi real
+    pk_plot.time_plot_psi(psi_traj)
+    plt.show()
+    plt.clf()
+
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        ylim=(-0.8, 0.8),
+        show=True
+    )
+
+    # Psi imaginary
+    pk_plot.time_plot_psi(psi_traj, imaginary=True)
+    plt.show()
+    plt.clf()
+
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        d_type='imaginary',
+        ylim=(-0.8, 0.8),
+        show=True
+    )
+
+    # Psi complex
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        d_type='complex',
+        ylim=(-0.8, 0.8),
+        show=True
+    )
+
+    # Probability density function
+    pdf_traj = pk.PsiTraj(psi, t, pdf=True)
+
+    pk_plot.time_plot_psi(pdf_traj)
+    plt.show()
+
+    pk_plot.traj_plot_psi(
+        pdf_traj,
+        ylim=(-0.1, 0.7),
+        show=True
+    )
+
+
+def harmonic_1D_test1():
     """
     The 1D Harmonic potential
     """
@@ -1138,17 +1224,21 @@ def harmonic_1d_test1():
     )
 
 
-def harmonic_1d_test2():
+def harmonic_1D_test2():
     """
     Animated trisurf for harmonic oscillator.
     """
-    mix_coeff = 1.0/np.sqrt(2)
 
     # Sum 2 eigenstates.
-    harmonics = [0, 5]
+    # harmonics = [0, 2, 4, 7]
+    harmonics = list(range(20))
+    # mix_coeff = 1.0/np.sqrt(2)
+    mix_coeff = 1.0/np.sqrt(len(harmonics))
+    length = 10
+    x_left = -length/2
     psi = ho.HarmPsi(
-        length=10,
-        x_left=-5,
+        length=length,
+        x_left=x_left,
         dx=0.05,
         normalize=False,
         eigenstate_params=[
@@ -1164,10 +1254,11 @@ def harmonic_1d_test2():
 
     # t_len = 150
     t_len = 50
-    t = np.linspace(0, t_len, 301)
+    t = np.linspace(0, t_len, 601)
     psi_traj = pk.PsiTraj(psi, t)
     # cylindrical_lim = (-0.4, 0.4)
-    cylindrical_lim = (-0.6, 0.6)
+    # cylindrical_lim = (-0.6, 0.6)
+    cylindrical_lim = (-1.0, 1.0)
 
     pk_plot.traj_plot_psi2(
         psi_traj,
@@ -1177,15 +1268,35 @@ def harmonic_1d_test2():
         show=True
     )
 
+    # Psi complex
+    pk_plot.traj_plot_psi(
+        psi_traj,
+        d_type='complex',
+        ylim=cylindrical_lim,
+        show=True
+    )
 
-def harmonic_1d_test3():
+    pdf_traj = pk.PsiTraj(psi, t, pdf=True)
+
+    # pk_plot.time_plot_psi(pdf_traj)
+    # plt.show()
+
+    pk_plot.traj_plot_psi(
+        pdf_traj,
+        ylim=(-0.1, 1.0),
+        show=True
+    )
+
+
+def harmonic_1D_test3():
     """
     Animated quiver for harmonic oscillator.
     """
-    mix_coeff = 1.0/np.sqrt(2)
 
     # Sum 2 eigenstates.
     harmonics = [0, 5]
+    # mix_coeff = 1.0/np.sqrt(2)
+    mix_coeff = 1.0/np.sqrt(len(harmonics))
     psi = ho.HarmPsi(
         length=10,
         x_left=-5,
@@ -2085,12 +2196,25 @@ if __name__=='__main__':
     # operator_test6()
 
     # ====================
+    # 1D Particle in a Ring tests
+    # ====================
+
+    # pir_1D_test1()
+    # pir_1D_test2()
+    # pir_1D_test3()
+
+    # ====================
+    # 1D Harmonic Oscillator tests
+    # ====================
+
+    # harmonic_1D_test1()
+    # harmonic_1D_test2()
+    # harmonic_1D_test3()
+
+    # ====================
     # Quantum Mechanics in 2D
     # ====================
 
-    # harmonic_1d_test1()
-    harmonic_1d_test2()
-    harmonic_1d_test3()
     # harmonic_2d_test1()
     # harmonic_2d_test2()
     # harmonic_2d_test3()

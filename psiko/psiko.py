@@ -346,6 +346,12 @@ class Psi(object):
         self.wf_type = wf_type
         self.hbar = hbar
 
+        self._init_eigenstates(
+            eigenstate_params,
+            normalize
+        )
+
+    def _init_eigenstates(self, eigenstate_params, normalize):
         self.eigenstates = []
 
         if eigenstate_params is None or len(eigenstate_params) <= 0:
