@@ -2269,14 +2269,14 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    # pib_test1()
+    pib_test1()
     # pib_test1_old()
     # pib_test2_old()
-    # pib_test3()
+    pib_test3()
     # pib_test3_old()
-    # pib_interference_test1()
+    pib_interference_test1()
     # pib_interference_test1_old()
-    # pib_interference_test2()
+    pib_interference_test2()
     # pib_interference_test2_old()
     # quadrature_test1()
     # quadrature_test2()
@@ -2285,18 +2285,18 @@ if __name__=='__main__':
     # QM postulates
     # ====================
 
-    # normalize_test1()
+    normalize_test1()
     # normalize_test1_old()
-    # schroedinger_test1()
+    schroedinger_test1()
     # schroedinger_test1_old()
-    # schroedinger_test2()
+    schroedinger_test2()
     # schroedinger_test2_old()
     # schroedinger_test3()
     # schroedinger_test4()
     # schroedinger_test5()
-    # operator_test1()
+    operator_test1()
     # operator_test1_old()
-    # operator_test2()
+    operator_test2()
     # operator_test2_old()
 
     # ====================
@@ -2312,17 +2312,17 @@ if __name__=='__main__':
     # 1D Particle in a Ring tests
     # ====================
 
-    # pir_1D_test1()
-    # pir_1D_test2()
+    pir_1D_test1()
+    pir_1D_test2()
     pir_1D_test3()
 
     # ====================
     # 1D Harmonic Oscillator tests
     # ====================
 
-    # harmonic_1D_test1()
-    # harmonic_1D_test2()
-    # harmonic_1D_test3()
+    harmonic_1D_test1()
+    harmonic_1D_test2()
+    harmonic_1D_test3()
 
     # ====================
     # Quantum Mechanics in 2D

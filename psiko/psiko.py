@@ -328,6 +328,85 @@ class Psi(object):
         hbar: Planck's constant
         eigenstate_params: list of parameters for eigenstates
         """
+        raise NotImplementedError()
+
+    def prob_density(self, t=0.0):
+        """
+        Probability density for the wavefunction.
+
+        t: time
+        """
+        raise NotImplementedError()
+
+    def psi_norm(self, t=0.0):
+        """
+        Norm of the wavefunction.
+
+        t: time
+        """
+        raise NotImplementedError()
+
+    def _normalize(self):
+        """
+        Normalize the wavefunction by scaling the mixture
+        coefficients of the eigenstates.
+        """
+        raise NotImplementedError()
+
+    def position(self, y):
+        """
+        Position operator
+
+        y:
+        """
+        raise NotImplementedError()
+
+    def momentum(self, y):
+        """
+        Momentum operator
+
+        y:
+        """
+        raise NotImplementedError()
+
+    def expectation(self, operator, t=0.0):
+        """
+        Expectation value for an operator on this wavefunction.
+
+        operator: operator function to take the expectation for
+        t: time
+        """
+        raise NotImplementedError()
+
+    def eigenfunction(self):
+        raise NotImplementedError()
+
+    def energy(self):
+        raise NotImplementedError()
+
+    def at_time(self, t):
+        """
+        t: time
+        """
+        raise NotImplementedError()
+
+
+class Psi1D(Psi):
+    """
+    1D wavefunction evaluated at discrete points x.
+    """
+
+    def __init__(self, length=None, num_points=None, dx=None, x_left=None, wf_type=_wf_type['position'],
+                 normalize=True, hbar=1.0, eigenstate_params=None):
+        """
+        length: length of domain
+        num_points: number of points to track in domain (x)
+        dx: distance between points of x
+        wf_type: wavefunction type
+        normalize: whether or not to normalize the wavefunction
+        hbar: Planck's constant
+        eigenstate_params: list of parameters for eigenstates
+        """
         self.length = length
 
         if x_left is None:
@@ -449,6 +528,156 @@ class Psi(object):
         """
         return sum(eigenstate.at_time(t)
                    for eigenstate in self.eigenstates)
+
+
+class Psi2D(Psi):
+    """
+    2D wavefunction evaluated at discrete points (x, y).
+    """
+
+    def __init__(self, x_length=None, x_num_points=None, dx=None, x_left=None,
+                 y_length=None, y_num_points=None, dy=None, y_left=None,
+                 wf_type=_wf_type['position'],
+                 normalize=True, hbar=1.0, eigenstate_params=None):
+        """
+        x_length: length of domain
+        x_num_points: number of points to track in domain (x)
+        dx: distance between points of x
+        wf_type: wavefunction type
+        normalize: whether or not to normalize the wavefunction
+        hbar: Planck's constant
+        eigenstate_params: list of parameters for eigenstates
+        """
+        # self.length = length
+
+        # if x_left is None:
+        #     self.x_left = 0
+        # else:
+        #     self.x_left = x_left
+
+        # if num_points is not None:
+        #     # self.x = np.linspace(0, self.length, num_points)
+        #     self.x = np.linspace(self.x_left, self.length+self.x_left, num_points)
+        # elif dx is not None:
+        #     self.dx = dx
+        #     # self.x = np.arange(0, self.length, dx)
+        #     self.x = np.arange(self.x_left, self.length+self.x_left, dx)
+
+        # self.wf_type = wf_type
+        # self.hbar = hbar
+
+        # self._init_eigenstates(
+        #     eigenstate_params,
+        #     normalize
+        # )
+        pass
+
+    def _init_eigenstates(self, eigenstate_params, normalize):
+        # self.eigenstates = []
+
+        # if eigenstate_params is None or len(eigenstate_params) <= 0:
+        #     raise ValueError('Must provide list of eigenstate parameters: eigenstate_params')
+
+        # # Validate mixture coefficients.
+        # mix_coeff_sum = sum(ep.get('mix_coeff', 1.0) for ep in eigenstate_params)
+        # print(f'sum(mix_coeff): {mix_coeff_sum}')
+        # mix_coeff_sum = sum(ep.get('mix_coeff', 1.0)**2 for ep in eigenstate_params)
+        # print(f'sum(mix_coeff**2): {mix_coeff_sum}')
+
+        # # Build eigenstates.
+        # for ep in eigenstate_params:
+        #     n = ep['quantum_numbers']['n']
+        #     self.eigenstates.append(
+        #         Eigenstate(
+        #             self.eigenfunction(n),
+        #             self.energy(n),
+        #             mix_coeff=ep.get('mix_coeff', 1.0),
+        #             hbar=self.hbar,
+        #             quantum_numbers=ep.get('quantum_numbers', None)
+        #         )
+        #     )
+
+        # if len(self.x) > 1:
+        #     if normalize:  # Do not normalize if there is only one point.
+        #         self._normalize()
+        pass
+
+    def prob_density(self, t=0.0):
+        """
+        Probability density for the wavefunction.
+
+        t: time
+        """
+        # y = self.at_time(t)
+        # return (np.conjugate(y) * y).real
+        pass
+
+    def psi_norm(self, t=0.0):
+        """
+        Norm of the wavefunction.
+
+        t: time
+        """
+        # result = simps(self.prob_density(t), self.x)
+        # return np.sqrt(result)
+        pass
+
+    def _normalize(self):
+        """
+        Normalize the wavefunction by scaling the mixture
+        coefficients of the eigenstates.
+        """
+        # psi_norm = self.psi_norm()
+        # for eigenstate in self.eigenstates:
+        #     eigenstate.mix_coeff /= psi_norm
+        pass
+
+    def position(self, y):
+        """
+        Position operator
+
+        y:
+        """
+        # return self.x * y
+        pass
+
+    def momentum(self, y):
+        """
+        Momentum operator
+
+        y:
+        """
+        # return -1j * self.hbar * finite_diff(y, self.dx)
+        pass
+
+    def expectation(self, operator, t=0.0):
+        """
+        Expectation value for an operator on this wavefunction.
+
+        operator: operator function to take the expectation for
+        t: time
+        """
+        # y = self.at_time(t)
+        # integrand = np.conjugate(y) * operator(y)
+        # exp = complex_simps(integrand, self.x)
+        # exp = 0.0 if np.abs(exp) < 1e-7 else exp
+
+        # return exp
+        pass
+
+    def eigenfunction(self):
+        raise NotImplementedError()
+
+    def energy(self):
+        raise NotImplementedError()
+
+    def at_time(self, t):
+        """
+        t: time
+        """
+        # return sum(eigenstate.at_time(t)
+        #            for eigenstate in self.eigenstates)
+        pass
 
 
 class PsiTraj(object):

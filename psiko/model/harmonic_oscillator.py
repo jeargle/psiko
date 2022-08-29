@@ -5,7 +5,7 @@
 import numpy as np
 from scipy.special import factorial
 
-from psiko.psiko import Psi
+from psiko.psiko import Psi1D
 
 __all__ = ["harmonic_oscillator_1D", "harmonic_oscillator_1D_in_field",
            "excited_overlap", "harmonic_potential_2D", "harmonic_oscillator_2D",
@@ -16,7 +16,7 @@ __all__ = ["harmonic_oscillator_1D", "harmonic_oscillator_1D_in_field",
 # Harmonic Oscillator
 # ====================
 
-class HarmPsi(Psi):
+class HarmPsi(Psi1D):
 
     def eigenfunction(self, n):
         """

@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from psiko.psiko import Psi, cnt_evolve, _wf_type
+from psiko.psiko import Psi1D, cnt_evolve, _wf_type
 
 __all__ = ["PirPsi"]
 
@@ -13,7 +13,7 @@ __all__ = ["PirPsi"]
 # Particle in a Ring
 # ====================
 
-class PirPsi(Psi):
+class PirPsi(Psi1D):
     """
     Wavefunction for a particle in a ring.
 

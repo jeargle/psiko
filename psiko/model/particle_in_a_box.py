@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from psiko.psiko import Psi, cnt_evolve
+from psiko.psiko import Psi1D, cnt_evolve
 
 __all__ = ["pib_ti_1D", "pib_td_1D", "pib_wave_solution", "pib_energy"]
 
@@ -13,7 +13,7 @@ __all__ = ["pib_ti_1D", "pib_td_1D", "pib_wave_solution", "pib_energy"]
 # Particle in a Box
 # ====================
 
-class PibPsi(Psi):
+class PibPsi(Psi1D):
 
     def eigenfunction(self, n):
         """
