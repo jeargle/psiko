@@ -4,17 +4,17 @@ Toolkit for playing around with quantum mechanics.
 
 ## General
 
-This project is loosely based on work done for the edX course The Quantum World (CHEM160x).
+As a toolkit, this library provides classes and functions for building simple quantum systems and drawing various plots based on them.  Complex-valued wavefunctions can be created from sets of eigenstates and then plotted over space or momentum axes.  Once created, these wavefunctions can be sampled at given times or across multiple timepoints to produce trajectories which can then be used for further plotting or animation.
 
-As a toolkit, this library provides classes and functions for building simple quantum systems and drawing various plots based on them.  Complex-valued wavefunctions can be created from sets of eigenstates and then plotted over space or momentum axes.  These wavefunctions can be sampled at given times or across multiple timepoints to produce trajectories which can then be used for further plotting or animation.
+This project is loosely based on work done for the edX course The Quantum World (CHEM160x).
 
 ## Psi - Wavefunction
 
-`Psi` is the base class that represents wavefunctions (Ψ).  Its constructor accepts a domain and parameters for setting up the eigenstates that make up the wavefunction.  `Psi` is an abstract class, and its children are responsible for handling setup and calculation for specific Hamiltonians.  Wavefunction classes are provided for a few simple Hamiltonians, such as particle-in-a-box (`PibPsi`) and harmonic oscillator (`HarmPsi`), but you can also subclass `Psi` to build wavefunctions for other systems.
+`Psi` is the base class that represents wavefunctions (Ψ).  Its constructor accepts a domain and parameters for setting up the eigenstates that make up the wavefunction.  `Psi` is an abstract class as are its direct children, `Psi1D` and `Psi2D`, which govern wavefunctions in 1 and 2 dimensions, respectively.  Child classes of `Psi1D` and `Psi2D` are responsible for handling setup and calculation for specific Hamiltonians.  Wavefunction classes are provided for a few simple Hamiltonians, such as particle-in-a-box (`PibPsi`) and harmonic oscillator (`HarmPsi`), but you can also subclass `Psi` to build wavefunctions for other systems.
 
-You can construct a wavefunction from one or more eigenfunctions along with corresponding misture coefficients.  Eigenfunctions for a particular system are time-independent solutions to HΨ=EΨ where H is the Hamiltonian (linear operator) and E is the energy (eigenvalue) for the wavefunction Ψ.
+You can construct a wavefunction from one or more eigenfunctions along with corresponding mixture coefficients.  Eigenfunctions for a particular system are time-independent solutions to HΨ=EΨ where H is the Hamiltonian (linear operator) and E is the energy (eigenvalue) for the wavefunction Ψ.
 
-There are also methods for calculating the time-dependent wavefunction at a given time, its probability density, and expectation values for quantum operators.
+There are also methods for calculating the wavefunction state at a given time, its probability density, and expectation values for quantum operators.
 
 ### Particle in a Box
 
@@ -23,6 +23,10 @@ There are also methods for calculating the time-dependent wavefunction at a give
 ### Harmonic Oscillator
 
 `HarmPsi` models a 1D particle in a harmonic potential.  The eigenfunctions are similar in shape to particle-in-a-box solutions, but based on Gaussians since the boundary conditions tend to 0 as the edges approach infinity.
+
+### Particle in a Ring
+
+`PirPsi` models a 1D particle in a ring.  The particle is free to move within a finite space with periodic boundary conditions.  The eigenfunctions are sinusoidal where the two edges of the "box" are set equal to each other.
 
 ## PsiTraj - Wavefunction Trajectory
 
