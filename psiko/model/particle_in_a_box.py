@@ -6,7 +6,7 @@ import numpy as np
 
 from psiko.psiko import Psi1D, cnt_evolve
 
-__all__ = ["pib_ti_1D", "pib_td_1D", "pib_wave_solution", "pib_energy"]
+__all__ = ["pib_ti_1D", "pib_td_1D", "pib_wave_solution"]
 
 
 # ====================
@@ -81,35 +81,35 @@ def pib_wave_solution(x, t, c, n, l):
     return pib_td_1D(t, c, n, l) * pib_ti_1D(x, n, l)
 
 # DEPRECATED
-def pib_energy(n, l, hbar=1.0, m=1):
-    """
-    Energy eigenvalues
+# def pib_energy(n, l, hbar=1.0, m=1):
+#     """
+#     Energy eigenvalues
 
-    n: eigenfunction index
-    l: length of box spanned by psi.x
-    hbar: Planck's constant
-    m: mass
-    """
-    return (n**2 * hbar**2 * np.pi**2) / (2.0 * m * l**2)
+#     n: eigenfunction index
+#     l: length of box spanned by psi.x
+#     hbar: Planck's constant
+#     m: mass
+#     """
+#     return (n**2 * hbar**2 * np.pi**2) / (2.0 * m * l**2)
 
 # DEPRECATED
-def pib_superposition(x, t, l, n1, n2):
-    mixture_coeff = 1.0/np.sqrt(2) + 0.0j
+# def pib_superposition(x, t, l, n1, n2):
+#     mixture_coeff = 1.0/np.sqrt(2) + 0.0j
 
-    # First eigenstate
-    psi1 = pib_ti_1D(x, n1, l)
-    E1 = pib_energy(n1, l)
+#     # First eigenstate
+#     psi1 = pib_ti_1D(x, n1, l)
+#     E1 = pib_energy(n1, l)
 
-    # Second eigenstate
-    psi2 = pib_ti_1D(x, n2, l)
-    E2 = pib_energy(n2, l)
+#     # Second eigenstate
+#     psi2 = pib_ti_1D(x, n2, l)
+#     E2 = pib_energy(n2, l)
 
-    psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
+#     psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
 
-    for step, time in enumerate(t):
-        # Get time evolved coefficients
-        c1 = cnt_evolve(mixture_coeff, time, E1)
-        c2 = cnt_evolve(mixture_coeff, time, E2)
-        psi[:, step] = c1*psi1 + c2*psi2
+#     for step, time in enumerate(t):
+#         # Get time evolved coefficients
+#         c1 = cnt_evolve(mixture_coeff, time, E1)
+#         c2 = cnt_evolve(mixture_coeff, time, E2)
+#         psi[:, step] = c1*psi1 + c2*psi2
 
-    return psi
+#     return psi

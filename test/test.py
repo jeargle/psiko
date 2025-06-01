@@ -575,31 +575,31 @@ def schroedinger_test1():
     plt.show()
 
 
-def schroedinger_test1_old():
-    """
-    Set up a mixed state from the ground and first excited states for
-    the particle in a box.  Normalize the wavefunction.
-    """
-    l = 10
-    x = np.arange(0, l, 0.01)
+# def schroedinger_test1_old():
+#     """
+#     Set up a mixed state from the ground and first excited states for
+#     the particle in a box.  Normalize the wavefunction.
+#     """
+#     l = 10
+#     x = np.arange(0, l, 0.01)
 
-    # First eigenstate
-    psi1_x = pib.pib_ti_1D(x, 1, l)
-    c1 = 1.0/np.sqrt(2)
-    E1 = pib.pib_energy(1, l)
+#     # First eigenstate
+#     psi1_x = pib.pib_ti_1D(x, 1, l)
+#     c1 = 1.0/np.sqrt(2)
+#     E1 = pib.pib_energy(1, l)
 
-    # Second eigenstate
-    psi2_x = pib.pib_ti_1D(x, 2, l)
-    c2 = 1.0/np.sqrt(2)
-    E2 = pib.pib_energy(2, l)
+#     # Second eigenstate
+#     psi2_x = pib.pib_ti_1D(x, 2, l)
+#     c2 = 1.0/np.sqrt(2)
+#     E2 = pib.pib_energy(2, l)
 
-    # Mixed state
-    psi0 = c1*psi1_x + c2*psi2_x
-    psi0_norm = pk.psi_norm(x, psi0)
-    print(f'Norm is {psi0_norm}')
+#     # Mixed state
+#     psi0 = c1*psi1_x + c2*psi2_x
+#     psi0_norm = pk.psi_norm(x, psi0)
+#     print(f'Norm is {psi0_norm}')
 
-    plt.plot(x, psi0)
-    plt.show()
+#     plt.plot(x, psi0)
+#     plt.show()
 
 
 def schroedinger_test2():
@@ -683,66 +683,66 @@ def schroedinger_test2():
     )
 
 
-def schroedinger_test2_old():
-    """
-    Time-dependent Schroedinger equation.
-    """
-    l = 10
-    x = np.arange(0, l, 0.01)
-    t = np.linspace(0, 50, 100)
-    psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
-    pdf = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+# def schroedinger_test2_old():
+#     """
+#     Time-dependent Schroedinger equation.
+#     """
+#     l = 10
+#     x = np.arange(0, l, 0.01)
+#     t = np.linspace(0, 50, 100)
+#     psi = np.zeros(len(x)*len(t), dtype=complex).reshape(len(x), len(t))
+#     pdf = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
 
-    # First eigenstate
-    c1_0 = 1/np.sqrt(2)
-    psi1_x = pib.pib_ti_1D(x, 1, l)
-    E1 = pib.pib_energy(1, l)
+#     # First eigenstate
+#     c1_0 = 1/np.sqrt(2)
+#     psi1_x = pib.pib_ti_1D(x, 1, l)
+#     E1 = pib.pib_energy(1, l)
 
-    # Second eigenstate
-    c2_0 = 1/np.sqrt(2)
-    psi2_x = pib.pib_ti_1D(x, 2, l)
-    E2 = pib.pib_energy(2, l)
+#     # Second eigenstate
+#     c2_0 = 1/np.sqrt(2)
+#     psi2_x = pib.pib_ti_1D(x, 2, l)
+#     E2 = pib.pib_energy(2, l)
 
-    for step, time in enumerate(t):
-        # Get time evolved coefficients
-        c1 = pk.cnt_evolve(c1_0, time, E1)
-        c2 = pk.cnt_evolve(c2_0, time, E2)
-        psi[:, step] = c1*psi1_x + c2*psi2_x
-        pdf[:, step] = pk.prob_density(psi[:, step])
+#     for step, time in enumerate(t):
+#         # Get time evolved coefficients
+#         c1 = pk.cnt_evolve(c1_0, time, E1)
+#         c2 = pk.cnt_evolve(c2_0, time, E2)
+#         psi[:, step] = c1*psi1_x + c2*psi2_x
+#         pdf[:, step] = pk.prob_density(psi[:, step])
 
-    # Psi real
-    pk_plot.time_plot(x, psi.real, t)
-    plt.show()
-    plt.clf()
+#     # Psi real
+#     pk_plot.time_plot(x, psi.real, t)
+#     plt.show()
+#     plt.clf()
 
-    pk_plot.traj_plot(
-        x, psi.real, t,
-        # xlim=(0, l),
-        ylim=(-0.5, 0.75),
-        # skip=5,
-        show=True
-    )
+#     pk_plot.traj_plot(
+#         x, psi.real, t,
+#         # xlim=(0, l),
+#         ylim=(-0.5, 0.75),
+#         # skip=5,
+#         show=True
+#     )
 
-    # Psi imaginary
-    pk_plot.time_plot(x, psi.imag, t)
-    plt.show()
-    plt.clf()
+#     # Psi imaginary
+#     pk_plot.time_plot(x, psi.imag, t)
+#     plt.show()
+#     plt.clf()
 
-    pk_plot.traj_plot(
-        x, psi.imag, t,
-        ylim=(-0.6, 0.3),
-        show=True
-    )
+#     pk_plot.traj_plot(
+#         x, psi.imag, t,
+#         ylim=(-0.6, 0.3),
+#         show=True
+#     )
 
-    # Probability density function
-    pk_plot.time_plot(x, pdf, t)
-    plt.show()
+#     # Probability density function
+#     pk_plot.time_plot(x, pdf, t)
+#     plt.show()
 
-    pk_plot.traj_plot(
-        x, pdf, t,
-        ylim=(-0.1, 0.4),
-        show=True
-    )
+#     pk_plot.traj_plot(
+#         x, pdf, t,
+#         ylim=(-0.1, 0.4),
+#         show=True
+#     )
 
 
 def schroedinger_test3():
@@ -752,7 +752,7 @@ def schroedinger_test3():
     length = 10
 
     # Sum 2 eigenstates.
-    harmonics = [2, 7]
+    harmonics = [1, 2]
     # mix_coeff = 1.0/np.sqrt(2)
     mix_coeff = 1.0/np.sqrt(len(harmonics))
     psi = pib.PibPsi(
@@ -790,7 +790,7 @@ def schroedinger_test4():
 
     # Sum 2 eigenstates.
     # harmonics = [2, 3, 5, 7]
-    harmonics = [1, 2]
+    harmonics = [1]
     # mix_coeff = 1.0/np.sqrt(2)
     mix_coeff = 1.0/np.sqrt(len(harmonics))
     psi = pib.PibPsi(
@@ -821,7 +821,7 @@ def schroedinger_test4():
         ylim=cylindrical_lim,
         zlim=cylindrical_lim,
         cmap_str='cool',
-        gif='trisurf-1-2-front.gif',
+        # gif='trisurf-1-2-front.gif',
         show=True
     )
 
@@ -834,7 +834,7 @@ def schroedinger_test5():
 
     # Sum 2 eigenstates.
     # harmonics = [2, 3, 5, 7]
-    harmonics = [1, 2]
+    harmonics = [2]
     # mix_coeff = 1.0/np.sqrt(2)
     mix_coeff = 1.0/np.sqrt(len(harmonics))
     psi = pib.PibPsi(
@@ -866,7 +866,7 @@ def schroedinger_test5():
         ylim=cylindrical_lim,
         zlim=cylindrical_lim,
         cmap_str='cool',
-        gif='quiver-1-2-front.gif',
+        # gif='quiver-1-2-front.gif',
         show=True
     )
 
@@ -965,28 +965,28 @@ def operator_test2():
     plt.show()
 
 
-def operator_test2_old():
-    """
-    Observables and expectation values.
-    """
-    l = 10
-    dx = 0.01
-    x = np.arange(0, l, dx)
-    t = np.arange(0, 100)
-    psi = pib.pib_superposition(x, t, l, 1, 2)
-    p_array = np.zeros(len(t), dtype=complex)
-    x_array = np.zeros(len(t), dtype=complex)
+# def operator_test2_old():
+#     """
+#     Observables and expectation values.
+#     """
+#     l = 10
+#     dx = 0.01
+#     x = np.arange(0, l, dx)
+#     t = np.arange(0, 100)
+#     psi = pib.pib_superposition(x, t, l, 1, 2)
+#     p_array = np.zeros(len(t), dtype=complex)
+#     x_array = np.zeros(len(t), dtype=complex)
 
-    for step, time in enumerate(t):
-        p_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.momentum_operator)
-        x_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.position_operator)
+#     for step, time in enumerate(t):
+#         p_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.momentum_operator)
+#         x_array[step] = pk.eval_expectation(psi[:, step], x, dx, pk.position_operator)
 
-    plt.plot(t, p_array)
-    plt.show()
+#     plt.plot(t, p_array)
+#     plt.show()
 
-    plt.clf()
-    plt.plot(t, x_array)
-    plt.show()
+#     plt.clf()
+#     plt.plot(t, x_array)
+#     plt.show()
 
 
 def operator_test3():
@@ -1211,10 +1211,11 @@ def pir_1D_test3():
     """
     Animated quiver for Particle in a Ring.
     """
-    mix_coeff = 1.0/np.sqrt(2)
 
     # Sum 2 eigenstates.
-    harmonics = [1, -2]
+    # harmonics = [1, -2]
+    harmonics = [1, 2, 3, 4, 5]
+    mix_coeff = 1.0/np.sqrt(len(harmonics))
     psi = pir.PirPsi(
         length=10,
         dx=0.1,
@@ -1231,13 +1232,13 @@ def pir_1D_test3():
     )
 
     t_len = 150
-    t = np.linspace(0, t_len, 201)
+    t = np.linspace(0, t_len, 401)
     psi_traj = pk.PsiTraj(psi, t)
     cylindrical_lim = (-0.6, 0.6)
 
     pk_plot.traj_plot_psi2(
         psi_traj,
-        plot_type='quiver',
+        # plot_type='quiver',
         ylim=cylindrical_lim,
         zlim=cylindrical_lim,
         cmap_str='cool',
@@ -2269,14 +2270,14 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    pib_test1()
+    # pib_test1()
     # pib_test1_old()
     # pib_test2_old()
-    pib_test3()
+    # pib_test3()
     # pib_test3_old()
-    pib_interference_test1()
+    # pib_interference_test1()
     # pib_interference_test1_old()
-    pib_interference_test2()
+    # pib_interference_test2()
     # pib_interference_test2_old()
     # quadrature_test1()
     # quadrature_test2()
@@ -2285,18 +2286,18 @@ if __name__=='__main__':
     # QM postulates
     # ====================
 
-    normalize_test1()
+    # normalize_test1()
     # normalize_test1_old()
     schroedinger_test1()
     # schroedinger_test1_old()
     schroedinger_test2()
     # schroedinger_test2_old()
-    # schroedinger_test3()
-    # schroedinger_test4()
-    # schroedinger_test5()
-    operator_test1()
+    schroedinger_test3()
+    schroedinger_test4()
+    schroedinger_test5()
+    # operator_test1()
     # operator_test1_old()
-    operator_test2()
+    # operator_test2()
     # operator_test2_old()
 
     # ====================
@@ -2312,17 +2313,17 @@ if __name__=='__main__':
     # 1D Particle in a Ring tests
     # ====================
 
-    pir_1D_test1()
-    pir_1D_test2()
-    pir_1D_test3()
+    # pir_1D_test1()
+    # pir_1D_test2()
+    # pir_1D_test3()
 
     # ====================
     # 1D Harmonic Oscillator tests
     # ====================
 
-    harmonic_1D_test1()
-    harmonic_1D_test2()
-    harmonic_1D_test3()
+    # harmonic_1D_test1()
+    # harmonic_1D_test2()
+    # harmonic_1D_test3()
 
     # ====================
     # Quantum Mechanics in 2D
