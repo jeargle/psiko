@@ -1,5 +1,4 @@
 # John Eargle
-# 2017-2022
 
 import numpy as np
 import scipy as sp
@@ -9,9 +8,7 @@ from scipy.special import (
 )
 
 __all__ = ["square_comp", "square", "square2", "force1", "repulsion",
-           "boundary_1d", "pib_ti_1D", "pib_td_1D", "pib_wave_solution",
-           "pib_energy", "square_function", "projection_integrand",
-           "time_plot", "traj_plot"]
+           "boundary_1d", "square_function", "projection_integrand"]
 
 
 

@@ -1,5 +1,4 @@
 # John Eargle
-# 2017-2022
 
 
 import numpy as np

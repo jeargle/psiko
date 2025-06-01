@@ -1,5 +1,4 @@
 # John Eargle
-# 2017-2022
 
 
 # from __future__ import print_function
@@ -200,22 +199,22 @@ def pib_test1():
     plt.show()
 
 
-def pib_test1_old():
-    """
-    Plot first three eigenfunctions for a particle in a box.
-    """
-    l = 10
-    x = np.linspace(0, l, 1001)
-    y = []
+# def pib_test1_old():
+#     """
+#     Plot first three eigenfunctions for a particle in a box.
+#     """
+#     l = 10
+#     x = np.linspace(0, l, 1001)
+#     y = []
 
-    # Calculate 3 harmonics.
-    for n in range(1,4):
-        y.append(pib.pib_ti_1D(x, n, l))
+#     # Calculate 3 harmonics.
+#     for n in range(1,4):
+#         y.append(pib.pib_ti_1D(x, n, l))
 
-    for i, psi in enumerate(y):
-        plt.plot(x, psi, label=f'{i+1}')
-    plt.legend()
-    plt.show()
+#     for i, psi in enumerate(y):
+#         plt.plot(x, psi, label=f'{i+1}')
+#     plt.legend()
+#     plt.show()
 
 
 def pib_test2_old():
@@ -273,32 +272,32 @@ def pib_test3():
     )
 
 
-def pib_test3_old():
-    """
-    Plot time series for third eigenfunction of particle in a box.
-    """
-    c = 0.1
-    n = 3
-    l = 10
-    x = np.arange(0, l, 0.01)
-    dt = 0.1
-    t = np.arange(0, 66, dt)
+# def pib_test3_old():
+#     """
+#     Plot time series for third eigenfunction of particle in a box.
+#     """
+#     c = 0.1
+#     n = 3
+#     l = 10
+#     x = np.arange(0, l, 0.01)
+#     dt = 0.1
+#     t = np.arange(0, 66, dt)
 
-    traj = np.zeros((len(x), len(t)))
-    for step, time in enumerate(t):
-        traj[:, step] = pib.pib_wave_solution(x, time, c, n, l)
+#     traj = np.zeros((len(x), len(t)))
+#     for step, time in enumerate(t):
+#         traj[:, step] = pib.pib_wave_solution(x, time, c, n, l)
 
-    pk_plot.time_plot(x, traj, t)
-    plt.show()
-    plt.clf()
+#     pk_plot.time_plot(x, traj, t)
+#     plt.show()
+#     plt.clf()
 
-    pk_plot.traj_plot(
-        x, traj, t, dt,
-        xlim=(0, l),
-        ylim=(-0.5, 0.5),
-        skip=10,
-        show=True
-    )
+#     pk_plot.traj_plot(
+#         x, traj, t, dt,
+#         xlim=(0, l),
+#         ylim=(-0.5, 0.5),
+#         skip=10,
+#         show=True
+#     )
 
 
 def pib_interference_test1():
@@ -408,31 +407,32 @@ def pib_interference_test2():
     )
 
 
-def pib_interference_test2_old():
-    """
-    Plot time evolution of full wavefunction made from the first two
-    eigenstates.
-    """
-    c = 0.5
-    l = 10
-    x = np.linspace(0, l, 101)
-    dt = 0.1
-    t = np.arange(0, 30, dt)
-    traj = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
+# def pib_interference_test2_old():
+#     """
+#     Plot time evolution of full wavefunction made from the first two
+#     eigenstates.
+#     """
+#     c = 0.5
+#     l = 10
+#     x = np.linspace(0, l, 101)
+#     dt = 0.1
+#     t = np.arange(0, 30, dt)
+#     # t = np.arange(0, 66, dt)
+#     traj = np.zeros(len(x)*len(t)).reshape(len(x), len(t))
 
-    for step, time in enumerate(t):
-        traj[:, step] = (pib.pib_wave_solution(x, time, c, 1, l) +
-                         pib.pib_wave_solution(x, time, c, 2, l))
+#     for step, time in enumerate(t):
+#         traj[:, step] = (pib.pib_wave_solution(x, time, c, 1, l) +
+#                          pib.pib_wave_solution(x, time, c, 2, l))
 
-    pk_plot.time_plot(x, traj, t, timestep=1)
-    plt.show()
-    plt.clf()
+#     pk_plot.time_plot(x, traj, t, timestep=1)
+#     plt.show()
+#     plt.clf()
 
-    pk_plot.traj_plot(
-        x, traj, t, dt,
-        xlim=(0, l), ylim=(-1.0, 1.0),
-        skip=5, show=True
-    )
+#     pk_plot.traj_plot(
+#         x, traj, t, dt,
+#         xlim=(0, l), ylim=(-1.0, 1.0),
+#         skip=5, show=True
+#     )
 
 
 def quadrature_test1():
@@ -2270,15 +2270,16 @@ if __name__=='__main__':
     # 1D Quantum Particle tests
     # ====================
 
-    # pib_test1()
     # pib_test1_old()
+    # pib_test3_old()
+    # pib_interference_test2_old()
+
+    # pib_test1()
     # pib_test2_old()
     # pib_test3()
-    # pib_test3_old()
-    # pib_interference_test1()
-    # pib_interference_test1_old()
-    # pib_interference_test2()
-    # pib_interference_test2_old()
+    pib_interference_test1()
+    pib_interference_test1_old()
+    pib_interference_test2()
     # quadrature_test1()
     # quadrature_test2()
 
@@ -2286,19 +2287,20 @@ if __name__=='__main__':
     # QM postulates
     # ====================
 
-    # normalize_test1()
     # normalize_test1_old()
-    schroedinger_test1()
     # schroedinger_test1_old()
-    schroedinger_test2()
     # schroedinger_test2_old()
-    schroedinger_test3()
-    schroedinger_test4()
-    schroedinger_test5()
-    # operator_test1()
     # operator_test1_old()
-    # operator_test2()
     # operator_test2_old()
+
+    # normalize_test1()
+    # schroedinger_test1()
+    # schroedinger_test2()
+    # schroedinger_test3()
+    # schroedinger_test4()
+    # schroedinger_test5()
+    # operator_test1()
+    # operator_test2()
 
     # ====================
     # 1D Time-Independent Schroedinger Equation (TISE)
